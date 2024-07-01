@@ -1,0 +1,90 @@
+import { FetchInterface } from "../interfaces/fetch.interface";
+import {
+  GoodReceiptCreateInterface,
+  GoodReceiptItemInterface,
+  GoodReceiptSearchInterface,
+  GoodReceiptStatus,
+} from "../interfaces/good-receipt.interface";
+import { connectionFactory } from "../utils/connector.utils";
+
+const conn = connectionFactory();
+
+class GoodReceiptCreateModel {
+  name: string;
+  date: Date;
+  supplier: string;
+  createdBy: string;
+  items: GoodReceiptItemInterface[];
+
+  constructor(data: GoodReceiptCreateInterface) {
+    this.name = data.name;
+    this.date = data.date;
+    this.supplier = data.supplierID;
+    this.items = data.items;
+    this.createdBy = data.createdBy;
+  }
+
+  create() {
+    return conn.model("good-receipt").create({
+      name: this.name,
+      date: this.date,
+      supplierID: this.supplier,
+      items: this.items,
+      createdBy: this.createdBy,
+      createdAt: new Date(),
+    });
+  }
+
+  static fetch(data: GoodReceiptSearchInterface) {
+    const filters = [];
+    if (data.status.includes(GoodReceiptStatus.Active)) {
+      filters.push({
+        isDelete: false,
+      });
+    }
+
+    if (data.status.includes(GoodReceiptStatus.Deleted)) {
+      filters.push({
+        isDelete: true,
+      });
+    }
+
+    return Promise.all([
+      conn
+        .model("good-receipt")
+        .find({
+          name: {
+            $regex: new RegExp(data.keyword, "i"),
+          },
+          $or: filters,
+          $expr: {
+            $and: [
+              { $eq: [{ $month: "$date" }, data.month] },
+              { $eq: [{ $year: "$date" }, data.year] },
+            ],
+          },
+        })
+        .sort({ date: 1 })
+        .select("date name createdAt isDelete")
+        .populate("supplierID", "name")
+        .populate("createdBy", "name")
+        .populate("deletedBy", "name")
+        .limit(20)
+        .skip((data.page - 1) * 20),
+      conn.model("good-receipt").countDocuments({
+        name: {
+          $regex: new RegExp(data.keyword, "i"),
+        },
+        $or: filters,
+        $expr: {
+          $and: [
+            { $eq: [{ $month: "$date" }, data.month] },
+            { $eq: [{ $year: "$date" }, data.year] },
+          ],
+        },
+      }),
+    ]);
+  }
+}
+
+export default GoodReceiptCreateModel;

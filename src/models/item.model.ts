@@ -1,0 +1,269 @@
+import {
+  ItemDeleteInterface,
+  ItemFetchInterface,
+  ItemFetchInterfaceBranch,
+  ItemInterface,
+  ItemUpdateFavorite,
+} from "../interfaces/item.interface";
+import { Types } from "mongoose";
+import { connectionFactory } from "../utils/connector.utils";
+
+const conn = connectionFactory();
+
+class ItemModelModel {
+  id?: string;
+  reference?: string;
+  description?: string;
+  itemTypeID?: string;
+  itemBrandID?: string;
+  createdBy?: string;
+  price?: number;
+  barcode?: string | null;
+  isFavorite?: boolean;
+  images?: string[];
+  isActive: boolean;
+
+  constructor(data: ItemInterface) {
+    this.id = data.id;
+    this.reference = data.reference;
+    this.description = data.description;
+    this.itemTypeID = data.itemTypeID;
+    this.itemBrandID = data.itemBrandID;
+    this.createdBy = data.createdBy;
+    this.price = data.price;
+    this.barcode = data.barcode;
+    this.isFavorite = data.isFavorite;
+    this.images = data.images;
+    this.isActive = data.isActive;
+  }
+
+  create() {
+    return conn.model("items").create({
+      reference: this.reference,
+      description: this.description,
+      barcode: this.barcode,
+      itemTypeID: this.itemTypeID,
+      itemBrandID: this.itemBrandID,
+      createdBy: this.createdBy,
+      price: this.price,
+      isFavorite: this.isFavorite,
+      createdAt: new Date(),
+      images: this.images,
+    });
+  }
+
+  static fetch(data: ItemFetchInterface) {
+    return Promise.all([
+      conn
+        .model("items")
+        .find({
+          isDelete: false,
+          $or: [
+            {
+              reference: {
+                $regex: RegExp(data.keyword, "i"),
+              },
+            },
+            {
+              description: {
+                $regex: RegExp(data.keyword, "i"),
+              },
+            },
+          ],
+        })
+        .skip((data.page - 1) * 20)
+        .limit(20)
+        .populate({
+          path: "itemBrandID",
+          select: "name",
+        })
+        .populate("_id reference description createdAt images price")
+        .populate({
+          path: "itemTypeID",
+          select: "name description",
+        }),
+      conn.model("items").countDocuments({
+        isDelete: false,
+        $or: [
+          {
+            reference: {
+              $regex: RegExp(data.keyword, "i"),
+            },
+          },
+          {
+            description: {
+              $regex: RegExp(data.keyword, "i"),
+            },
+          },
+        ],
+      }),
+    ]);
+  }
+
+  static async fetchV2WStock(data: ItemFetchInterfaceBranch) {
+    const [items, countItems] = await Promise.all([
+      conn
+        .model("items")
+        .find({
+          isDelete: false,
+          isActive: true,
+          $or: [
+            {
+              reference: { $regex: RegExp(data.keyword, "i") },
+            },
+            {
+              description: { $regex: RegExp(data.keyword, "i") },
+            },
+          ],
+        })
+        .limit(20)
+        .skip((data.page - 1) * 20)
+        .sort({ reference: 1 }),
+      conn.model("items").countDocuments({
+        isDelete: false,
+        isActive: true,
+        $or: [
+          {
+            reference: { $regex: RegExp(data.keyword, "i") },
+          },
+          {
+            description: { $regex: RegExp(data.keyword, "i") },
+          },
+        ],
+      }),
+    ]);
+
+    const itemIDs = items.map((item) => item._id);
+    const stocks = await conn.model("stock").find({
+      itemID: { $in: itemIDs },
+      storeID: data.branch,
+    });
+
+    return [
+      items.map((x) => {
+        const stockIndex = stocks.findIndex(
+          (stock) => stock.itemID.toString() === x._id.toString()
+        );
+
+        return {
+          item: {
+            _id: x._id,
+            reference: x.reference,
+            description: x.description,
+            createdAt: x.createdAt,
+            price: x.price,
+          },
+          quantity: stockIndex === -1 ? 0 : stocks[stockIndex].quantity,
+        };
+      }),
+      countItems,
+    ];
+  }
+
+  static updateFavoriteStatus(data: ItemUpdateFavorite) {
+    return conn.model("items").updateOne(
+      {
+        _id: data.id,
+      },
+      {
+        isFavorite: data.isFavorite,
+      }
+    );
+  }
+  update() {
+    return conn.model("items").updateOne(
+      {
+        _id: this.id!,
+      },
+      {
+        reference: this.reference,
+        description: this.description,
+        barcode: this.barcode,
+        itemTypeID: this.itemTypeID,
+        itemBrandID: this.itemBrandID,
+        price: this.price,
+        images: this.images,
+        isActive: this.isActive,
+      }
+    );
+  }
+
+  static async deleteImage(imageURL: string, itemID: string) {
+    const item = await conn.model("items").findById(itemID);
+    if (!item) {
+      throw new Error("Item not found");
+    } else {
+      item.images = item.images?.filter((x: string) => x != imageURL);
+      return item.save();
+    }
+  }
+
+  static delete(data: ItemDeleteInterface) {
+    return conn.model("items").findByIdAndUpdate(data.id, {
+      isDelete: true,
+      deletedAt: new Date(),
+      deletedBy: data.userID,
+    });
+  }
+
+  static fetchByID(id: string) {
+    return conn
+      .model("items")
+      .findById(new Types.ObjectId(id))
+      .populate("itemTypeID")
+      .populate("itemBrandID");
+  }
+
+  static fetchInitial(): Promise<any[]> {
+    return conn
+      .model("items")
+      .find({
+        isDelete: false,
+      })
+      .populate("itemTypeID")
+      .populate("itemBrandID");
+  }
+
+  static async preCreate(data: ItemInterface) {
+    // Check if item already exists
+    try {
+      const count = await conn.model("items").countDocuments({
+        reference: data.reference,
+        isDelete: false,
+      });
+
+      return count == 0;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async preUpdate(data: ItemInterface) {
+    try {
+      const count = await conn.model("items").countDocuments({
+        reference: data.reference,
+        _id: {
+          $ne: data.id,
+        },
+      });
+
+      return count == 0;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async preDelete(id: string) {
+    try {
+      const count = await conn.model("items").countDocuments({
+        itemID: id,
+        isDelete: false,
+      });
+      return count == 0;
+    } catch (error) {
+      throw error;
+    }
+  }
+}
+
+export default ItemModelModel;

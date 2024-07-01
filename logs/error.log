@@ -1,0 +1,49 @@
+[2024-06-29 02:19:15] [ERROR] Item: Error on fetching item MissingSchemaError: Schema hasn't been registered for model "item".
+Use mongoose.model(name, schema)
+[2024-06-29 13:11:56] [ERROR] Item: Error on creating item ValidationError: createdBy: Path `createdBy` is required.
+[2024-06-29 13:12:52] [ERROR] Item: Error on creating item TypeError: Cannot read properties of undefined (reading 'length')
+[2024-06-29 13:13:41] [ERROR] Item: Error on creating item TypeError: Cannot read properties of undefined (reading 'length')
+[2024-06-29 20:17:53] [ERROR] Store: Error on creating store ValidationError: createdBy: Path `createdBy` is required.
+[2024-06-30 01:14:00] [ERROR] Supplier: Error on pre-deleting supplier MongooseError: Model.findByIdAndUpdate() no longer accepts a callback
+[2024-06-30 01:32:20] [ERROR] GoodReceipt: Error on creating good receipt ValidationError: createdBy: Path `createdBy` is required., createdAt: Path `createdAt` is required., supplierID: Path `supplierID` is required., name: Path `name` is required., items.0.discount: Path `discount` is required.
+[2024-06-30 01:33:18] [ERROR] GoodReceipt: Error on creating good receipt ValidationError: name: Path `name` is required., items.0.discount: Path `discount` is required.
+[2024-06-30 01:36:45] [ERROR] GoodReceipt: Error on creating good receipt ValidationError: name: Path `name` is required.
+[2024-06-30 01:52:45] [ERROR] Master worker: Job 1503 has failed with Schema hasn't been registered for model "stocks".
+Use mongoose.model(name, schema)
+[2024-06-30 13:16:34] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-06-30 13:16:34] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-06-30 13:16:34] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-06-30 13:16:34] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-06-30 13:16:34] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-06-30 13:16:35] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-06-30 13:16:35] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-06-30 13:16:35] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-06-30 13:16:36] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-06-30 13:16:36] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-06-30 13:16:36] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-06-30 13:16:37] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-06-30 13:16:37] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-06-30 13:16:38] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-06-30 13:16:38] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-06-30 13:16:39] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-06-30 13:16:39] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-06-30 14:33:01] [ERROR] Adjustment: Error on creating adjustment event: ValidationError: name: Path `name` is required.
+[2024-06-30 23:01:49] [ERROR] Packing list: Error on creating packing list ValidationError: createdBy: Path `createdBy` is required., customerID: Path `customerID` is required.
+[2024-06-30 23:03:00] [ERROR] Packing list: Error on creating packing list ValidationError: customerID: Path `customerID` is required.
+[2024-06-30 23:04:05] [ERROR] Packing list: Error on creating packing list ValidationError: customerID: Path `customerID` is required.
+[2024-06-30 23:04:54] [ERROR] Invoice: Error on creating invoice ValidationError: dueDate: Path `dueDate` is required.
+[2024-06-30 23:06:07] [ERROR] Packing list: Error on creating packing list ValidationError: customerID: Path `customerID` is required.
+[2024-07-01 00:44:52] [ERROR] Packing list: Error on fetching packing list CastError: Cast to ObjectId failed for value "List" (type string) at path "_id" for model "packing-list"
+[2024-07-01 00:44:57] [ERROR] Packing list: Error on fetching packing list CastError: Cast to ObjectId failed for value "List" (type string) at path "_id" for model "packing-list"
+[2024-07-01 00:45:31] [ERROR] Packing list: Error on fetching packing list CastError: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "packing-list"
+[2024-07-01 00:45:42] [ERROR] Packing list: Error on fetching packing list CastError: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "packing-list"
+[2024-07-01 00:45:52] [ERROR] Packing list: Error on fetching packing list CastError: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "packing-list"
+[2024-07-01 01:56:45] [ERROR] GoodReceipt: Error on fetching good receipt StrictPopulateError: Cannot populate path `customerID` because it is not in your schema. Set the `strictPopulate` option to false to override.
+[2024-07-01 11:37:04] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-01 11:37:04] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-01 11:37:04] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-01 11:37:05] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-01 11:37:05] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-01 11:37:05] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-01 11:37:05] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-01 11:37:06] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
