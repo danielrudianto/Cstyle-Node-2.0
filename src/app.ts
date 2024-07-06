@@ -14,6 +14,7 @@ import MembershipRoutes from "./routes/membership.routes";
 import AdjustmentEventRoutes from "./routes/adjustment.routes";
 import PackingListRoutes from "./routes/packing-list.routes";
 import QuotationRoutes from "./routes/quotation.routes";
+import DeliverySlipRoutes from "./routes/delivery-slip.routes";
 import GoodReceiptRoutes from "./routes/good-receipt.routes";
 
 import CashierRoutes from "./routes/cashier.routes";
@@ -62,6 +63,7 @@ app.use("/membership", AuthInterceptor.intercept, MembershipRoutes);
 
 app.use("/quotation", AuthInterceptor.intercept, QuotationRoutes);
 app.use("/packing-list", AuthInterceptor.intercept, PackingListRoutes);
+app.use("/delivery-slip", AuthInterceptor.intercept, DeliverySlipRoutes);
 app.use("/good-receipt", AuthInterceptor.intercept, GoodReceiptRoutes);
 
 app.use("/adjustment", AuthInterceptor.intercept, AdjustmentEventRoutes);

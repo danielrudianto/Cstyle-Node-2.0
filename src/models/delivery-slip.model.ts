@@ -2,6 +2,7 @@ import { connectionFactory } from "../utils/connector.utils";
 import {
   DeliverySlipInterface,
   DeliverySlipItem,
+  DeliverySlipUpdateInterface,
 } from "../interfaces/delivery-slip.interface";
 
 const conn = connectionFactory();
@@ -14,8 +15,11 @@ class DeliverySlipModelModel {
   items: DeliverySlipItem[];
   createdBy: string;
   createdAt?: Date;
-  deletedBy?: string | null;
-  deletedAt?: Date | null;
+  deletedBy: string | null;
+  deletedAt: Date | null;
+  isDelete: boolean;
+  isReturn: boolean;
+  returnedAt: Date | null;
 
   constructor(data: DeliverySlipInterface) {
     this.id = data.id;
@@ -28,6 +32,9 @@ class DeliverySlipModelModel {
     this.createdAt = data.createdAt;
     this.deletedBy = data.deletedBy;
     this.deletedAt = data.deletedAt;
+    this.isDelete = data.isDelete;
+    this.isReturn = data.isReturn;
+    this.returnedAt = data.returnedAt;
   }
 
   create() {
@@ -42,8 +49,50 @@ class DeliverySlipModelModel {
     });
   }
 
+  static fetchByID(id: string) {
+    return conn
+      .model("delivery-slip")
+      .findById(id)
+      .populate("customerID", "name")
+      .populate("salesID", "name")
+      .populate("items.itemID", "reference description");
+  }
+
+  static fetchUnconfirmed(page: number) {
+    return Promise.all([
+      conn
+        .model("delivery-slip")
+        .find({ isReturn: false, isDelete: false })
+        .populate("customerID", "name")
+        .skip((page - 1) * 10)
+        .limit(10),
+      conn.model("delivery-slip").countDocuments({ deletedBy: null }),
+    ]);
+  }
+
+  static update(data: DeliverySlipUpdateInterface) {
+    return conn.model("delivery-slip").updateOne(
+      {
+        _id: data.id,
+      },
+      {
+        $set: {
+          // isReturn: true,
+          returnedAt: data.returnedAt,
+          ...data.items.reduce(
+            (acc, item) => ({
+              ...acc,
+              [`items.${item.id}.returned`]: item.return,
+            }),
+            {}
+          ),
+        },
+      }
+    );
+  }
+
   static async generateName(date: Date): Promise<string> {
-    const count = await conn.model("packing-list").countDocuments({
+    const count = await conn.model("delivery-slip").countDocuments({
       $expr: {
         $and: [
           { $eq: [{ $month: "$date" }, date.getMonth() + 1] },

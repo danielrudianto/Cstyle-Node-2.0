@@ -52,6 +52,7 @@ export function connectionFactory() {
   conn.model("items", ItemSchema);
   conn.model("suppliers", SupplierSchema);
   conn.model("packing-list", PackingListSchema);
+  conn.model("delivery-slip", DeliverySlipSchema);
 
   conn.model("stock-ins", StockInSchema);
   conn.model("stock-outs", StockOutSchema);

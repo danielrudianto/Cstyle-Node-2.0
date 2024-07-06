@@ -5,6 +5,7 @@ import DeliverySlipModelModel from "../models/delivery-slip.model";
 import StockModelModel from "../models/stock.model";
 import LoggerHelper from "../utils/logger.utils";
 import { queue } from "../utils/queue.utils";
+import InvoiceModelModel from "../models/invoice.model";
 
 class DeliverySlipController {
   static create = (req: Request, res: Response) => {
@@ -51,6 +52,11 @@ class DeliverySlipController {
             items: modifiedItems,
             createdBy: userID,
             note: note,
+            isDelete: false,
+            isReturn: false,
+            deletedAt: null,
+            deletedBy: null,
+            returnedAt: null,
           })
             .create()
             .then(async (result) => {
@@ -61,7 +67,7 @@ class DeliverySlipController {
                   deliverySlipID: result._id,
                 });
               });
-              res.status(201).send(result);
+              return res.status(201).send(result);
             })
             .catch((error) => {
               new LoggerHelper({
@@ -69,7 +75,7 @@ class DeliverySlipController {
                 tag: "Delivery slip",
                 type: LoggerType.error,
               });
-              res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+              return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
             });
         }
       })
@@ -78,8 +84,83 @@ class DeliverySlipController {
           message: `Error on fetching stock ${error}`,
           tag: "Delivery slip",
           type: LoggerType.error,
-        });
+        }).log();
+
+        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
       });
+  };
+
+  static fetchByID = (req: Request, res: Response) => {
+    const id = req.params.id;
+
+    DeliverySlipModelModel.fetchByID(id)
+      .then((result) => {
+        if (!result) {
+          return res.status(404).send(ErrorList["DELIVERY_SLIP_NOT_FOUND"]);
+        } else {
+          return res.status(200).send(result);
+        }
+      })
+      .catch((error) => {
+        new LoggerHelper({
+          message: `Error on fetching delivery slip ${error}`,
+          tag: "Delivery slip",
+          type: LoggerType.error,
+        }).log();
+
+        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+      });
+  };
+
+  static fetchUnconfirmed = (req: Request, res: Response) => {
+    const page = !req.query.page ? 1 : Number(req.query.page);
+    DeliverySlipModelModel.fetchUnconfirmed(page)
+      .then(([result, count]) => {
+        return res.status(200).send({
+          data: result,
+          count: count,
+        });
+      })
+      .catch((error) => {
+        new LoggerHelper({
+          message: `Error on fetching unconfirmed delivery slips ${error}`,
+          tag: "Delivery slips",
+          type: LoggerType.error,
+        }).log();
+
+        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+      });
+  };
+
+  static confirm = (req: Request, res: Response) => {
+    const items = req.body.items;
+    const invoiceDueDate = new Date(req.body.invoiceDueDate);
+    const invoiceDate = new Date(req.body.invoiceDate);
+    const invoiceNote = req.body.invoiceNote;
+    const deliverySlipID = req.body.id;
+
+    DeliverySlipModelModel.fetchByID(deliverySlipID).then((result) => {
+      if (!result) {
+        return res.status(404).send(ErrorList["DELIVERY_SLIP_NOT_FOUND"]);
+      }
+
+      if (result.isDelete) {
+        return res.status(400).send(ErrorList["DELIVERY_SLIP_DELETED"]);
+      }
+
+      if (result.isReturn) {
+        return res.status(400).send(ErrorList["DELIVERY_SLIP_RETURNED"]);
+      }
+
+      DeliverySlipModelModel.update({
+        id: deliverySlipID,
+        items: items,
+        returnedAt: invoiceDate,
+      }).then(async (result) => {
+        return res.status(200).send(result);
+        // const invoiceName = await InvoiceModelModel.generateName(invoiceDate);
+      });
+    });
   };
 }
 

@@ -49,3 +49,16 @@ Use mongoose.model(name, schema)
 [2024-07-01 11:37:06] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
 [2024-07-04 10:17:38] [ERROR] Status: Error on fetching status dashboard MongoServerError: PlanExecutor error during aggregation :: caused by :: can't $subtract array from array
 [2024-07-04 10:17:49] [ERROR] Status: Error on fetching status dashboard MongoServerError: PlanExecutor error during aggregation :: caused by :: can't $subtract array from array
+[2024-07-06 14:19:07] [ERROR] Delivery slip: Error on fetching stock MissingSchemaError: Schema hasn't been registered for model "delivery-slip".
+Use mongoose.model(name, schema)
+[2024-07-06 14:39:20] [ERROR] Delivery slip: Error on fetching delivery slip CastError: Cast to ObjectId failed for value "List" (type string) at path "_id" for model "delivery-slip"
+[2024-07-06 14:39:52] [ERROR] Delivery slip: Error on fetching delivery slip CastError: Cast to ObjectId failed for value "List" (type string) at path "_id" for model "delivery-slip"
+[2024-07-06 14:40:05] [ERROR] Delivery slip: Error on fetching delivery slip CastError: Cast to ObjectId failed for value "List" (type string) at path "_id" for model "delivery-slip"
+[2024-07-06 14:40:08] [ERROR] Delivery slip: Error on fetching delivery slip CastError: Cast to ObjectId failed for value "List" (type string) at path "_id" for model "delivery-slip"
+[2024-07-06 15:00:33] [ERROR] Delivery slip: Error on fetching delivery slip CastError: Cast to ObjectId failed for value "6688f79dfde315ac597abee" (type string) at path "_id" for model "delivery-slip"
+[2024-07-06 15:01:02] [ERROR] Delivery slip: Error on fetching delivery slip CastError: Cast to ObjectId failed for value "6688f79dfde315ac597abe" (type string) at path "_id" for model "delivery-slip"
+[2024-07-06 15:01:05] [ERROR] Delivery slip: Error on fetching delivery slip CastError: Cast to ObjectId failed for value "6688f79dfde315ac597abe" (type string) at path "_id" for model "delivery-slip"
+[2024-07-06 15:01:16] [ERROR] Delivery slip: Error on fetching delivery slip CastError: Cast to ObjectId failed for value "6688f79dfde315ac597abe" (type string) at path "_id" for model "delivery-slip"
+[2024-07-06 15:02:48] [ERROR] Delivery slip: Error on fetching delivery slip CastError: Cast to ObjectId failed for value "6688f79dfde315ac597abe" (type string) at path "_id" for model "delivery-slip"
+[2024-07-06 15:02:54] [ERROR] Delivery slip: Error on fetching delivery slip CastError: Cast to ObjectId failed for value "6688f79dfde315ac597abee" (type string) at path "_id" for model "delivery-slip"
+[2024-07-06 15:03:14] [ERROR] Delivery slip: Error on fetching delivery slip CastError: Cast to ObjectId failed for value "6688f04001f1973551c54f" (type string) at path "_id" for model "delivery-slip"

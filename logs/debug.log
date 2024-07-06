@@ -3358,3 +3358,156 @@ Use mongoose.model(name, schema)
 [2024-07-04 22:31:18] [INFO] MongoDB: Connected with MongoDB Database Engine
 [2024-07-04 22:31:19] [INFO] Redis: Connected with Redis Database Engine
 [2024-07-04 22:31:19] [INFO] Sync: Synced 40 users
+[2024-07-06 12:02:49] [INFO] Server: Server started on port 5000
+[2024-07-06 12:02:49] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-06 12:02:49] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-06 12:02:49] [INFO] Sync: Synced 3 users
+[2024-07-06 14:09:18] [INFO] Server: Server started on port 5000
+[2024-07-06 14:09:18] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-06 14:09:18] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-06 14:09:18] [INFO] Sync: Synced 3 users
+[2024-07-06 14:10:10] [INFO] Server: Server started on port 5000
+[2024-07-06 14:10:10] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-06 14:10:10] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-06 14:10:10] [INFO] Sync: Synced 3 users
+[2024-07-06 14:10:28] [INFO] Server: Server started on port 5000
+[2024-07-06 14:10:28] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-06 14:10:29] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-06 14:10:29] [INFO] Sync: Synced 3 users
+[2024-07-06 14:11:27] [INFO] Server: Server started on port 5000
+[2024-07-06 14:11:27] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-06 14:11:27] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-06 14:11:27] [INFO] Sync: Synced 3 users
+[2024-07-06 14:12:08] [INFO] Server: Server started on port 5000
+[2024-07-06 14:12:08] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-06 14:12:08] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-06 14:12:08] [INFO] Sync: Synced 3 users
+[2024-07-06 14:13:59] [INFO] Server: Server started on port 5000
+[2024-07-06 14:13:59] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-06 14:13:59] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-06 14:13:59] [INFO] Sync: Synced 3 users
+[2024-07-06 14:19:05] [INFO] Server: Server started on port 5000
+[2024-07-06 14:19:05] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-06 14:19:05] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-06 14:19:05] [INFO] Sync: Synced 3 users
+[2024-07-06 14:19:07] [ERROR] Delivery slip: Error on fetching stock MissingSchemaError: Schema hasn't been registered for model "delivery-slip".
+Use mongoose.model(name, schema)
+[2024-07-06 14:19:32] [INFO] Server: Server started on port 5000
+[2024-07-06 14:19:32] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-06 14:19:32] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-06 14:19:32] [INFO] Sync: Synced 3 users
+[2024-07-06 14:21:52] [INFO] Server: Server started on port 5000
+[2024-07-06 14:21:52] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-06 14:21:52] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-06 14:21:52] [INFO] Sync: Synced 3 users
+[2024-07-06 14:22:04] [INFO] Server: Server started on port 5000
+[2024-07-06 14:22:04] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-06 14:22:04] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-06 14:22:04] [INFO] Sync: Synced 3 users
+[2024-07-06 14:23:19] [INFO] Server: Server started on port 5000
+[2024-07-06 14:23:19] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-06 14:23:19] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-06 14:23:19] [INFO] Sync: Synced 3 users
+[2024-07-06 14:24:55] [INFO] Server: Server started on port 5000
+[2024-07-06 14:24:55] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-06 14:24:56] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-06 14:24:56] [INFO] Sync: Synced 3 users
+[2024-07-06 14:32:14] [INFO] Server: Server started on port 5000
+[2024-07-06 14:32:14] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-06 14:32:14] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-06 14:32:14] [INFO] Sync: Synced 3 users
+[2024-07-06 14:33:14] [INFO] Server: Server started on port 5000
+[2024-07-06 14:33:14] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-06 14:33:14] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-06 14:33:14] [INFO] Sync: Synced 3 users
+[2024-07-06 14:33:28] [INFO] Server: Server started on port 5000
+[2024-07-06 14:33:28] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-06 14:33:28] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-06 14:33:28] [INFO] Sync: Synced 3 users
+[2024-07-06 14:35:08] [INFO] Server: Server started on port 5000
+[2024-07-06 14:35:08] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-06 14:35:08] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-06 14:35:08] [INFO] Sync: Synced 3 users
+[2024-07-06 14:39:20] [ERROR] Delivery slip: Error on fetching delivery slip CastError: Cast to ObjectId failed for value "List" (type string) at path "_id" for model "delivery-slip"
+[2024-07-06 14:39:38] [INFO] Server: Server started on port 5000
+[2024-07-06 14:39:38] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-06 14:39:38] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-06 14:39:38] [INFO] Sync: Synced 3 users
+[2024-07-06 14:39:47] [INFO] Server: Server started on port 5000
+[2024-07-06 14:39:47] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-06 14:39:47] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-06 14:39:47] [INFO] Sync: Synced 3 users
+[2024-07-06 14:39:52] [ERROR] Delivery slip: Error on fetching delivery slip CastError: Cast to ObjectId failed for value "List" (type string) at path "_id" for model "delivery-slip"
+[2024-07-06 14:40:03] [INFO] Server: Server started on port 5000
+[2024-07-06 14:40:03] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-06 14:40:03] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-06 14:40:03] [INFO] Sync: Synced 3 users
+[2024-07-06 14:40:05] [ERROR] Delivery slip: Error on fetching delivery slip CastError: Cast to ObjectId failed for value "List" (type string) at path "_id" for model "delivery-slip"
+[2024-07-06 14:40:08] [ERROR] Delivery slip: Error on fetching delivery slip CastError: Cast to ObjectId failed for value "List" (type string) at path "_id" for model "delivery-slip"
+[2024-07-06 15:00:33] [ERROR] Delivery slip: Error on fetching delivery slip CastError: Cast to ObjectId failed for value "6688f79dfde315ac597abee" (type string) at path "_id" for model "delivery-slip"
+[2024-07-06 15:01:02] [ERROR] Delivery slip: Error on fetching delivery slip CastError: Cast to ObjectId failed for value "6688f79dfde315ac597abe" (type string) at path "_id" for model "delivery-slip"
+[2024-07-06 15:01:05] [ERROR] Delivery slip: Error on fetching delivery slip CastError: Cast to ObjectId failed for value "6688f79dfde315ac597abe" (type string) at path "_id" for model "delivery-slip"
+[2024-07-06 15:01:16] [ERROR] Delivery slip: Error on fetching delivery slip CastError: Cast to ObjectId failed for value "6688f79dfde315ac597abe" (type string) at path "_id" for model "delivery-slip"
+[2024-07-06 15:02:48] [ERROR] Delivery slip: Error on fetching delivery slip CastError: Cast to ObjectId failed for value "6688f79dfde315ac597abe" (type string) at path "_id" for model "delivery-slip"
+[2024-07-06 15:02:54] [ERROR] Delivery slip: Error on fetching delivery slip CastError: Cast to ObjectId failed for value "6688f79dfde315ac597abee" (type string) at path "_id" for model "delivery-slip"
+[2024-07-06 15:03:14] [ERROR] Delivery slip: Error on fetching delivery slip CastError: Cast to ObjectId failed for value "6688f04001f1973551c54f" (type string) at path "_id" for model "delivery-slip"
+[2024-07-06 15:12:50] [INFO] Server: Server started on port 5000
+[2024-07-06 15:12:50] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-06 15:12:50] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-06 15:12:50] [INFO] Sync: Synced 3 users
+[2024-07-06 15:21:23] [INFO] Server: Server started on port 5000
+[2024-07-06 15:21:23] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-06 15:21:23] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-06 15:21:23] [INFO] Sync: Synced 3 users
+[2024-07-06 15:22:08] [INFO] Server: Server started on port 5000
+[2024-07-06 15:22:08] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-06 15:22:08] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-06 15:22:08] [INFO] Sync: Synced 3 users
+[2024-07-06 15:56:26] [INFO] Server: Server started on port 5000
+[2024-07-06 15:56:26] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-06 15:56:27] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-06 15:56:27] [INFO] Sync: Synced 3 users
+[2024-07-06 15:59:07] [INFO] Server: Server started on port 5000
+[2024-07-06 15:59:07] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-06 15:59:07] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-06 15:59:07] [INFO] Sync: Synced 3 users
+[2024-07-06 16:01:59] [INFO] Server: Server started on port 5000
+[2024-07-06 16:01:59] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-06 16:01:59] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-06 16:01:59] [INFO] Sync: Synced 3 users
+[2024-07-06 16:07:29] [INFO] Server: Server started on port 5000
+[2024-07-06 16:07:29] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-06 16:07:29] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-06 16:07:29] [INFO] Sync: Synced 3 users
+[2024-07-06 16:09:22] [INFO] Server: Server started on port 5000
+[2024-07-06 16:09:22] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-06 16:09:22] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-06 16:09:22] [INFO] Sync: Synced 3 users
+[2024-07-06 16:10:28] [INFO] Server: Server started on port 5000
+[2024-07-06 16:10:28] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-06 16:10:28] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-06 16:10:28] [INFO] Sync: Synced 3 users
+[2024-07-06 16:10:37] [INFO] Server: Server started on port 5000
+[2024-07-06 16:10:37] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-06 16:10:37] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-06 16:10:37] [INFO] Sync: Synced 3 users
+[2024-07-06 16:12:44] [INFO] Server: Server started on port 5000
+[2024-07-06 16:12:44] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-06 16:12:44] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-06 16:12:44] [INFO] Sync: Synced 3 users
+[2024-07-06 16:13:08] [INFO] Server: Server started on port 5000
+[2024-07-06 16:13:08] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-06 16:13:08] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-06 16:13:08] [INFO] Sync: Synced 3 users
+[2024-07-06 16:13:50] [INFO] Server: Server started on port 5000
+[2024-07-06 16:13:50] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-06 16:13:50] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-06 16:13:50] [INFO] Sync: Synced 3 users
+[2024-07-06 16:13:59] [INFO] Server: Server started on port 5000
+[2024-07-06 16:13:59] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-06 16:13:59] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-06 16:13:59] [INFO] Sync: Synced 3 users
+[2024-07-06 16:14:40] [INFO] Server: Server started on port 5000
+[2024-07-06 16:14:40] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-06 16:14:40] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-06 16:14:40] [INFO] Sync: Synced 3 users
