@@ -39,6 +39,10 @@ router.put(
 router.get("/v2", CustomerController.fetchV2);
 router.get("/bulk/autocomplete", CustomerController.fetchAutocompleteBulk);
 router.get(
+  "/consignment/autocomplete",
+  CustomerController.fetchAutocompleteConsignment
+);
+router.get(
   "/:id",
   param("id").isMongoId().withMessage(ErrorList["ID_INVALID"]),
   ErrorInterceptor.intercept,

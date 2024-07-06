@@ -39,6 +39,11 @@ const StockCardSchema = new Schema({
     required: false,
     ref: "good-receipts",
   },
+  deliverySlipID: {
+    type: Schema.Types.ObjectId,
+    required: false,
+    ref: "delivery-slips"
+  }
 });
 
 export default StockCardSchema;

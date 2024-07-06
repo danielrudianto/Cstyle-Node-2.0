@@ -6,5 +6,6 @@ export interface StockCardInterface {
   adjustmentEventID: string | null;
   goodReceiptID: string | null;
   invoiceID: string | null;
+  deliverySlipID: string | null;
   date: Date;
 }

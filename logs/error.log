@@ -47,3 +47,5 @@ Use mongoose.model(name, schema)
 [2024-07-01 11:37:05] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
 [2024-07-01 11:37:05] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
 [2024-07-01 11:37:06] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-04 10:17:38] [ERROR] Status: Error on fetching status dashboard MongoServerError: PlanExecutor error during aggregation :: caused by :: can't $subtract array from array
+[2024-07-04 10:17:49] [ERROR] Status: Error on fetching status dashboard MongoServerError: PlanExecutor error during aggregation :: caused by :: can't $subtract array from array

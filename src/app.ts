@@ -19,6 +19,8 @@ import GoodReceiptRoutes from "./routes/good-receipt.routes";
 import CashierRoutes from "./routes/cashier.routes";
 import MigrationRoutes from "./routes/migration.routes";
 
+import StatusRoutes from "./routes/status.routes";
+
 import AuthInterceptor from "./interceptors/auth.interceptor";
 import helmet from "helmet";
 import { createClient } from "redis";
@@ -65,6 +67,8 @@ app.use("/good-receipt", AuthInterceptor.intercept, GoodReceiptRoutes);
 app.use("/adjustment", AuthInterceptor.intercept, AdjustmentEventRoutes);
 app.use("/cashier", CashierRoutes);
 app.use("/migration", MigrationRoutes);
+
+app.use("/status", AuthInterceptor.intercept, StatusRoutes);
 
 redisClient.on("error", (error) => {
   new LoggerHelper({

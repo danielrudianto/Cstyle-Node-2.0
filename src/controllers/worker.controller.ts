@@ -16,13 +16,20 @@ import StockInModelModel from "../models/stock-in.model";
 import StockModelModel from "../models/stock.model";
 import StockCardModelModel from "../models/stock-card.model";
 import OverflowModelModel from "../models/overflow.model";
-import { StockOutInterface } from "../interfaces/stock-out.interface";
+import {
+  StockOutInterface,
+  StockOutTempInterface,
+} from "../interfaces/stock-out.interface";
 import StockOutModelModel from "../models/stock-out.model";
 import { Mutex } from "async-mutex";
+import {
+  UpdateProductImageDataInterface,
+  CommonWorkerInterface,
+} from "../interfaces/worker.interface";
 
 const mutex = new Mutex();
 class WorkerController {
-  static createProduct(data: any): void {
+  static createProduct(data: CommonWorkerInterface): void {
     ItemModelModel.fetchByID(data.id)
       .then(async (result) => {
         if (result) {
@@ -77,7 +84,7 @@ class WorkerController {
       });
   }
 
-  static updateProduct(data: any): any {
+  static updateProduct(data: CommonWorkerInterface): any {
     ItemModelModel.fetchByID(data.id)
       .then(async (result) => {
         if (result) {
@@ -134,7 +141,7 @@ class WorkerController {
       });
   }
 
-  static updateProductImages(data: any): any {
+  static updateProductImages(data: UpdateProductImageDataInterface): any {
     const id = data.id;
     const images = data.images as string[];
 
@@ -144,7 +151,7 @@ class WorkerController {
     });
   }
 
-  static createUser(data: any) {
+  static createUser(data: CommonWorkerInterface) {
     UserModelModel.fetchByID(data.id)
       .then((user) => {
         if (!user) {
@@ -162,7 +169,7 @@ class WorkerController {
       });
   }
 
-  static updateUser(data: any) {
+  static updateUser(data: CommonWorkerInterface) {
     UserModelModel.fetchByID(data.id)
       .then((user) => {
         if (!user) {
@@ -180,7 +187,7 @@ class WorkerController {
       });
   }
 
-  static deleteUser(data: any) {
+  static deleteUser(data: CommonWorkerInterface) {
     MigrationModelModel.deleteUser(data.id)
       .then((result) => {
         return result;
@@ -190,7 +197,7 @@ class WorkerController {
       });
   }
 
-  static createBill(data: any) {
+  static createBill(data: CommonWorkerInterface) {
     BillModelModel.fetchByID(data.id).then(async (result) => {
       if (!result) {
         throw Error(ErrorList["BILL_NOT_FOUND"]);
@@ -278,6 +285,7 @@ class WorkerController {
         invoiceID: null,
         adjustmentEventID: data.adjustmentEventID,
         goodReceiptID: data.goodReceiptID,
+        deliverySlipID: null,
       }),
     ])
       .then(([result, _, __]) => {
@@ -351,6 +359,7 @@ class WorkerController {
       invoiceID: data.invoiceID,
       adjustmentEventID: data.adjustmentEventID,
       goodReceiptID: null,
+      deliverySlipID: null,
     }).create();
 
     await new StockModelModel({
@@ -360,7 +369,24 @@ class WorkerController {
     }).update();
   }
 
-  static insertStockOutCardOnly(data: any) {}
+  static async insertStockOutCardOnly(data: StockOutTempInterface) {
+    await new StockCardModelModel({
+      itemID: data.itemID,
+      quantity: data.quantity,
+      date: data.date,
+      billID: null,
+      invoiceID: null,
+      adjustmentEventID: null,
+      goodReceiptID: null,
+      deliverySlipID: data.deliverySlipID,
+    }).create();
+
+    await new StockModelModel({
+      itemID: data.itemID,
+      quantity: Math.abs(data.quantity) * -1,
+      storeID: null,
+    }).update();
+  }
 }
 
 export default WorkerController;

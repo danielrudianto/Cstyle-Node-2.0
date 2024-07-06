@@ -152,6 +152,22 @@ class CustomerController {
       });
   };
 
+  static fetchAutocompleteConsignment = (req: Request, res: Response) => {
+    const keyword = req.query.keyword as string;
+    CustomerModelModel.fetchAutocomplete(keyword, "consignment")
+      .then((result) => {
+        return res.status(200).send(result);
+      })
+      .catch((error) => {
+        new LoggerHelper({
+          message: `Error on fetching customer ${error}`,
+          tag: "Customer",
+          type: LoggerType.error,
+        }).log();
+        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+      });
+  };
+
   static fetchByID = (req: Request, res: Response) => {
     const id = req.params.id;
     CustomerModelModel.fetchByID(id)

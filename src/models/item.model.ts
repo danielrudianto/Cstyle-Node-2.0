@@ -100,6 +100,116 @@ class ItemModelModel {
     ]);
   }
 
+  static fetchPopular() {
+    const currentDate = new Date();
+    currentDate.setDate(currentDate.getDate() - 30 * 270);
+
+    return Promise.all([
+      conn.model("packing-lists").aggregate([
+        {
+          $match: {
+            date: {
+              $gte: new Date(currentDate),
+            },
+            isDelete: false,
+          },
+        },
+        {
+          $unwind: {
+            path: "$items",
+          },
+        },
+        {
+          $group: {
+            _id: "$items.itemID",
+            quantity: {
+              $sum: "$items.quantity",
+            },
+          },
+        },
+        {
+          $sort: {
+            quantity: -1,
+          },
+        },
+        {
+          $limit: 10,
+        },
+        {
+          $lookup: {
+            from: "items",
+            localField: "_id",
+            foreignField: "_id",
+            as: "item",
+          },
+        },
+        {
+          $unwind: {
+            path: "$item",
+          },
+        },
+        {
+          $project: {
+            reference: "$item.reference",
+            description: "$item.description",
+            quantity: "$quantity",
+          },
+        },
+      ]),
+      conn.model("bills").aggregate([
+        {
+          $match: {
+            date: {
+              $gte: new Date(currentDate),
+            },
+            isDelete: false,
+          },
+        },
+        {
+          $unwind: {
+            path: "$items",
+          },
+        },
+        {
+          $group: {
+            _id: "$items.itemID",
+            quantity: {
+              $sum: "$items.quantity",
+            },
+          },
+        },
+        {
+          $sort: {
+            quantity: -1,
+          },
+        },
+        {
+          $limit: 10,
+        },
+        {
+          $lookup: {
+            from: "items",
+            localField: "_id",
+            foreignField: "_id",
+            as: "item",
+          },
+        },
+        {
+          $unwind: {
+            path: "$item",
+          },
+        },
+        {
+          $project: {
+            reference: "$item.reference",
+            description: "$item.description",
+            quantity: "$quantity",
+          },
+        },
+      ]),
+    ]);
+  }
+
   static async fetchV2WStock(data: ItemFetchInterfaceBranch) {
     const [items, countItems] = await Promise.all([
       conn

@@ -9,3 +9,11 @@ export interface StockOutInterface {
   stockInID?: string;
   storeID: string | null;
 }
+
+export interface StockOutTempInterface {
+  id?: string;
+  date: Date;
+  itemID: string;
+  deliverySlipID: string;
+  quantity: number;
+}

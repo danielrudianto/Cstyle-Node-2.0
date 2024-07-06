@@ -11,6 +11,8 @@ class StockCardModelModel {
   invoiceID: string | null;
   adjustmentEventID: string | null;
   goodReceiptID: string | null;
+  deliverySlipID: string | null;
+
   constructor(data: StockCardInterface) {
     this.itemID = data.itemID;
     this.quantity = data.quantity;
@@ -19,6 +21,7 @@ class StockCardModelModel {
     this.invoiceID = data.invoiceID;
     this.adjustmentEventID = data.adjustmentEventID;
     this.goodReceiptID = data.goodReceiptID;
+    this.deliverySlipID = data.deliverySlipID;
   }
 
   create() {

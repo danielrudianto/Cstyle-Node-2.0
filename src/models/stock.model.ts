@@ -1,8 +1,12 @@
+import { Mutex } from "async-mutex";
 import { CheckStockInterface } from "../interfaces/check-stock.interface";
 import { StockInterface } from "../interfaces/stock.interface";
 import { connectionFactory } from "../utils/connector.utils";
+import LoggerHelper from "../utils/logger.utils";
+import { LoggerType } from "../interfaces/logger.interface";
 
 const conn = connectionFactory();
+const mutex = new Mutex();
 
 class StockModelModel {
   itemID: string;
@@ -14,23 +18,39 @@ class StockModelModel {
     this.quantity = data.quantity;
   }
 
-  update() {
-    return conn.model("stock").findOneAndUpdate(
-      {
-        storeID: this.storeID,
-        itemID: this.itemID,
-      },
-      {
-        $inc: {
-          quantity: this.quantity,
-        },
-      },
-      {
-        upsert: true,
-        new: true,
-        runValidators: true,
-      }
-    );
+  async update() {
+    await mutex.acquire();
+    mutex
+      .runExclusive(() => {
+        return conn.model("stock").findOneAndUpdate(
+          {
+            storeID: this.storeID,
+            itemID: this.itemID,
+          },
+          {
+            $inc: {
+              quantity: this.quantity,
+            },
+          },
+          {
+            upsert: true,
+            new: true,
+            runValidators: true,
+          }
+        );
+      })
+      .then(() => {
+        return true;
+      })
+      .catch((error) => {
+        new LoggerHelper({
+          message: `Error on updating stock: ${error.message}`,
+          type: LoggerType.error,
+          tag: "StockModel",
+        }).log();
+
+        return false;
+      });
   }
 
   static checkStockByItemIDs(

@@ -106,7 +106,7 @@ class MigrationModelModel {
     });
   }
 
-  static deleteUser(userID: number) {
+  static deleteUser(userID: string) {
     return conn.model("migration").create({
       // Autoincrement from previous
       migration_version: new Date().getTime(),
