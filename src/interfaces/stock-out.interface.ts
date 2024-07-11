@@ -17,3 +17,17 @@ export interface StockOutTempInterface {
   deliverySlipID: string;
   quantity: number;
 }
+
+export interface StockOutTransferInterface {
+  storeID: string | null;
+  itemID: string;
+  quantity: number;
+}
+
+export interface RemoveStockInInterface {
+  goodReceiptID: string | null;
+  itemID: string;
+  adjustmentCaseID: string | null;
+  quantity: number;
+  storeID: string | null;
+}

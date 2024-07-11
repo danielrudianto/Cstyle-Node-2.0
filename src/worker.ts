@@ -8,12 +8,18 @@ import {
   UpdateProductImageDataInterface,
 } from "./interfaces/worker.interface";
 import { StockInInterface } from "./interfaces/stock-in.interface";
-import { StockOutInterface, StockOutTempInterface } from "./interfaces/stock-out.interface";
+import {
+  RemoveStockInInterface,
+  StockOutInterface,
+  StockOutTempInterface,
+  StockOutTransferInterface,
+} from "./interfaces/stock-out.interface";
 
 const workerOptions = {
   connection: {
     host: "localhost",
     port: 6379,
+    concurrency: 1,
   },
 };
 
@@ -29,6 +35,11 @@ interface JobDataMap {
   insertStockOut: StockOutInterface;
   checkOverflow: void;
   insertStockOutTemp: StockOutTempInterface;
+  insertStockOutOnly: StockOutInterface;
+  insertStockOutTransfer: StockOutTransferInterface;
+  insertStockInTransfer: StockOutTransferInterface;
+  removeStockOutTemp: StockOutTempInterface;
+  removeStockIn: RemoveStockInInterface;
 }
 
 type JobName = keyof JobDataMap;
@@ -62,19 +73,42 @@ const workerHandler = async <T extends JobName>(job: Job<T>) => {
       WorkerController.deleteUser(job.data as CommonWorkerInterface);
       break;
     case "createBill":
-      WorkerController.createBill(job.data as CommonWorkerInterface);
+      await WorkerController.createBill(job.data as CommonWorkerInterface);
       break;
     case "insertStockIn":
-      WorkerController.insertStockIn(job.data as StockInInterface);
+      await WorkerController.insertStockIn(job.data as StockInInterface);
       break;
     case "insertStockOut":
-      WorkerController.insertStockOut(job.data as StockOutInterface);
-      break;
-    case "checkOverflow":
+      await WorkerController.insertStockOut(job.data as StockOutInterface);
       break;
     case "insertStockOutTemp":
-      // Used for stock card and stock only
-      WorkerController.insertStockOutCardOnly(job.data as StockOutTempInterface);
+      await WorkerController.insertStockOutCardOnly(
+        job.data as StockOutTempInterface
+      );
+      break;
+    case "removeStockOutTemp":
+      await WorkerController.removeStockOutCardOnly(
+        job.data as StockOutTempInterface
+      );
+      break;
+    case "insertStockOutOnly":
+      await WorkerController.insertStockOutOnly(job.data as StockOutInterface);
+      break;
+    case "insertStockOutTransfer":
+      await WorkerController.stockOutTransfer(
+        job.data as StockOutTransferInterface
+      );
+      break;
+    case "insertStockInTransfer":
+      await WorkerController.stockInTransfer(
+        job.data as StockOutTransferInterface
+      );
+      break;
+    case "removeStockIn":
+      await WorkerController.removeStockIn(job.data as RemoveStockInInterface);
+      break;
+    case "checkOverflow":
+      await WorkerController.checkOverflow();
       break;
   }
 };

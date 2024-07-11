@@ -3,3 +3,9 @@ export interface StockInterface {
   storeID: string | null;
   quantity: number;
 }
+
+export interface DeleteStockInInterface {
+  goodReceiptID: string | null;
+  adjustmentEventID: string | null;
+  itemID: string;
+}

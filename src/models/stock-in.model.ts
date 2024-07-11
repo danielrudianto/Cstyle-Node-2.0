@@ -1,3 +1,4 @@
+import { DeleteStockInInterface } from "../interfaces/stock.interface";
 import { StockInInterface } from "../interfaces/stock-in.interface";
 import { connectionFactory } from "../utils/connector.utils";
 
@@ -42,6 +43,14 @@ class StockInModelModel {
       $inc: {
         residue: -1 * decr,
       },
+    });
+  }
+
+  static delete(data: DeleteStockInInterface) {
+    return conn.model("stock-ins").findOneAndDelete({
+      goodReceiptID: data.goodReceiptID,
+      adjustmentEventID: data.adjustmentEventID,
+      itemID: data.itemID,
     });
   }
 }

@@ -4,6 +4,7 @@ import { StockInterface } from "../interfaces/stock.interface";
 import { connectionFactory } from "../utils/connector.utils";
 import LoggerHelper from "../utils/logger.utils";
 import { LoggerType } from "../interfaces/logger.interface";
+import { RemoveStockInInterface } from "src/interfaces/stock-out.interface";
 
 const conn = connectionFactory();
 const mutex = new Mutex();
@@ -19,57 +20,138 @@ class StockModelModel {
   }
 
   async update() {
-    await mutex.acquire();
-    mutex
-      .runExclusive(() => {
-        return conn.model("stock").findOneAndUpdate(
-          {
-            storeID: this.storeID,
-            itemID: this.itemID,
+    try {
+      await conn.model("stocks").findOneAndUpdate(
+        {
+          storeID: this.storeID,
+          itemID: this.itemID,
+        },
+        {
+          $inc: {
+            quantity: this.quantity,
           },
-          {
-            $inc: {
-              quantity: this.quantity,
-            },
-          },
-          {
-            upsert: true,
-            new: true,
-            runValidators: true,
-          }
-        );
-      })
-      .then(() => {
-        return true;
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          message: `Error on updating stock: ${error.message}`,
-          type: LoggerType.error,
-          tag: "StockModel",
-        }).log();
-
-        return false;
-      });
+        },
+        {
+          upsert: true,
+          new: true,
+          runValidators: true,
+        }
+      );
+    } catch (error) {
+      throw error;
+    }
   }
 
   static checkStockByItemIDs(
     items: CheckStockInterface[],
     storeID: string | null
   ) {
-    return conn.model("stock").find({
+    return conn.model("stocks").find({
       itemID: { $in: items.map((x) => x.itemID) },
       storeID: storeID,
     });
   }
 
+  static checkDashboardStockByItemIDs(
+    items: CheckStockInterface[],
+    storeID: string | null
+  ) {
+    return Promise.all([
+      conn.model("stocks").aggregate([
+        {
+          $match: {
+            itemID: { $in: items.map((x) => x.itemID) },
+            storeID: storeID,
+          },
+        },
+        {
+          $group: {
+            _id: "$itemID",
+            quantity: { $sum: "$quantity" },
+          },
+        },
+      ]),
+      conn.model("stocks").aggregate([
+        {
+          $match: {
+            itemID: { $in: items.map((x) => x.itemID) },
+            storeID: {
+              $ne: storeID,
+            },
+          },
+        },
+        {
+          $group: {
+            _id: "$itemID",
+            quantity: { $sum: "$quantity" },
+          },
+        },
+      ]),
+    ]);
+  }
+
+  static fetch(storeID: string | null, itemIDs: string[]) {
+    return Promise.all([]);
+  }
+
   static fetchByStoreID(storeID: string) {
-    return conn.model("stock").find({
+    return conn.model("stocks").find({
       storeID: storeID,
       quantity: {
         $gt: 0,
       },
     });
+  }
+
+  static fetchByItemID(itemID: string) {
+    return conn
+      .model("stocks")
+      .find({
+        itemID: itemID,
+      })
+      .populate("storeID", "name address");
+  }
+
+  static async removeStockIn(data: RemoveStockInInterface) {
+    const result = await Promise.all([
+      conn.model("stocks").updateOne(
+        {
+          itemID: data.itemID,
+          storeID: data.storeID,
+        },
+        {
+          $inc: {
+            quantity: data.quantity * -1,
+          },
+        }
+      ),
+      conn.model("stock-ins").findOneAndDelete({
+        itemID: data.itemID,
+        goodReceiptID: data.goodReceiptID,
+        adjustmentCaseID: data.adjustmentCaseID,
+      }),
+    ]);
+    const stockIn = result[1];
+    const stockInID = stockIn._id;
+    const stockOuts = await conn.model("stock-outs").find({
+      stockInID: stockInID,
+    });
+
+    for (let i = 0; i < stockOuts.length; i++) {
+      await conn.model("overflows").create({
+        quantity: stockOuts[i].quantity,
+        billID: stockOuts[i].billID,
+        invoiceID: stockOuts[i].invoiceID,
+        adjustmentEventID: stockOuts[i].adjustmentEventID,
+        itemID: stockOuts[i].itemID,
+      });
+
+      await conn.model("stock-outs").deleteOne({
+        _id: stockOuts[i]._id,
+      });
+    }
+
+    return true;
   }
 }
 

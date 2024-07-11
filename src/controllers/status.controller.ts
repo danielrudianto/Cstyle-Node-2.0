@@ -36,7 +36,7 @@ class StatusController {
             memberStoreMap: memberCountStore.map((x: any) => {
               return {
                 count: x.count,
-                storeID: x._id,
+                storeID: x.store,
               };
             }),
             sales: {

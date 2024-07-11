@@ -50,7 +50,7 @@ class AdjustmentEventController {
                       price: 0,
                       adjustmentEventID: result._id,
                       goodReceiptID: null,
-                      storeID: null,
+                      storeID: store,
                     });
                   });
 
@@ -90,6 +90,57 @@ class AdjustmentEventController {
           return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
         });
     }
+  };
+
+  static fetch = (req: Request, res: Response) => {
+    const page = req.body.page;
+    const month = req.body.month;
+    const year = req.body.year;
+    const keyword = req.body.keyword;
+    const status = req.body.status as string[];
+
+    AdjustmentModelModel.fetch({
+      page: page,
+      month: month + 1,
+      year: year,
+      keyword: keyword,
+      status: status,
+    })
+      .then(([result, count]) => {
+        return res.status(200).send({
+          data: result,
+          count: count,
+        });
+      })
+      .catch((error) => {
+        new LoggerHelper({
+          message: `Error on fetching adjustment event: ${error}`,
+          type: LoggerType.error,
+          tag: "Adjustment",
+        }).log();
+
+        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+      });
+  };
+
+  static fetchByID = (req: Request, res: Response) => {
+    const id = req.params.id;
+    AdjustmentModelModel.fetchByID(id)
+      .then((result) => {
+        if (!result) {
+          return res.status(404).send(ErrorList["ADJUSTMENT_EVENT_NOT_FOUND"]);
+        } else {
+          return res.status(200).send(result);
+        }
+      })
+      .catch((error) => {
+        new LoggerHelper({
+          message: `Error on fetching adjustment event: ${error}`,
+          tag: "Adjustment",
+          type: LoggerType.error,
+        }).log();
+        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+      });
   };
 }
 

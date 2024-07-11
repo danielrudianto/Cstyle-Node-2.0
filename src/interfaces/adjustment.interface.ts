@@ -12,3 +12,11 @@ export interface AdjustmentItemInterface {
   itemID: string;
   quantity: number;
 }
+
+export interface AdjustmentFetchInterface {
+  page: number;
+  keyword: string;
+  status: string[];
+  month: number;
+  year: number;
+}

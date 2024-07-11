@@ -70,25 +70,23 @@ class DeliverySlipModelModel {
     ]);
   }
 
-  static update(data: DeliverySlipUpdateInterface) {
-    return conn.model("delivery-slip").updateOne(
-      {
-        _id: data.id,
-      },
-      {
-        $set: {
-          // isReturn: true,
-          returnedAt: data.returnedAt,
-          ...data.items.reduce(
-            (acc, item) => ({
-              ...acc,
-              [`items.${item.id}.returned`]: item.return,
-            }),
-            {}
-          ),
-        },
+  static async update(data: DeliverySlipUpdateInterface) {
+    const deliverySlip = await conn.model("delivery-slips").findById(data.id);
+    deliverySlip.isReturn = true;
+    deliverySlip.returnedAt = new Date();
+
+    for (let i = 0; i < data.items.length; i++) {
+      const id = data.items[i].id;
+      const quantity = data.items[i].return;
+
+      const index = deliverySlip.items.findIndex((x: any) => x.id == id);
+      if (index != -1) {
+        deliverySlip.items[index].returned = quantity;
       }
-    );
+    }
+
+    await deliverySlip.save();
+    return deliverySlip;
   }
 
   static async generateName(date: Date): Promise<string> {

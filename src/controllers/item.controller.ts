@@ -237,6 +237,7 @@ class ItemController {
   static fetchV2 = (req: Request, res: Response) => {
     const page = !req.query.page ? 1 : parseInt(req.query.page as string);
     const keyword = !req.query.keyword ? "" : (req.query.keyword as string);
+
     // If keyword length is 13 and all characters are numbers, search by barcode
     ItemModelModel.fetch({
       keyword: keyword,
@@ -262,11 +263,13 @@ class ItemController {
     const page = req.body.page;
     const keyword = req.body.keyword;
     const branch = req.body.branch;
+    const onlyActive = !req.body.onlyActive ? false : req.body.onlyActive;
     // If keyword length is 13 and all characters are numbers, search by barcode
     ItemModelModel.fetchV2WStock({
       keyword: keyword,
       page: page,
       branch: branch,
+      onlyActive: onlyActive,
     })
       .then(([result, count]) => {
         return res.status(200).send({

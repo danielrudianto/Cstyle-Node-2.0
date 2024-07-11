@@ -16,6 +16,8 @@ import PackingListRoutes from "./routes/packing-list.routes";
 import QuotationRoutes from "./routes/quotation.routes";
 import DeliverySlipRoutes from "./routes/delivery-slip.routes";
 import GoodReceiptRoutes from "./routes/good-receipt.routes";
+import StockRequestRoutes from "./routes/stock-transfer.routes";
+import ItemStockRoutes from "./routes/item-stock.routes";
 
 import CashierRoutes from "./routes/cashier.routes";
 import MigrationRoutes from "./routes/migration.routes";
@@ -60,11 +62,13 @@ app.use("/supplier", AuthInterceptor.intercept, SupplierRoutes);
 app.use("/user", AuthInterceptor.intercept, UserRoutes);
 app.use("/store", AuthInterceptor.intercept, StoreRoutes);
 app.use("/membership", AuthInterceptor.intercept, MembershipRoutes);
+app.use("/item-stock", AuthInterceptor.anyIntercept, ItemStockRoutes);
 
 app.use("/quotation", AuthInterceptor.intercept, QuotationRoutes);
 app.use("/packing-list", AuthInterceptor.intercept, PackingListRoutes);
 app.use("/delivery-slip", AuthInterceptor.intercept, DeliverySlipRoutes);
 app.use("/good-receipt", AuthInterceptor.intercept, GoodReceiptRoutes);
+app.use("/stock-transfer", AuthInterceptor.intercept, StockRequestRoutes);
 
 app.use("/adjustment", AuthInterceptor.intercept, AdjustmentEventRoutes);
 app.use("/cashier", CashierRoutes);

@@ -113,6 +113,31 @@ class StoreController {
       });
   };
 
+  static fetchOthers = (req: Request, res: Response) => {
+    const storeID = req.body.storeID;
+    StoreModelModel.fetchOthers(storeID)
+      .then((result) => {
+        return res.status(200).send([
+          {
+            _id: null,
+            name: "Office",
+            address: "Jalan Raya Kerobokan no. 87A",
+            phoneNumber: "0878-5426-8240",
+            code: "",
+          },
+          ...result,
+        ]);
+      })
+      .catch((error) => {
+        new LoggerHelper({
+          message: `Error on fetching other stores ${error}`,
+          type: LoggerType.error,
+          tag: "Store",
+        }).log();
+        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+      });
+  };
+
   static updateByID = (req: Request, res: Response) => {
     const name = req.body.name;
     const address = req.body.address;

@@ -1,4 +1,4 @@
-import { MembershipInterface } from "src/interfaces/membership.interface";
+import { MembershipInterface } from "../interfaces/membership.interface";
 import { connectionFactory } from "../utils/connector.utils";
 
 const conn = connectionFactory();
@@ -65,6 +65,19 @@ class MembershipModelModel {
             },
           },
         },
+        {
+          $lookup: {
+            from: "stores",
+            localField: "_id",
+            foreignField: "_id",
+            as: "store",
+          },
+        },
+        {
+          $unwind: {
+            path: "$store",
+          },
+        },
       ]),
       conn.model("memberships").aggregate([
         {
@@ -99,6 +112,14 @@ class MembershipModelModel {
     return conn.model("memberships").findOne({
       code: code,
     });
+  }
+
+  static async preCreate(code: string) {
+    const count = await conn.model("memberships").countDocuments({
+      code: code,
+    });
+
+    return count == 0;
   }
 }
 

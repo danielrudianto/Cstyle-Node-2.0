@@ -5,6 +5,7 @@ const router = Router();
 
 router.post("/", DeliverySlipController.create);
 router.get("/unconfirmed", DeliverySlipController.fetchUnconfirmed);
+router.get("/invoice/:id", DeliverySlipController.fetchByIDWInvoice);
 router.get("/:id", DeliverySlipController.fetchByID);
 router.put("/confirm", DeliverySlipController.confirm);
 

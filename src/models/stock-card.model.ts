@@ -27,6 +27,12 @@ class StockCardModelModel {
   create() {
     return conn.model("stock-cards").create(this);
   }
+
+  static deleteByDeliverySlipID(id: string) {
+    return conn.model("stock-cards").deleteMany({
+      deliverySlipID: id,
+    });
+  }
 }
 
 export default StockCardModelModel;

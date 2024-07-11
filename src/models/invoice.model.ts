@@ -56,6 +56,12 @@ class InvoiceModelModel {
     });
   }
 
+  static fetchByDeliverySlipID(id: string) {
+    return conn.model("invoice").findOne({
+      deliverySlipID: id,
+    });
+  }
+
   static async generateName(date: Date): Promise<string> {
     const count = await conn.model("invoice").countDocuments({
       $expr: {

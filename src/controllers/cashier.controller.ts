@@ -104,6 +104,7 @@ class CashierController {
         } else {
           BillModelModel.insertMany(modifiedBills)
             .then((result) => {
+              console.log(result);
               result.forEach(async (x) => {
                 await queue.add("createBill", {
                   id: x._id,
@@ -166,7 +167,7 @@ class CashierController {
   };
 
   static fetchStock = (req: Request, res: Response) => {
-    const storeID = req.body.store_id;
+    const storeID = req.body.storeID;
     StockModelModel.fetchByStoreID(storeID)
       .then((result) => {
         return res.status(200).send(

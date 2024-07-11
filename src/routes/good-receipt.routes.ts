@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { body } from "express-validator";
+import { body, param } from "express-validator";
 import { ErrorList } from "../data/error-list";
 import ErrorInterceptor from "../interceptors/error.interceptor";
 import GoodReceiptController from "../controllers/good-receipt.controller";
@@ -16,5 +16,14 @@ router.post(
   ErrorInterceptor.intercept,
   GoodReceiptController.create
 );
+
+router.get(
+  "/:id",
+  param("id").isMongoId().withMessage(ErrorList["ID_INVALID"]),
+  ErrorInterceptor.intercept,
+  GoodReceiptController.fetchByID
+);
+
+router.put("/", GoodReceiptController.updateByID);
 
 export default router;

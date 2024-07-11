@@ -24,6 +24,19 @@ class MembershipPointModelModel {
     });
   }
 
+  static fetch(page: number) {
+    return Promise.all([
+      conn
+        .model("membership-points")
+        .find({})
+        .populate("createdBy", "name")
+        .sort({ createdAt: -1 })
+        .limit(10)
+        .skip((page - 1) * 10),
+      conn.model("membership-points").countDocuments({}),
+    ]);
+  }
+
   static fetchCurrentConversion() {
     return conn.model("membership-points").findOne({}).sort({
       createdAt: -1,

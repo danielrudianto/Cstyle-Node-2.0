@@ -9,7 +9,8 @@ import { connectionFactory } from "../utils/connector.utils";
 
 const conn = connectionFactory();
 
-class GoodReceiptCreateModel {
+export class GoodReceiptCreateModel {
+  id?: string;
   name: string;
   date: Date;
   supplier: string;
@@ -17,7 +18,7 @@ class GoodReceiptCreateModel {
   items: GoodReceiptItemInterface[];
 
   constructor(data: GoodReceiptCreateInterface) {
-    this.name = data.name;
+    (this.id = data.id), (this.name = data.name);
     this.date = data.date;
     this.supplier = data.supplierID;
     this.items = data.items;
@@ -33,6 +34,25 @@ class GoodReceiptCreateModel {
       createdBy: this.createdBy,
       createdAt: new Date(),
     });
+  }
+
+  update() {
+    return conn.model("good-receipt").findByIdAndUpdate(this.id, {
+      name: this.name,
+      date: this.date,
+      supplierID: this.supplier,
+      items: this.items,
+    });
+  }
+}
+
+export class GoodReceiptModelModel {
+  static fetchByID(id: string) {
+    return conn
+      .model("good-receipt")
+      .findById(id)
+      .populate("items.itemID", "reference description")
+      .populate("supplierID", "name address");
   }
 
   static fetch(data: GoodReceiptSearchInterface) {
@@ -86,5 +106,3 @@ class GoodReceiptCreateModel {
     ]);
   }
 }
-
-export default GoodReceiptCreateModel;

@@ -1,5 +1,6 @@
 import { Mutex } from "async-mutex";
 import {
+  AdjustmentFetchInterface,
   AdjustmentInterface,
   AdjustmentItemInterface,
 } from "../interfaces/adjustment.interface";
@@ -36,6 +37,64 @@ class AdjustmentModelModel {
       items: this.items,
       storeID: this.storeID,
     });
+  }
+
+  static fetch(data: AdjustmentFetchInterface) {
+    const filter = [];
+
+    if (data.status.includes("active")) {
+      filter.push({
+        isDelete: false,
+      });
+    }
+
+    if (data.status.includes("deleted")) {
+      filter.push({
+        isDelete: true,
+      });
+    }
+
+    return Promise.all([
+      conn
+        .model("adjustment-event")
+        .find({
+          $or: filter,
+          name: RegExp(data.keyword, "i"),
+          $expr: {
+            $and: [
+              { $eq: [{ $month: "$date" }, data.month] },
+              { $eq: [{ $year: "$date" }, data.year] },
+            ],
+          },
+        })
+        .populate("storeID", "name")
+        .populate("createdBy", "name")
+        .sort({
+          createdAt: -1,
+        })
+        .limit(20)
+        .skip(20 * (data.page - 1)),
+      conn.model("adjustment-event").countDocuments({
+        $or: filter,
+        name: RegExp(data.keyword, "i"),
+        $expr: {
+          $and: [
+            { $eq: [{ $month: "$date" }, data.month] },
+            { $eq: [{ $year: "$date" }, data.year] },
+          ],
+        },
+      }),
+    ]);
+  }
+
+  static fetchByID(id: string) {
+    return conn
+      .model("adjustment-event")
+      .findById(id)
+      .populate("createdBy", "name")
+      .populate("deletedBy", "name")
+      .populate("storeID", "name")
+      .populate("items.itemID", "reference description");
   }
 
   static async preCreate(

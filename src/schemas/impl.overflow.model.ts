@@ -20,10 +20,10 @@ const OverflowSchema = new Schema({
     required: false,
     ref: "invoices",
   },
-  stockInID: {
+  itemID: {
     type: Schema.Types.ObjectId,
-    required: false,
-    ref: "stock-ins",
+    required: true,
+    ref: "items",
   },
 });
 

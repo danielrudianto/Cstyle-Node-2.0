@@ -108,6 +108,20 @@ class StoreModelModel {
     ]);
   }
 
+  static fetchOthers(storeID: string) {
+    return conn
+      .model("stores")
+      .find({
+        _id: {
+          $ne: storeID,
+        },
+        isActive: true,
+      })
+      .sort({
+        name: 1,
+      });
+  }
+
   static async fetchByCode(code: string): Promise<StoreModelModel> {
     const store = await conn
       .model("stores")

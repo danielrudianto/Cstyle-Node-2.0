@@ -93,6 +93,7 @@ export enum ErrorList {
   DATE_REQUIRED = "Date is required",
   PURCHASE_ORDER_REQUIRED = "Purchase order is required",
   ITEMS_REQUIRED = "Items is required",
+  ITEMS_INVALID = "Items invalid",
   PURCHASE_ORDER_NOT_FOUND = "Purchase order not found",
   PURCHASE_ORDER_NOT_INCOMPLETE = "Purchase order is not incomplete",
   PURCHASE_ORDER_ITEM_NOT_FOUND = "Purchase order item not found",
@@ -170,6 +171,9 @@ export enum ErrorList {
   ADJUSTMENT_EVENT_NOT_FOUND = "Adjustment event not found",
   USER_NOT_ACTIVE = "User not active",
   STOCK_REQUEST_EMPTY_ITEMS = "Stock request empty items",
+  LANGUAGE_REQUIRED = "Language is required",
+  LANGUAGE_INVALID = "Language is invalid",
+  PHONE_EMAIL_REQUIRED = "Either phone number or email is required",
 
   ADMINISTRATOR_ONLY = "Sorry, this feature is for administrator only",
   BILL_NAME_DUPLICATE = "Bill name already exist",
@@ -192,4 +196,5 @@ export enum ErrorList {
   BAD_REQUEST = "Bad request",
   IS_FAVORITE_INVALID = "Is favorite field is invalid",
   LOGIN_ERROR = "Invalid username / password. Please check again your input.",
+  STOCK_REQUEST_SAME_STORE = "Stock request from and to store must be different",
 }

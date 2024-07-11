@@ -6,6 +6,7 @@ export interface GoodReceiptInterface {
 }
 
 export interface GoodReceiptCreateInterface {
+  id?: string;
   date: Date;
   name: string;
   supplierID: string;

@@ -17,8 +17,10 @@ import StockModelModel from "../models/stock.model";
 import StockCardModelModel from "../models/stock-card.model";
 import OverflowModelModel from "../models/overflow.model";
 import {
+  RemoveStockInInterface,
   StockOutInterface,
   StockOutTempInterface,
+  StockOutTransferInterface,
 } from "../interfaces/stock-out.interface";
 import StockOutModelModel from "../models/stock-out.model";
 import { Mutex } from "async-mutex";
@@ -197,71 +199,40 @@ class WorkerController {
       });
   }
 
-  static createBill(data: CommonWorkerInterface) {
-    BillModelModel.fetchByID(data.id).then(async (result) => {
-      if (!result) {
-        throw Error(ErrorList["BILL_NOT_FOUND"]);
-      } else {
-        if (result.memberID != null) {
-          const conversion = await redisClient.get("conversion");
-          const value = result.items.reduce((acc: number, item: any) => {
-            return acc + (item.price - item.discount) * item.quantity;
-          }, 0);
+  static async createBill(data: CommonWorkerInterface) {
+    const result = await BillModelModel.fetchByID(data.id);
+    if (!result) {
+      throw Error(ErrorList["BILL_NOT_FOUND"]);
+    } else {
+      const value = result.items.reduce((acc: number, item: any) => {
+        return acc + (item.price - item.discount) * item.quantity;
+      }, 0);
 
-          const point =
-            Number(conversion) == 0
-              ? 0
-              : Math.floor(value / Number(conversion));
+      if (result.memberID != null) {
+        const conversion = await redisClient.get("conversion");
+        const point =
+          Number(conversion) == 0 ? 0 : Math.floor(value / Number(conversion));
 
-          await MembershipModelModel.updatePoint(result.memberID, point);
-
-          const todaySales = await redisClient.get(
-            `sales:${moment(result.date).format("YYYY-MM-DD")}:${
-              result.storeID
-            }`
-          );
-
-          if (todaySales == null) {
-            await redisClient.set(
-              `sales:${moment(result.date).format("YYYY-MM-DD")}:${
-                result.storeID
-              }`,
-              value,
-              {
-                EX: 30 * 24 * 60 * 60,
-              }
-            );
-          } else {
-            await redisClient.set(
-              `sales:${moment(result.date).format("YYYY-MM-DD")}:${
-                result.storeID
-              }`,
-              Number(todaySales) + value,
-              {
-                EX: 30 * 24 * 60 * 60,
-              }
-            );
-          }
-
-          result.bills.forEach(async (x: any) => {
-            const item: StockOutInterface = {
-              date: result.date,
-              itemID: x.itemID,
-              quantity: x.quantity,
-              adjustmentEventID: null,
-              storeID: result.storeID,
-              billID: result._id.toString(),
-              invoiceID: null,
-            };
-            await queue.add("insertStockOut", item);
-          });
-        }
+        await MembershipModelModel.updatePoint(result.memberID, point);
       }
-    });
+
+      result.items.forEach(async (x: any) => {
+        const item: StockOutInterface = {
+          date: result.date,
+          itemID: x.itemID,
+          quantity: x.quantity,
+          adjustmentEventID: null,
+          storeID: result.storeID,
+          billID: result._id.toString(),
+          invoiceID: null,
+        };
+        await queue.add("insertStockOut", item);
+      });
+    }
   }
 
-  static insertStockIn(data: StockInInterface) {
-    Promise.all([
+  static async insertStockIn(data: StockInInterface) {
+    const [result, _, __] = await Promise.all([
       new StockInModelModel({
         date: data.date,
         itemID: data.itemID,
@@ -287,13 +258,44 @@ class WorkerController {
         goodReceiptID: data.goodReceiptID,
         deliverySlipID: null,
       }),
+    ]);
+
+    return result._id;
+  }
+
+  static async removeStockIn(data: RemoveStockInInterface) {
+    await StockModelModel.removeStockIn(data);
+    Promise.all([
+      new StockModelModel({
+        storeID: data.storeID,
+        itemID: data.itemID,
+        quantity: data.quantity * -1,
+      }).update(),
+      StockInModelModel.delete({
+        goodReceiptID: data.goodReceiptID,
+        adjustmentEventID: data.adjustmentCaseID,
+        itemID: data.itemID,
+      }),
     ])
-      .then(([result, _, __]) => {
-        return result._id;
+      .then(async ([_, stockIn]) => {
+        const stockInID = stockIn._id;
+        const stockOuts = await StockOutModelModel.fetchByStockInID(stockInID);
+
+        for (let i = 0; i < stockOuts.length; i++) {
+          await new OverflowModelModel({
+            itemID: data.itemID,
+            quantity: stockOuts[i].quantity,
+            billID: stockOuts[i].billID,
+            adjustmentEventID: stockOuts[i].adjustmentEventID,
+            invoiceID: stockOuts[i].invoiceID,
+          }).create();
+
+          await StockOutModelModel.deleteByID(stockOuts[i]._id);
+        }
+
+        return true;
       })
-      .catch((error) => {
-        throw Error(error);
-      });
+      .catch((error) => {});
   }
 
   static async insertStockOut(data: StockOutInterface) {
@@ -308,9 +310,9 @@ class WorkerController {
         await new OverflowModelModel({
           itemID: data.itemID,
           quantity: quantity,
-          billID: null,
-          adjustmentEventID: null,
-          invoiceID: null,
+          billID: data.billID,
+          adjustmentEventID: data.adjustmentEventID,
+          invoiceID: data.invoiceID,
         }).create();
 
         quantity = 0;
@@ -369,10 +371,66 @@ class WorkerController {
     }).update();
   }
 
+  static async insertStockOutOnly(data: StockOutInterface) {
+    let quantity = data.quantity;
+    while (quantity > 0) {
+      if (quantity == 0) {
+        break;
+      }
+
+      const stockIn = await StockInModelModel.fetchFifo(data.itemID);
+      if (!stockIn) {
+        await new OverflowModelModel({
+          itemID: data.itemID,
+          quantity: quantity,
+          billID: data.billID,
+          adjustmentEventID: data.adjustmentEventID,
+          invoiceID: data.invoiceID,
+        }).create();
+
+        quantity = 0;
+        break;
+      } else if (stockIn.quantity >= quantity) {
+        await Promise.all([
+          new StockOutModelModel({
+            stockInID: stockIn._id.toString(),
+            itemID: data.itemID,
+            date: data.date,
+            quantity: quantity,
+            billID: data.billID,
+            adjustmentEventID: data.adjustmentEventID,
+            invoiceID: data.invoiceID,
+            storeID: data.storeID,
+          }).create(),
+          StockInModelModel.updateResidue(stockIn._id, quantity),
+        ]);
+
+        quantity = 0;
+        break;
+      } else if (stockIn.quantity < quantity) {
+        await Promise.all([
+          new StockOutModelModel({
+            stockInID: stockIn._id.toString(),
+            itemID: data.itemID,
+            date: data.date,
+            quantity: stockIn.quantity,
+            billID: data.billID,
+            adjustmentEventID: data.adjustmentEventID,
+            invoiceID: data.invoiceID,
+            storeID: data.storeID,
+          }).create(),
+          StockInModelModel.updateResidue(stockIn._id, stockIn.quantity),
+        ]);
+
+        quantity = quantity - stockIn.quantity;
+      }
+    }
+  }
+
   static async insertStockOutCardOnly(data: StockOutTempInterface) {
     await new StockCardModelModel({
       itemID: data.itemID,
-      quantity: data.quantity,
+      quantity: Math.abs(data.quantity) * -1,
       date: data.date,
       billID: null,
       invoiceID: null,
@@ -386,6 +444,60 @@ class WorkerController {
       quantity: Math.abs(data.quantity) * -1,
       storeID: null,
     }).update();
+  }
+
+  static async removeStockOutCardOnly(data: StockOutTempInterface) {
+    await StockCardModelModel.deleteByDeliverySlipID(data.deliverySlipID);
+
+    await new StockModelModel({
+      itemID: data.itemID,
+      quantity: Math.abs(data.quantity),
+      storeID: null,
+    }).update();
+  }
+
+  static async stockOutTransfer(data: StockOutTransferInterface) {
+    try {
+      await new StockModelModel({
+        itemID: data.itemID,
+        quantity: Math.abs(data.quantity) * -1,
+        storeID: data.storeID,
+      }).update();
+
+      return true;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async stockInTransfer(data: StockOutTransferInterface) {
+    try {
+      await new StockModelModel({
+        itemID: data.itemID,
+        quantity: Math.abs(data.quantity),
+        storeID: data.storeID,
+      }).update();
+
+      return true;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async checkOverflow() {
+    const overflows = await OverflowModelModel.fetchAll();
+    for (let i = 0; i < overflows.length; i++) {
+      const data: StockOutInterface = {
+        quantity: overflows[i].quantity,
+        itemID: overflows[i].itemID,
+        billID: overflows[i].billID,
+        invoiceID: overflows[i].invoiceID,
+        adjustmentEventID: overflows[i].adjustmentEventID,
+        storeID: null,
+        date: new Date(),
+      };
+      queue.add("insertStockOutOnly", data);
+    }
   }
 }
 

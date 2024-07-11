@@ -6,6 +6,10 @@ import StockModelModel from "../models/stock.model";
 import LoggerHelper from "../utils/logger.utils";
 import { queue } from "../utils/queue.utils";
 import InvoiceModelModel from "../models/invoice.model";
+import {
+  StockOutInterface,
+  StockOutTempInterface,
+} from "src/interfaces/stock-out.interface";
 
 class DeliverySlipController {
   static create = (req: Request, res: Response) => {
@@ -112,6 +116,29 @@ class DeliverySlipController {
       });
   };
 
+  static fetchByIDWInvoice = (req: Request, res: Response) => {
+    const id = req.params.id;
+    Promise.all([
+      DeliverySlipModelModel.fetchByID(id),
+      InvoiceModelModel.fetchByDeliverySlipID(id),
+    ])
+      .then(([deliverySlip, salesInvoice]) => {
+        return res.status(200).send({
+          deliverySlip: deliverySlip,
+          salesInvoice: salesInvoice,
+        });
+      })
+      .catch((error) => {
+        new LoggerHelper({
+          message: `Error on fetching delivery slip ${error}`,
+          tag: "Delivery slip",
+          type: LoggerType.error,
+        }).log();
+
+        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+      });
+  };
+
   static fetchUnconfirmed = (req: Request, res: Response) => {
     const page = !req.query.page ? 1 : Number(req.query.page);
     DeliverySlipModelModel.fetchUnconfirmed(page)
@@ -157,8 +184,58 @@ class DeliverySlipController {
         items: items,
         returnedAt: invoiceDate,
       }).then(async (result) => {
-        return res.status(200).send(result);
-        // const invoiceName = await InvoiceModelModel.generateName(invoiceDate);
+        for (let i = 0; i < result.items.length; i++) {
+          // return the stocks
+          const data: StockOutTempInterface = {
+            date: result.date,
+            quantity: result.items[i].quantity,
+            itemID: result.items[i].itemID,
+            deliverySlipID: deliverySlipID,
+          };
+          await queue.add("removeStockOutTemp", data);
+        }
+
+        const invoiceName = await InvoiceModelModel.generateName(invoiceDate);
+        new InvoiceModelModel({
+          name: invoiceName,
+          date: invoiceDate,
+          dueDate: invoiceDueDate,
+          note: invoiceNote,
+          isDelete: false,
+          isHidden: false,
+          deliverySlipID: deliverySlipID,
+          packingListID: null,
+          createdBy: req.body.userID,
+          salesID: result.salesID,
+          customerID: result.customerID,
+        })
+          .create()
+          .then(async (salesInvoice) => {
+            for (let i = 0; i < result.items.length; i++) {
+              const data: StockOutInterface = {
+                date: invoiceDate,
+                quantity: result.items[i].quantity,
+                itemID: result.items[i].itemID,
+                invoiceID: salesInvoice._id,
+                adjustmentEventID: null,
+                billID: null,
+                storeID: null,
+              };
+
+              await queue.add("insertStockOut", data);
+            }
+
+            return res.status(201).send(result);
+          })
+          .catch((error) => {
+            new LoggerHelper({
+              message: `Error on creating invoice ${error}`,
+              tag: "Invoice",
+              type: LoggerType.error,
+            }).log();
+
+            return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+          });
       });
     });
   };

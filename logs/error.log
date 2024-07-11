@@ -62,3 +62,87 @@ Use mongoose.model(name, schema)
 [2024-07-06 15:02:48] [ERROR] Delivery slip: Error on fetching delivery slip CastError: Cast to ObjectId failed for value "6688f79dfde315ac597abe" (type string) at path "_id" for model "delivery-slip"
 [2024-07-06 15:02:54] [ERROR] Delivery slip: Error on fetching delivery slip CastError: Cast to ObjectId failed for value "6688f79dfde315ac597abee" (type string) at path "_id" for model "delivery-slip"
 [2024-07-06 15:03:14] [ERROR] Delivery slip: Error on fetching delivery slip CastError: Cast to ObjectId failed for value "6688f04001f1973551c54f" (type string) at path "_id" for model "delivery-slip"
+[2024-07-08 21:40:39] [ERROR] Stock request: Error on creating stock request: E11000 duplicate key error collection: Cstyle.stock-requests index: name_1 dup key: { name: "SR-CS-2024-07-0001" }
+[2024-07-08 23:19:14] [ERROR] Stock request: Error on creating stock request: stock-requests validation failed: items.0.itemID: Path `itemID` is required.
+[2024-07-09 13:04:25] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0778014325" }
+[2024-07-09 13:04:41] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0778014325" }
+[2024-07-09 13:04:56] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0778014325" }
+[2024-07-09 13:05:11] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0778014325" }
+[2024-07-09 13:05:26] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0778014325" }
+[2024-07-09 13:05:41] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0778014325" }
+[2024-07-09 13:05:56] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0778014325" }
+[2024-07-09 13:06:11] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0778014325" }
+[2024-07-09 13:06:26] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0778014325" }
+[2024-07-09 13:06:41] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0778014325" }
+[2024-07-09 13:07:11] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0778014325" }
+[2024-07-09 13:07:26] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0778014325" }
+[2024-07-09 13:07:41] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0778014325" }
+[2024-07-09 13:07:56] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0778014325" }
+[2024-07-09 13:08:11] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0778014325" }
+[2024-07-09 13:08:26] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0778014325" }
+[2024-07-09 13:08:41] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0778014325" }
+[2024-07-09 13:08:56] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0778014325" }
+[2024-07-09 13:09:11] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0778014325" }
+[2024-07-09 13:09:26] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0778014325" }
+[2024-07-09 13:09:41] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0778014325" }
+[2024-07-09 13:14:16] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0740516761" }
+[2024-07-09 13:14:46] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0740516761" }
+[2024-07-09 13:15:01] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0740516761" }
+[2024-07-09 13:15:16] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0740516761" }
+[2024-07-09 13:15:31] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0740516761" }
+[2024-07-09 13:15:46] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0740516761" }
+[2024-07-09 13:16:01] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0740516761" }
+[2024-07-09 13:16:16] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0740516761" }
+[2024-07-09 13:16:31] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0740516761" }
+[2024-07-09 13:16:46] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0740516761" }
+[2024-07-09 13:17:01] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0740516761" }
+[2024-07-09 13:17:16] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0740516761" }
+[2024-07-09 13:17:31] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0740516761" }
+[2024-07-09 13:17:46] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0740516761" }
+[2024-07-09 13:18:01] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0740516761" }
+[2024-07-09 13:18:16] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0740516761" }
+[2024-07-09 13:18:31] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0740516761" }
+[2024-07-09 13:18:46] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0740516761" }
+[2024-07-09 13:19:01] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0740516761" }
+[2024-07-09 13:19:16] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0740516761" }
+[2024-07-09 13:19:31] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0740516761" }
+[2024-07-09 13:19:46] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0740516761" }
+[2024-07-09 13:20:01] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0740516761" }
+[2024-07-09 13:20:16] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0740516761" }
+[2024-07-09 13:20:33] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0740516761" }
+[2024-07-09 13:20:48] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0740516761" }
+[2024-07-09 13:21:03] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0740516761" }
+[2024-07-09 13:21:18] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0740516761" }
+[2024-07-09 13:21:33] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0740516761" }
+[2024-07-09 13:21:48] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0740516761" }
+[2024-07-09 13:22:03] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0740516761" }
+[2024-07-09 13:22:18] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0740516761" }
+[2024-07-09 13:22:33] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0740516761" }
+[2024-07-09 13:22:48] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0740516761" }
+[2024-07-09 13:23:03] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0740516761" }
+[2024-07-09 13:23:33] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0740516761" }
+[2024-07-09 13:23:48] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0740516761" }
+[2024-07-09 13:24:03] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0740516761" }
+[2024-07-09 13:24:18] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0740516761" }
+[2024-07-09 13:24:48] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0740516761" }
+[2024-07-09 14:16:30] [ERROR] Master worker: Error on completing job: Error: Missing lock for job 159. moveToFinished
+[2024-07-09 14:18:23] [ERROR] Master worker: Error on completing job: Error: Missing lock for job 159. moveToFinished
+[2024-07-09 14:19:46] [ERROR] Master worker: Job 159 has failed with job stalled more than allowable limit
+[2024-07-09 14:23:43] [ERROR] Master worker: Job 164 has failed with Cannot read properties of undefined (reading 'forEach')
+[2024-07-09 14:26:44] [ERROR] Master worker: Error on completing job: Error: Missing lock for job 167. moveToFinished
+[2024-07-09 14:38:01] [ERROR] Master worker: Job 175 has failed with job stalled more than allowable limit
+[2024-07-09 14:45:56] [ERROR] Master worker: Job 173 has failed with job stalled more than allowable limit
+[2024-07-09 14:45:56] [ERROR] Master worker: Error on completing job: Error: Missing lock for job 178. moveToFinished
+[2024-07-10 09:08:53] [ERROR] Membership: Error on creating membership: memberships validation failed: language: Path `language` is required.
+[2024-07-11 08:36:19] [ERROR] ItemStockController: Error on fetching item stock: Cast to ObjectId failed for value "null" (type string) at path "storeID" for model "stocks"
+[2024-07-11 08:36:26] [ERROR] ItemStockController: Error on fetching item stock: Cast to ObjectId failed for value "null" (type string) at path "storeID" for model "stocks"
+[2024-07-11 08:38:09] [ERROR] ItemStockController: Error on fetching item stock: Cast to ObjectId failed for value "null" (type string) at path "storeID" for model "stocks"
+[2024-07-11 09:27:10] [ERROR] Stock request: Error on creating stock request: stock-requests validation failed: createdBy: Cast to ObjectId failed for value "5678234" (type string) at path "createdBy" because of "BSONError", items.0.itemID: Path `itemID` is required.
+[2024-07-11 09:28:00] [ERROR] Stock request: Error on creating stock request: stock-requests validation failed: createdBy: Cast to ObjectId failed for value "5678234" (type string) at path "createdBy" because of "BSONError", items.0.itemID: Path `itemID` is required.
+[2024-07-11 09:28:12] [ERROR] Stock request: Error on creating stock request: stock-requests validation failed: createdBy: Cast to ObjectId failed for value "5678234" (type string) at path "createdBy" because of "BSONError", items.0.itemID: Path `itemID` is required.
+[2024-07-11 09:28:34] [ERROR] Stock request: Error on creating stock request: stock-requests validation failed: items.0.itemID: Path `itemID` is required.
+[2024-07-11 14:50:35] [ERROR] Invoice: Error on creating invoice ValidationError: date: Cast to date failed for value "Invalid Date" (type Date) at path "date"
+[2024-07-11 14:54:34] [ERROR] Invoice: Error on creating invoice ValidationError: date: Path `date` is required.
+[2024-07-11 14:55:11] [ERROR] Invoice: Error on creating invoice ValidationError: date: Path `date` is required.
+[2024-07-11 15:54:42] [ERROR] GoodReceipt: Error on creating good receipt ValidationError: items.0.itemID: Path `itemID` is required.
+[2024-07-11 15:55:38] [ERROR] GoodReceipt: Error on creating good receipt ValidationError: supplierID: Cast to ObjectId failed for value "0" (type number) at path "supplierID" because of "BSONError"

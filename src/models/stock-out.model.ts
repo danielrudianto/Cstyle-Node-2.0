@@ -29,6 +29,14 @@ class StockOutModelModel {
       stockInID: this.stockInID,
     });
   }
+
+  static fetchByStockInID(stockInID: string) {
+    return conn.model("stock-outs").find({ stockInID: stockInID });
+  }
+
+  static deleteByID(id: string) {
+    return conn.model("stock-outs").deleteOne({ _id: id });
+  }
 }
 
 export default StockOutModelModel;

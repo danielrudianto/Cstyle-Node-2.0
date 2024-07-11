@@ -81,6 +81,9 @@ class ItemModelModel {
         .populate({
           path: "itemTypeID",
           select: "name description",
+        })
+        .sort({
+          reference: 1,
         }),
       conn.model("items").countDocuments({
         isDelete: false,
@@ -214,37 +217,67 @@ class ItemModelModel {
     const [items, countItems] = await Promise.all([
       conn
         .model("items")
-        .find({
-          isDelete: false,
-          isActive: true,
-          $or: [
-            {
-              reference: { $regex: RegExp(data.keyword, "i") },
-            },
-            {
-              description: { $regex: RegExp(data.keyword, "i") },
-            },
-          ],
-        })
+        .find(
+          data.onlyActive
+            ? {
+                isDelete: false,
+                isActive: true,
+                $or: [
+                  {
+                    reference: { $regex: RegExp(data.keyword, "i") },
+                  },
+                  {
+                    description: { $regex: RegExp(data.keyword, "i") },
+                  },
+                ],
+              }
+            : {
+                isDelete: false,
+                $or: [
+                  {
+                    reference: { $regex: RegExp(data.keyword, "i") },
+                  },
+                  {
+                    description: { $regex: RegExp(data.keyword, "i") },
+                  },
+                ],
+              }
+        )
+        .populate("itemBrandID", "name")
+        .populate("itemTypeID", "name")
         .limit(20)
         .skip((data.page - 1) * 20)
         .sort({ reference: 1 }),
-      conn.model("items").countDocuments({
-        isDelete: false,
-        isActive: true,
-        $or: [
-          {
-            reference: { $regex: RegExp(data.keyword, "i") },
-          },
-          {
-            description: { $regex: RegExp(data.keyword, "i") },
-          },
-        ],
-      }),
+      conn.model("items").countDocuments(
+        data.onlyActive
+          ? {
+              isDelete: false,
+              isActive: true,
+              $or: [
+                {
+                  reference: { $regex: RegExp(data.keyword, "i") },
+                },
+                {
+                  description: { $regex: RegExp(data.keyword, "i") },
+                },
+              ],
+            }
+          : {
+              isDelete: false,
+              $or: [
+                {
+                  reference: { $regex: RegExp(data.keyword, "i") },
+                },
+                {
+                  description: { $regex: RegExp(data.keyword, "i") },
+                },
+              ],
+            }
+      ),
     ]);
 
     const itemIDs = items.map((item) => item._id);
-    const stocks = await conn.model("stock").find({
+    const stocks = await conn.model("stocks").find({
       itemID: { $in: itemIDs },
       storeID: data.branch,
     });
@@ -262,6 +295,8 @@ class ItemModelModel {
             description: x.description,
             createdAt: x.createdAt,
             price: x.price,
+            brand: x.itemBrandID.name,
+            type: x.itemTypeID.name,
           },
           quantity: stockIndex === -1 ? 0 : stocks[stockIndex].quantity,
         };

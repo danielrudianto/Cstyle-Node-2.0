@@ -20,6 +20,10 @@ class OverflowModelModel {
   create() {
     return conn.model("overflow").create(this);
   }
+
+  static fetchAll() {
+    return conn.model("overflow").find({});
+  }
 }
 
 export default OverflowModelModel;

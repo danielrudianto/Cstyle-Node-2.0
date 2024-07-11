@@ -23,6 +23,7 @@ import SupplierSchema from "../schemas/master.supplier.model";
 import StockOutSchema from "../schemas/impl.stock-out.model";
 import StockCardSchema from "../schemas/impl.stock-card.model";
 import MembershipPointSchema from "../schemas/ins.point.model";
+import OverflowSchema from "../schemas/impl.overflow.model";
 
 export function connectionFactory() {
   const url = "mongodb://127.0.0.1:27017";
@@ -43,7 +44,7 @@ export function connectionFactory() {
   conn.model("membership-point", PointSchema);
   conn.model("purchase-invoice", PurchaseInvoiceSchema);
   conn.model("quotations", QuotationSchema);
-  conn.model("stock-request", StockRequestSchema);
+  conn.model("stock-requests", StockRequestSchema);
   conn.model("stores", StoreSchema);
   conn.model("users", UserSchema);
   conn.model("customer", CustomerSchema);
@@ -57,7 +58,8 @@ export function connectionFactory() {
   conn.model("stock-ins", StockInSchema);
   conn.model("stock-outs", StockOutSchema);
   conn.model("stock-cards", StockCardSchema);
-  conn.model("stock", StockSchema);
+  conn.model("stocks", StockSchema);
+  conn.model("overflows", OverflowSchema);
 
   return conn;
 }

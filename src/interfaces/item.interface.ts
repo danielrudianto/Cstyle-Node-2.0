@@ -19,6 +19,7 @@ export interface ItemFetchInterface {
 
 export interface ItemFetchInterfaceBranch extends ItemFetchInterface {
   branch: string | null;
+  onlyActive: boolean;
 }
 
 export interface ItemUpdateFavorite {
