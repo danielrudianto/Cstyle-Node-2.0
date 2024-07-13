@@ -8,11 +8,12 @@ import StockModelModel from "../models/stock.model";
 import { ErrorList } from "../data/error-list";
 import LoggerHelper from "../utils/logger.utils";
 import { LoggerType } from "../interfaces/logger.interface";
-import { Mutex } from "async-mutex";
 import { queue } from "../utils/queue.utils";
 import StoreModelModel from "../models/store.model";
+import AsyncLock from "async-lock";
+import { StockOutInterface } from "../interfaces/stock-out.interface";
 
-const mutex = new Mutex();
+const lock = new AsyncLock();
 
 class CashierController {
   static sync = async (req: Request, res: Response) => {
@@ -30,12 +31,12 @@ class CashierController {
         name: x.name,
         date: moment(x.date).format("YYYY-MM-DD"),
         memberID: x.memberID,
-        storeID: storeID as Types.ObjectId,
-        createdBy: new Types.ObjectId(x.createdBy),
+        storeID: storeID,
+        createdBy: x.createdBy,
         createdAt: new Date(x.createdAt),
         items: (x.bills as any[]).map((a) => {
           return {
-            itemID: new Types.ObjectId(a.itemID),
+            itemID: a.itemID,
             quantity: a.quantity,
             price: a.price,
             discount: (a.discount * a.price) / 100,
@@ -86,51 +87,73 @@ class CashierController {
       {}
     );
 
-    StockModelModel.checkStockByItemIDs(
+    await lock.acquire(
       Object.entries(groupedData).map(([_, value]) => {
-        return { itemID: value.itemID, quantity: value.quantity };
+        return value.itemID;
       }),
-      storeID
-    )
-      .then((result) => {
-        // If the stock is sufficient for the modifiedBills, then proceed
-        const comparisonResults = result.map((item) => {
-          const groupedItem = groupedData[item.itemID];
-          return groupedItem.quantity <= item.quantity;
-        });
-
-        if (comparisonResults.includes(false)) {
-          return res.status(400).send(ErrorList["INSUFFICIENT_STOCK"]);
-        } else {
-          BillModelModel.insertMany(modifiedBills)
-            .then((result) => {
-              console.log(result);
-              result.forEach(async (x) => {
-                await queue.add("createBill", {
-                  id: x._id,
+      async () => {
+        StockModelModel.checkStockByItemIDs(
+          Object.entries(groupedData).map(([_, value]) => {
+            return { itemID: value.itemID, quantity: value.quantity };
+          }),
+          storeID
+        )
+          .then(async (result) => {
+            await lock.acquire(
+              Object.entries(groupedData).map(([_, value]) => {
+                return value.itemID;
+              }),
+              async () => {
+                const comparisonResults = result.map((item) => {
+                  const groupedItem = groupedData[item.itemID];
+                  return groupedItem.quantity <= item.quantity;
                 });
-              });
 
-              return res.status(200).send(result);
-            })
-            .catch((error) => {
-              new LoggerHelper({
-                message: `Error on creating bill ${error}`,
-                type: LoggerType.error,
-                tag: "Cashier",
-              }).log();
-              return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
-            });
-        }
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          message: `Error on checking stock ${error}`,
-          type: LoggerType.error,
-          tag: "Cashier",
-        }).log();
-        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
-      });
+                if (comparisonResults.includes(false)) {
+                  return res.status(400).send(ErrorList["INSUFFICIENT_STOCK"]);
+                } else {
+                  BillModelModel.insertMany(modifiedBills)
+                    .then((result) => {
+                      result.forEach(async (x) => {
+                        x.items.forEach(async (y: any) => {
+                          await new StockModelModel({
+                            itemID: y.itemID,
+                            quantity: y.quantity * -1,
+                            storeID: x.storeID,
+                          }).update();
+                        });
+
+                        await queue.add("createBill", {
+                          id: x._id,
+                        });
+                      });
+
+                      return res.status(200).send(result);
+                    })
+                    .catch((error) => {
+                      new LoggerHelper({
+                        message: `Error on creating bill ${error}`,
+                        type: LoggerType.error,
+                        tag: "Cashier",
+                      }).log();
+                      return res
+                        .status(500)
+                        .send(ErrorList["INTERNAL_SERVER_ERROR"]);
+                    });
+                }
+              }
+            );
+          })
+          .catch((error) => {
+            new LoggerHelper({
+              message: `Error on checking stock ${error}`,
+              type: LoggerType.error,
+              tag: "Cashier",
+            }).log();
+            return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+          });
+      }
+    );
   };
 
   static checkStore = (req: Request, res: Response) => {

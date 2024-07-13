@@ -33,3 +33,17 @@ export interface DeliverySlipUpdateItem {
   id: string;
   return: number;
 }
+
+export interface DeliverySlipFetchInterface {
+  page: number;
+  keyword: string;
+  month: number;
+  year: number;
+  status: DeliverySlipFetchStatus[];
+}
+
+export enum DeliverySlipFetchStatus {
+  "active" = "active",
+  "returned" = "returned",
+  "canceled" = "canceled",
+}

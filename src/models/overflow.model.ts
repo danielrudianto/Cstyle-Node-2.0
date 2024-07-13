@@ -18,11 +18,11 @@ class OverflowModelModel {
   }
 
   create() {
-    return conn.model("overflow").create(this);
+    return conn.model("overflows").create(this);
   }
 
   static fetchAll() {
-    return conn.model("overflow").find({});
+    return conn.model("overflows").find({});
   }
 }
 

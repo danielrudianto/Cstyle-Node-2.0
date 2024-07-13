@@ -197,4 +197,5 @@ export enum ErrorList {
   IS_FAVORITE_INVALID = "Is favorite field is invalid",
   LOGIN_ERROR = "Invalid username / password. Please check again your input.",
   STOCK_REQUEST_SAME_STORE = "Stock request from and to store must be different",
+  REJECT_NOTE_REQUIRED = "Reject note is required",
 }

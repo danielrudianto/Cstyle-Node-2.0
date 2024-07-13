@@ -11,6 +11,12 @@ import { GoodReceiptStatus } from "../interfaces/good-receipt.interface";
 import StockModelModel from "../models/stock.model";
 import { StockInInterface } from "src/interfaces/stock-in.interface";
 import { RemoveStockInInterface } from "src/interfaces/stock-out.interface";
+import AsyncLock from "async-lock";
+import StockInModelModel from "../models/stock-in.model";
+
+const lock = new AsyncLock({
+  maxPending: 1,
+});
 
 class GoodReceiptController {
   static create = (req: Request, res: Response) => {
@@ -37,14 +43,26 @@ class GoodReceiptController {
       .create()
       .then((result) => {
         items.forEach(async (x) => {
-          await queue.add("insertStockIn", {
-            itemID: x.id,
-            goodReceiptID: result.id,
-            adjustmentCaseID: null,
-            quantity: x.quantity,
-            price: (x.price * (100 - x.discount)) / 100,
-            residue: x.quantity,
+          await lock.acquire(x.id, async () => {
+            await new StockModelModel({
+              itemID: x.id,
+              quantity: x.quantity,
+              storeID: null,
+            }).update();
           });
+
+          const stockInData: StockInInterface = {
+            itemID: x.id,
+            quantity: x.quantity,
+            residue: x.quantity,
+            price: (x.price * (100 - x.discount)) / 100,
+            adjustmentEventID: null,
+            goodReceiptID: result._id,
+            storeID: null,
+            date: date,
+          };
+
+          await queue.add("insertStockIn", stockInData);
         });
 
         return res.status(201).send(result);
@@ -108,7 +126,6 @@ class GoodReceiptController {
   };
 
   static updateByID = (req: Request, res: Response) => {
-    // TODO: Check if good receipt is editable
     const id = req.body.id;
     const name = req.body.name;
     const supplierID = req.body.supplier;

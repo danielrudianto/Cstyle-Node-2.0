@@ -1,4 +1,3 @@
-import { Mutex } from "async-mutex";
 import {
   AdjustmentFetchInterface,
   AdjustmentInterface,
@@ -8,7 +7,6 @@ import { connectionFactory } from "../utils/connector.utils";
 import StockModelModel from "./stock.model";
 
 const conn = connectionFactory();
-const mutex = new Mutex();
 class AdjustmentModelModel {
   id?: string;
   name?: string;
@@ -128,15 +126,13 @@ class AdjustmentModelModel {
 
   static async generateName(date: Date): Promise<string> {
     try {
-      const count = await mutex.runExclusive(() => {
-        return conn.model("adjustment-event").countDocuments({
-          $expr: {
-            $and: [
-              { $eq: [{ $month: "$date" }, date.getMonth() + 1] },
-              { $eq: [{ $year: "$date" }, date.getFullYear()] },
-            ],
-          },
-        });
+      const count = await conn.model("adjustment-event").countDocuments({
+        $expr: {
+          $and: [
+            { $eq: [{ $month: "$date" }, date.getMonth() + 1] },
+            { $eq: [{ $year: "$date" }, date.getFullYear()] },
+          ],
+        },
       });
 
       return `ADJ-${date.getFullYear()}-${(date.getMonth() + 1)

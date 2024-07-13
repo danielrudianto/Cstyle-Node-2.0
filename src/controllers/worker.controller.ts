@@ -11,7 +11,6 @@ import BillModelModel from "../models/bill.model";
 import { redisClient } from "../app";
 import MembershipModelModel from "../models/membership.model";
 import { queue } from "../utils/queue.utils";
-import moment from "moment";
 import StockInModelModel from "../models/stock-in.model";
 import StockModelModel from "../models/stock.model";
 import StockCardModelModel from "../models/stock-card.model";
@@ -23,13 +22,11 @@ import {
   StockOutTransferInterface,
 } from "../interfaces/stock-out.interface";
 import StockOutModelModel from "../models/stock-out.model";
-import { Mutex } from "async-mutex";
 import {
   UpdateProductImageDataInterface,
   CommonWorkerInterface,
 } from "../interfaces/worker.interface";
 
-const mutex = new Mutex();
 class WorkerController {
   static createProduct(data: CommonWorkerInterface): void {
     ItemModelModel.fetchByID(data.id)
@@ -232,7 +229,7 @@ class WorkerController {
   }
 
   static async insertStockIn(data: StockInInterface) {
-    const [result, _, __] = await Promise.all([
+    const [result, _] = await Promise.all([
       new StockInModelModel({
         date: data.date,
         itemID: data.itemID,
@@ -243,11 +240,6 @@ class WorkerController {
         adjustmentEventID: data.adjustmentEventID,
         storeID: data.storeID,
       }).create(),
-      new StockModelModel({
-        itemID: data.itemID,
-        storeID: data.storeID,
-        quantity: data.quantity,
-      }).update(),
       new StockCardModelModel({
         itemID: data.itemID,
         quantity: data.quantity,
@@ -363,12 +355,6 @@ class WorkerController {
       goodReceiptID: null,
       deliverySlipID: null,
     }).create();
-
-    await new StockModelModel({
-      itemID: data.itemID,
-      quantity: Math.abs(data.quantity) * -1,
-      storeID: data.storeID,
-    }).update();
   }
 
   static async insertStockOutOnly(data: StockOutInterface) {

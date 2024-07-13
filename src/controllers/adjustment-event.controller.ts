@@ -5,9 +5,15 @@ import { queue } from "../utils/queue.utils";
 import LoggerHelper from "../utils/logger.utils";
 import { LoggerType } from "../interfaces/logger.interface";
 import moment from "moment";
+import AsyncLock from "async-lock";
+import { StockInInterface } from "../interfaces/stock-in.interface";
+import StockModelModel from "../models/stock.model";
+import { StockOutInterface } from "../interfaces/stock-out.interface";
+
+const lock = new AsyncLock();
 
 class AdjustmentEventController {
-  static create = (req: Request, res: Response) => {
+  static create = async (req: Request, res: Response) => {
     const date = req.body.date;
     const items = req.body.items as any[];
     const userID = req.body.userID;
@@ -17,59 +23,73 @@ class AdjustmentEventController {
       return res.status(400).send(ErrorList["BAD_REQUEST"]);
     } else {
       const negativeItems = items.filter((x) => x.quantity < 0);
-      AdjustmentModelModel.preCreate(negativeItems, store)
-        .then(async (validation) => {
-          if (!validation) {
-            return res.status(400).send(ErrorList["INSUFFICIENT_STOCK"]);
-          } else {
-            const name = await AdjustmentModelModel.generateName(
-              new Date(date)
+      lock
+        .acquire(
+          items.map((x) => x.id),
+          async () => {
+            const validation = await AdjustmentModelModel.preCreate(
+              negativeItems,
+              store
             );
-            new AdjustmentModelModel({
-              date: new Date(date),
-              name: name,
-              storeID: store,
-              items: items.map((x) => {
-                return {
-                  itemID: x.id,
-                  quantity: x.quantity,
-                };
-              }),
-              createdBy: userID,
-            })
-              .create()
-              .then((result) => {
-                // If it succeed, now it's time to input the stockIn directories
-                result.items
-                  .filter((x: any) => x.quantity > 0)
-                  .forEach(async (x: any) => {
-                    await queue.add("insertStockIn", {
-                      itemID: x.itemID,
+
+            if (!validation) {
+              return res.status(400).send(ErrorList["INSUFFICIENT_STOCK"]);
+            } else {
+              try {
+                const name = await AdjustmentModelModel.generateName(
+                  new Date(date)
+                );
+
+                const result = await new AdjustmentModelModel({
+                  date: new Date(date),
+                  name: name,
+                  storeID: store,
+                  items: items.map((x) => {
+                    return {
+                      itemID: x.id,
+                      quantity: x.quantity,
+                    };
+                  }),
+                  createdBy: userID,
+                }).create();
+
+                items.forEach(async (x: any) => {
+                  await new StockModelModel({
+                    itemID: x.id,
+                    quantity: x.quantity,
+                    storeID: store,
+                  }).update();
+
+                  if (x.quantity < 0) {
+                    const stockOutData: StockOutInterface = {
+                      itemID: x.id,
+                      quantity: x.quantity,
+                      adjustmentEventID: result._id,
+                      storeID: store,
+                      date: date,
+                      billID: null,
+                      invoiceID: null,
+                    };
+
+                    await queue.add("insertStockOut", stockOutData);
+                  } else if (x.quantity > 0) {
+                    const stockInData: StockInInterface = {
+                      itemID: x.id,
                       quantity: x.quantity,
                       residue: x.quantity,
                       price: 0,
                       adjustmentEventID: result._id,
                       goodReceiptID: null,
                       storeID: store,
-                    });
-                  });
+                      date: date,
+                    };
 
-                result.items
-                  .filter((x: any) => x.quantity < 0)
-                  .forEach(async (x: any) => {
-                    await queue.add("insertStockOut", {
-                      itemID: x.itemID,
-                      quantity: x.quantity * -1,
-                      adjustmentEventID: result._id,
-                      billID: null,
-                      storeID: null,
-                      date: moment(new Date(date)).format("YYYY-MM-DD"),
-                    });
-                  });
+                    await queue.add("insertStockIn", stockInData);
+                  }
+                });
 
-                return res.status(201).send(result);
-              })
-              .catch((error) => {
+                return result;
+              } catch (error) {
                 new LoggerHelper({
                   message: `Error on creating adjustment event: ${error}`,
                   type: LoggerType.error,
@@ -77,17 +97,20 @@ class AdjustmentEventController {
                 }).log();
 
                 return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
-              });
+              }
+            }
           }
+        )
+        .then((value) => {
+          return res.status(201).send(value);
         })
         .catch((error) => {
           new LoggerHelper({
-            message: `Error on pre-creating adjustment event: ${error}`,
+            message: `Error on creating adjustment event: ${error}`,
             type: LoggerType.error,
             tag: "Adjustment",
           }).log();
-
-          return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+          return res.status(500).send(error);
         });
     }
   };

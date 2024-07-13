@@ -146,3 +146,84 @@ Use mongoose.model(name, schema)
 [2024-07-11 14:55:11] [ERROR] Invoice: Error on creating invoice ValidationError: date: Path `date` is required.
 [2024-07-11 15:54:42] [ERROR] GoodReceipt: Error on creating good receipt ValidationError: items.0.itemID: Path `itemID` is required.
 [2024-07-11 15:55:38] [ERROR] GoodReceipt: Error on creating good receipt ValidationError: supplierID: Cast to ObjectId failed for value "0" (type number) at path "supplierID" because of "BSONError"
+[2024-07-12 01:09:39] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 01:09:39] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 01:09:39] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 01:09:39] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 01:09:39] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 01:09:39] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 01:09:39] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 01:09:40] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 01:09:40] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 01:09:41] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 01:09:41] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 01:09:42] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 01:09:42] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 01:09:43] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 01:09:43] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 01:09:44] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 01:09:44] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 01:09:45] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 01:09:45] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 01:09:46] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 01:09:46] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 01:09:47] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 01:09:47] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 01:09:48] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 01:09:48] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 01:33:32] [ERROR] Master worker: Job 1550 has failed with Schema hasn't been registered for model "overflow".
+Use mongoose.model(name, schema)
+[2024-07-12 01:34:55] [ERROR] Master worker: Job 1551 has failed with Schema hasn't been registered for model "overflow".
+Use mongoose.model(name, schema)
+[2024-07-12 03:43:43] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:43:43] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:43:43] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:43:43] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:43:43] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:43:43] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:43:44] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:43:44] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:43:44] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:43:45] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:43:45] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:43:46] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:43:46] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:43:47] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:43:47] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:43:48] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:43:48] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:43:49] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:43:49] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:43:50] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:43:50] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:43:51] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:43:51] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:43:52] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:43:52] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:43:53] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:43:53] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:43:54] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:43:54] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:43:55] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:43:56] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:43:56] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:43:57] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:43:57] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:43:58] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:43:58] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:43:59] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:43:59] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:44:00] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:44:00] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:44:01] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:44:01] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:44:02] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:44:02] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:44:03] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:44:03] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:44:04] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:44:04] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:44:05] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:44:05] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:44:06] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-12 03:44:06] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379

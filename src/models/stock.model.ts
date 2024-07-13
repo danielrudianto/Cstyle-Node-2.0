@@ -1,13 +1,9 @@
-import { Mutex } from "async-mutex";
 import { CheckStockInterface } from "../interfaces/check-stock.interface";
 import { StockInterface } from "../interfaces/stock.interface";
 import { connectionFactory } from "../utils/connector.utils";
-import LoggerHelper from "../utils/logger.utils";
-import { LoggerType } from "../interfaces/logger.interface";
 import { RemoveStockInInterface } from "src/interfaces/stock-out.interface";
 
 const conn = connectionFactory();
-const mutex = new Mutex();
 
 class StockModelModel {
   itemID: string;

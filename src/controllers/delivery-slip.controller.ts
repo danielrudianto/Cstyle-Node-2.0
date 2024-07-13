@@ -94,6 +94,37 @@ class DeliverySlipController {
       });
   };
 
+  static fetch = (req: Request, res: Response) => {
+    const page = req.body.page;
+    const keyword = req.body.keyword;
+    const month = req.body.month;
+    const year = req.body.year;
+    const status = req.body.status;
+
+    DeliverySlipModelModel.fetch({
+      page: page,
+      keyword: keyword,
+      month: month + 1,
+      year: year,
+      status: status,
+    })
+      .then(([result, count]) => {
+        return res.status(200).send({
+          data: result,
+          count: count,
+        });
+      })
+      .catch((error) => {
+        new LoggerHelper({
+          message: `Error on fetching delivery slip ${error}`,
+          tag: "Delivery slip",
+          type: LoggerType.error,
+        }).log();
+
+        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+      });
+  };
+
   static fetchByID = (req: Request, res: Response) => {
     const id = req.params.id;
 

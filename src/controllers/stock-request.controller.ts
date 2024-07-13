@@ -10,6 +10,9 @@ import { LoggerType } from "../interfaces/logger.interface";
 import StockModelModel from "../models/stock.model";
 import { queue } from "../utils/queue.utils";
 import { StockOutTransferInterface } from "../interfaces/stock-out.interface";
+import AsyncLock from "async-lock";
+
+const lock = new AsyncLock();
 
 class StockRequestController {
   static create = async (req: Request, res: Response) => {
@@ -126,18 +129,29 @@ class StockRequestController {
     const rejectNote = req.body.reason;
     const stockRequest = req.body.stockRequest;
     const userID = req.body.userID;
-    StockRequestModelModel.rejectByID(id, userID, rejectNote).then((result) => {
-      stockRequest.items.forEach(async (x: any) => {
-        const data: StockOutTransferInterface = {
-          itemID: x.itemID,
-          quantity: x.quantity,
-          storeID: stockRequest.requestTo,
-        };
-        await queue.add("insertStokInTransfer", data);
-      });
 
-      return res.status(201).send(result);
-    });
+    StockRequestModelModel.rejectByID(id, userID, rejectNote).then(
+      async (result) => {
+        await lock.acquire(
+          stockRequest.items.map((x: any) => {
+            return x.itemID;
+          }),
+          () => {
+            stockRequest.items.forEach(async (x: any) => {
+              const data: StockOutTransferInterface = {
+                itemID: x.itemID,
+                quantity: x.quantity,
+                storeID: stockRequest.requestTo,
+              };
+
+              await new StockModelModel(data).update();
+            });
+          }
+        );
+
+        return res.status(201).send(result);
+      }
+    );
   };
 
   static deleteByID = (req: Request, res: Response) => {
@@ -164,109 +178,6 @@ class StockRequestController {
 
         return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
       });
-    //     } else if (stockRequest.isReject) {
-    //       return res
-    //         .status(400)
-    //         .send(ErrorList["STOCK_REQUEST_ALREADY_REJECTED"]);
-    //     } else {
-    //       // Check stock from this request
-    //       StockModel.find({
-    //         itemID: {
-    //           $in: stockRequest.items.map((item) => item.itemID),
-    //         },
-    //         storeID: stockRequest.requestFrom,
-    //       })
-    //         .then((stocks) => {
-    //           // Check if each item has sufficient stock
-    //           let validation = true;
-    //           for (let i = 0; i < stockRequest.items.length; i++) {
-    //             const index = stocks.findIndex(
-    //               (stock) =>
-    //                 stock.itemID.toString() ==
-    //                 stockRequest.items[i].itemID.toString()
-    //             );
-    //             if (index == -1) {
-    //               validation = false;
-    //             } else {
-    //               const stock = stocks[index].quantity;
-    //               if (stock < stockRequest.items[i].quantity) {
-    //                 validation = false;
-    //               }
-    //             }
-    //           }
-    //           if (!validation) {
-    //             return res.status(400).send(ErrorList["INSUFFICIENT_STOCK"]);
-    //           } else {
-    //             stockRequestModel
-    //               .findByIdAndUpdate(id, {
-    //                 isDelete: true,
-    //                 deletedBy: userID,
-    //                 deletedAt: new Date(),
-    //               })
-    //               .then((result) => {
-    //                 // Update the stock
-    //                 const updateArray: any[] = [];
-    //                 for (let idx = 0; idx < stockRequest.items.length; idx++) {
-    //                   updateArray.push({
-    //                     updateOne: {
-    //                       filter: {
-    //                         itemID: stockRequest.items[idx].itemID,
-    //                         storeID: stockRequest.requestFrom,
-    //                       },
-    //                       update: {
-    //                         $inc: {
-    //                           quantity: stockRequest.items[idx].quantity * -1,
-    //                         },
-    //                       },
-    //                       upsert: true,
-    //                     },
-    //                   });
-    //                   updateArray.push({
-    //                     updateOne: {
-    //                       filter: {
-    //                         itemID: stockRequest.items[idx].itemID,
-    //                         storeID: stockRequest.requestTo,
-    //                       },
-    //                       update: {
-    //                         $inc: {
-    //                           quantity: stockRequest.items[idx].quantity,
-    //                         },
-    //                       },
-    //                       upsert: true,
-    //                     },
-    //                   });
-    //                 }
-    //                 StockModel.bulkWrite(updateArray)
-    //                   .then(() => {
-    //                     return res.status(201).send(result);
-    //                   })
-    //                   .catch((error) => {
-    //                     console.error(
-    //                       `[error]: Error on deleting stock request ${error}`
-    //                     );
-    //                     return res.status(500).send(error);
-    //                   });
-    //               })
-    //               .catch((error) => {
-    //                 console.error(
-    //                   `[error]: Error on deleting stock request ${error}`
-    //                 );
-    //                 return res.status(500).send(error);
-    //               });
-    //           }
-    //         })
-    //         .catch((error) => {
-    //           console.error(
-    //             `[error]: Error on deleting stock request ${error}`
-    //           );
-    //           return res.status(500).send(error);
-    //         });
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.error(`[error]: Error on deleting stock request ${error}`);
-    //     return res.status(500).send(error);
-    //   });
   };
 
   static fetchIncompleteRequests = (req: Request, res: Response) => {

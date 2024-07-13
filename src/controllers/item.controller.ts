@@ -237,8 +237,6 @@ class ItemController {
   static fetchV2 = (req: Request, res: Response) => {
     const page = !req.query.page ? 1 : parseInt(req.query.page as string);
     const keyword = !req.query.keyword ? "" : (req.query.keyword as string);
-
-    // If keyword length is 13 and all characters are numbers, search by barcode
     ItemModelModel.fetch({
       keyword: keyword,
       page: page,

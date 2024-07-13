@@ -37,6 +37,7 @@ router.post(
   ErrorInterceptor.intercept,
   StockRequestController.send
 );
+
 router.post(
   "/confirm",
   body("id").notEmpty().withMessage(ErrorList["ID_REQUIRED"]),
@@ -49,6 +50,7 @@ router.post(
   "/reject",
   body("id").notEmpty().withMessage(ErrorList["ID_REQUIRED"]),
   body("id").isMongoId().withMessage(ErrorList["ID_INVALID"]),
+  body("rejectNote").notEmpty().withMessage(ErrorList["REJECT_NOTE_REQUIRED"]),
   ErrorInterceptor.intercept,
   StockRequestController.checkStatus,
   StockRequestController.reject

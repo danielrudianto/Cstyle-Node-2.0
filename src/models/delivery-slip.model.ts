@@ -1,5 +1,7 @@
 import { connectionFactory } from "../utils/connector.utils";
 import {
+  DeliverySlipFetchInterface,
+  DeliverySlipFetchStatus,
   DeliverySlipInterface,
   DeliverySlipItem,
   DeliverySlipUpdateInterface,
@@ -47,6 +49,65 @@ class DeliverySlipModelModel {
       createdBy: this.createdBy,
       createdAt: new Date(),
     });
+  }
+
+  static fetch(data: DeliverySlipFetchInterface) {
+    const filter = [];
+    if (data.status.includes(DeliverySlipFetchStatus.active)) {
+      filter.push({
+        $expr: {
+          $and: [{ $eq: ["$isDelete", false] }, { $eq: ["$isReturn", false] }],
+        },
+      });
+    }
+
+    if (data.status.includes(DeliverySlipFetchStatus.returned)) {
+      filter.push({
+        $expr: {
+          $and: [{ $eq: ["$isDelete", false] }, { $eq: ["$isReturn", true] }],
+        },
+      });
+    }
+
+    if (data.status.includes(DeliverySlipFetchStatus.canceled)) {
+      filter.push({
+        $expr: {
+          $and: [{ $eq: ["$isDelete", true] }, { $eq: ["$deletedBy", null] }],
+        },
+      });
+    }
+
+    return Promise.all([
+      conn
+        .model("delivery-slip")
+        .find({
+          $or: filter,
+          $expr: {
+            // month and year
+            $and: [
+              { $eq: [{ $month: "$date" }, data.month] },
+              { $eq: [{ $year: "$date" }, data.year] },
+            ],
+          },
+          name: RegExp(data.keyword, "i"),
+        })
+        .populate("customerID", "name")
+        .populate("salesID", "name")
+        .populate("createdBy", "name")
+        .skip((data.page - 1) * 10)
+        .limit(10),
+      conn.model("delivery-slip").countDocuments({
+        $or: filter,
+        $expr: {
+          // month and year
+          $and: [
+            { $eq: [{ $month: "$date" }, data.month] },
+            { $eq: [{ $year: "$date" }, data.year] },
+          ],
+        },
+        name: RegExp(data.keyword, "i"),
+      }),
+    ]);
   }
 
   static fetchByID(id: string) {

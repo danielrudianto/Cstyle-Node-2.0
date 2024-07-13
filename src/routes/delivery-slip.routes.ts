@@ -3,6 +3,7 @@ import DeliverySlipController from "../controllers/delivery-slip.controller";
 
 const router = Router();
 
+router.post("/search/v2", DeliverySlipController.fetch);
 router.post("/", DeliverySlipController.create);
 router.get("/unconfirmed", DeliverySlipController.fetchUnconfirmed);
 router.get("/invoice/:id", DeliverySlipController.fetchByIDWInvoice);
