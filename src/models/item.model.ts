@@ -3,6 +3,7 @@ import {
   ItemFetchInterface,
   ItemFetchInterfaceBranch,
   ItemInterface,
+  ItemPriceFetchInterface,
   ItemUpdateFavorite,
 } from "../interfaces/item.interface";
 import { Types } from "mongoose";
@@ -101,6 +102,35 @@ class ItemModelModel {
         ],
       }),
     ]);
+  }
+
+  static fetchPrices(data: ItemPriceFetchInterface) {
+    const filters = [];
+    if (data.brand.length > 0) {
+      filters.push({
+        itemBrandID: {
+          $in: data.brand,
+        },
+      });
+    }
+
+    if (data.type.length > 0) {
+      filters.push({
+        itemTypeID: {
+          $in: data.type,
+        },
+      });
+    }
+
+    return conn
+      .model("items")
+      .find({
+        ...filters,
+        isDelete: false,
+      })
+      .select("_id reference description price")
+      .populate("itemTypeID", "name")
+      .populate("itemBrandID", "name");
   }
 
   static fetchPopular() {

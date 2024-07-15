@@ -95,6 +95,14 @@ class AdjustmentModelModel {
       .populate("items.itemID", "reference description");
   }
 
+  static deleteByID(id: string, userID: string) {
+    return conn.model("adjustment-event").findByIdAndUpdate(id, {
+      isDelete: true,
+      deletedBy: userID,
+      deletedAt: new Date(),
+    });
+  }
+
   static async preCreate(
     data: { id: string; quantity: number }[],
     storeID: string | null

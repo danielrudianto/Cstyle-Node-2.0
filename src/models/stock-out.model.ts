@@ -1,4 +1,7 @@
-import { StockOutInterface } from "../interfaces/stock-out.interface";
+import {
+  RemoveStockOutInterface,
+  StockOutInterface,
+} from "../interfaces/stock-out.interface";
 import { connectionFactory } from "../utils/connector.utils";
 
 const conn = connectionFactory();
@@ -32,6 +35,16 @@ class StockOutModelModel {
 
   static fetchByStockInID(stockInID: string) {
     return conn.model("stock-outs").find({ stockInID: stockInID });
+  }
+
+  static fetchDeletation(data: RemoveStockOutInterface) {
+    return conn.model("stock-outs").find({
+      billID: data.billID,
+      invoiceID: data.invoiceID,
+      adjustmentEventID: data.adjustmentCaseID,
+      itemID: data.itemID,
+      storeID: data.storeID,
+    });
   }
 
   static deleteByID(id: string) {

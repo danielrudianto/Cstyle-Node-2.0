@@ -1,3 +1,4 @@
+import { FetchInterface } from "../interfaces/fetch.interface";
 import { MembershipInterface } from "../interfaces/membership.interface";
 import { connectionFactory } from "../utils/connector.utils";
 
@@ -44,6 +45,76 @@ class MembershipModelModel {
       createdBy: this.createdBy,
       createdAt: this.createdAt,
     });
+  }
+
+  update() {
+    return conn.model("memberships").findByIdAndUpdate(this.id, {
+      name: this.name,
+      point: this.point,
+      email: this.email,
+      phoneNumber: this.phoneNumber,
+      nationality: this.nationality,
+      language: this.language,
+    });
+  }
+
+  static fetch(data: FetchInterface) {
+    return Promise.all([
+      conn
+        .model("memberships")
+        .find({
+          $or: [
+            {
+              name: {
+                $regex: data.keyword,
+                $options: "i",
+              },
+            },
+            {
+              code: {
+                $regex: data.keyword,
+                $options: "i",
+              },
+            },
+            {
+              nationality: {
+                $regex: data.keyword,
+                $options: "i",
+              },
+            },
+          ],
+        })
+        .populate("storeID", "name")
+        .sort({ name: 1 })
+        .limit(20)
+        .skip((data.page - 1) * 20),
+      conn.model("memberships").countDocuments({
+        $or: [
+          {
+            name: {
+              $regex: data.keyword,
+              $options: "i",
+            },
+          },
+          {
+            code: {
+              $regex: data.keyword,
+              $options: "i",
+            },
+          },
+          {
+            nationality: {
+              $regex: data.keyword,
+              $options: "i",
+            },
+          },
+        ],
+      }),
+    ]);
+  }
+
+  static fetchByID(id: string) {
+    return conn.model("memberships").findById(id).populate("storeID", "name");
   }
 
   static fetchByIDs(ids: string[]) {
@@ -120,6 +191,10 @@ class MembershipModelModel {
     });
 
     return count == 0;
+  }
+
+  static preUpdate(id: string) {
+    return conn.model("memberships").findById(id);
   }
 }
 

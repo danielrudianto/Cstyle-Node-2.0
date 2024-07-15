@@ -10,10 +10,8 @@ import LoggerHelper from "../utils/logger.utils";
 import { LoggerType } from "../interfaces/logger.interface";
 import { queue } from "../utils/queue.utils";
 import StoreModelModel from "../models/store.model";
-import AsyncLock from "async-lock";
 import { StockOutInterface } from "../interfaces/stock-out.interface";
-
-const lock = new AsyncLock();
+import lock from "../utils/lock.utils";
 
 class CashierController {
   static sync = async (req: Request, res: Response) => {
@@ -89,7 +87,7 @@ class CashierController {
 
     await lock.acquire(
       Object.entries(groupedData).map(([_, value]) => {
-        return value.itemID;
+        return `${value.itemID}:${storeID}`;
       }),
       async () => {
         StockModelModel.checkStockByItemIDs(

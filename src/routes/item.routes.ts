@@ -27,6 +27,13 @@ const upload = multer({
   storage: uploadOptions,
 });
 
+router.post(
+  "/price",
+  body("type").exists().withMessage(ErrorList["ITEM_TYPE_REQUIRED"]),
+  body("brand").exists().withMessage(ErrorList["ITEM_BRAND_REQUIRED"]),
+  ErrorInterceptor.intercept,
+  ItemController.fetchPrice
+);
 router.post("/selector/v2", ItemController.fetchByBranchV2);
 router.post(
   "/v2",
@@ -43,7 +50,6 @@ router.post(
   ItemController.createV2
 );
 
-// router.put("/price", ItemController.updatePrice);
 router.put(
   "/like",
   body("itemID").isMongoId().withMessage(ErrorList["ID_INVALID"]),

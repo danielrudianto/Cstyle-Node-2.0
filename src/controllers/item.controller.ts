@@ -99,7 +99,7 @@ class ItemController {
             return res.status(404).send(ErrorList["ITEM_NOT_FOUND"]);
           } else {
             const product = await ItemModelModel.fetchByID(id);
-            if (product == null) {
+            if (!product) {
               return res.status(404).send(ErrorList["ITEM_NOT_FOUND"]);
             }
 
@@ -182,7 +182,7 @@ class ItemController {
           id: id,
           userID: userID,
         })
-          .then((result) => {
+          .then(async (result) => {
             // Delete the file
             if (result == null) {
               return res.status(404).send(ErrorList["ITEM_NOT_FOUND"]);
@@ -191,6 +191,10 @@ class ItemController {
               for (const image of images) {
                 fs.unlinkSync(image);
               }
+
+              await queue.add("deleteProduct", {
+                id: id,
+              });
 
               return res.status(200).send(result);
             }
@@ -278,6 +282,27 @@ class ItemController {
       .catch((error) => {
         new LoggerHelper({
           message: `Error on fetching item ${error}`,
+          type: LoggerType.error,
+          tag: "Item",
+        }).log();
+        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+      });
+  };
+
+  static fetchPrice = (req: Request, res: Response) => {
+    const type = req.body.type;
+    const brand = req.body.brand;
+
+    ItemModelModel.fetchPrices({
+      brand: brand,
+      type: type,
+    })
+      .then((result) => {
+        return res.status(200).send(result);
+      })
+      .catch((error) => {
+        new LoggerHelper({
+          message: `Error on fetching item price ${error}`,
           type: LoggerType.error,
           tag: "Item",
         }).log();

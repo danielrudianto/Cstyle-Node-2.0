@@ -1,6 +1,7 @@
 import { DeleteStockInInterface } from "../interfaces/stock.interface";
 import { StockInInterface } from "../interfaces/stock-in.interface";
 import { connectionFactory } from "../utils/connector.utils";
+import { RemoveStockInInterface } from "../interfaces/stock-out.interface";
 
 const conn = connectionFactory();
 class StockInModelModel {
@@ -36,6 +37,14 @@ class StockInModelModel {
         },
       })
       .sort({ _id: 1 });
+  }
+
+  static fetchDeletation(data: RemoveStockInInterface) {
+    return conn.model("stock-ins").findOne({
+      itemID: data.itemID,
+      goodReceiptID: data.goodReceiptID,
+      adjustmentEventID: data.adjustmentCaseID,
+    });
   }
 
   static updateResidue(stockInID: string, decr: number) {

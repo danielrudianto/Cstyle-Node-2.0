@@ -23,4 +23,11 @@ router.get(
   AdjustmentEventController.fetchByID
 );
 
+router.delete(
+  "/:id",
+  param("id").isMongoId().withMessage(ErrorList["ID_INVALID"]),
+  ErrorInterceptor.intercept,
+  AdjustmentEventController.deleteByID
+);
+
 export default router;

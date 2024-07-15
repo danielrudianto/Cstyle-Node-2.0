@@ -109,25 +109,12 @@ class StockModelModel {
   }
 
   static async removeStockIn(data: RemoveStockInInterface) {
-    const result = await Promise.all([
-      conn.model("stocks").updateOne(
-        {
-          itemID: data.itemID,
-          storeID: data.storeID,
-        },
-        {
-          $inc: {
-            quantity: data.quantity * -1,
-          },
-        }
-      ),
-      conn.model("stock-ins").findOneAndDelete({
-        itemID: data.itemID,
-        goodReceiptID: data.goodReceiptID,
-        adjustmentCaseID: data.adjustmentCaseID,
-      }),
-    ]);
-    const stockIn = result[1];
+    const result = await conn.model("stock-ins").findOneAndDelete({
+      itemID: data.itemID,
+      goodReceiptID: data.goodReceiptID,
+      adjustmentCaseID: data.adjustmentCaseID,
+    });
+    const stockIn = result;
     const stockInID = stockIn._id;
     const stockOuts = await conn.model("stock-outs").find({
       stockInID: stockInID,

@@ -62,17 +62,14 @@ class MigrationModelModel {
   }
 
   static updateProduct(data: ProductMigrationInterface) {
-    if (data.isActive) {
-      return conn.model("migration").create({
-        migration_version: new Date().getTime(),
-        command: `UPDATE product SET reference = '${data.reference}', description = '${data.description}' WHERE mongoID = '${data.id}';`,
-      });
-    } else {
-      return conn.model("migration").create({
-        migration_version: new Date().getTime(),
-        command: `DELETE FROM product WHERE mongoID = '${data.id}';`,
-      });
-    }
+    return conn.model("migration").create({
+      migration_version: new Date().getTime(),
+      command: `UPDATE product SET reference = '${
+        data.reference
+      }', description = '${data.description}', isActive = ${
+        data.isActive ? 1 : 0
+      } WHERE mongoID = '${data.id}';`,
+    });
   }
 
   static updateProductBrand(data: ProductBrandMigrationInterface) {

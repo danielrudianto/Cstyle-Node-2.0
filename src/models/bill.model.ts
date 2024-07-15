@@ -181,6 +181,37 @@ class BillModelModel {
     ]);
   }
 
+  static fetchReport(
+    storeID: string | null,
+    month: number,
+    year: number,
+    isHidden: boolean = true
+  ) {
+    if (isHidden) {
+      return conn.model("bills").find({
+        isHidden: false,
+        storeID: storeID,
+        $expr: {
+          $and: [
+            { $eq: [{ $year: "$date" }, year] },
+            { $eq: [{ $month: "$date" }, month] },
+          ],
+        },
+      });
+    } else {
+      return conn.model("bills").find({
+        isHidden: false,
+      });
+    }
+  }
+
+  static fetchProductReport(
+    storeID: string | null,
+    month: number,
+    year: number,
+    isHidden: boolean = true
+  ) {}
+
   static fetchMemberTransactions() {
     return conn.model("bills").countDocuments({
       memberID: {

@@ -219,7 +219,8 @@ class StockRequestModelModel {
       .findByIdAndUpdate(data.id, {
         items: data.items,
         isSending: true,
-        sendBy: data.createdBy,
+        updatedBy: data.createdBy,
+        updatedAt: new Date(),
       })
       .populate("requestFrom", "name address")
       .populate("requestTo", "name address")

@@ -5132,3 +5132,605 @@ Use mongoose.model(name, schema)
 [2024-07-12 22:50:27] [INFO] MongoDB: Connected with MongoDB Database Engine
 [2024-07-12 22:50:27] [INFO] Redis: Connected with Redis Database Engine
 [2024-07-12 22:50:28] [INFO] Sync: Synced 3 users
+[2024-07-13 12:34:30] [INFO] Server: Server started on port 5000
+[2024-07-13 12:34:30] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 12:34:30] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-13 12:34:30] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-13 12:34:30] [INFO] Sync: Synced 3 users
+[2024-07-13 12:34:30] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-13 12:34:30] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-13 12:34:31] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-13 12:34:31] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-13 12:34:31] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-13 12:34:31] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-13 12:34:32] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-13 12:34:32] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-13 12:34:33] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-13 12:34:33] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-13 12:34:34] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-13 12:34:34] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-13 12:34:35] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-13 12:34:35] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-13 12:34:36] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-13 12:34:36] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-13 12:34:37] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-13 12:34:37] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-13 12:34:38] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-13 12:34:38] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-13 12:34:39] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-13 12:34:39] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-13 12:34:40] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-13 12:34:40] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-13 12:34:41] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-13 12:34:41] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-13 12:34:42] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-13 12:34:42] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 12:47:47] [INFO] Server: Server started on port 5000
+[2024-07-13 12:47:47] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 12:47:47] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 12:47:47] [INFO] Sync: Synced 3 users
+[2024-07-13 12:48:19] [INFO] Server: Server started on port 5000
+[2024-07-13 12:48:19] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 12:48:19] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 12:48:19] [INFO] Sync: Synced 3 users
+[2024-07-13 13:22:49] [INFO] Server: Server started on port 5000
+[2024-07-13 13:22:49] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 13:22:49] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 13:22:49] [INFO] Sync: Synced 3 users
+[2024-07-13 13:23:09] [INFO] Server: Server started on port 5000
+[2024-07-13 13:23:09] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 13:23:09] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 13:23:09] [INFO] Sync: Synced 3 users
+[2024-07-13 13:36:14] [INFO] Server: Server started on port 5000
+[2024-07-13 13:36:14] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 13:36:14] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 13:36:14] [INFO] Sync: Synced 3 users
+[2024-07-13 13:37:34] [INFO] Server: Server started on port 5000
+[2024-07-13 13:37:34] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 13:37:34] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 13:37:34] [INFO] Sync: Synced 3 users
+[2024-07-13 13:38:51] [INFO] Server: Server started on port 5000
+[2024-07-13 13:38:51] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 13:38:51] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 13:38:51] [INFO] Sync: Synced 3 users
+[2024-07-13 13:42:21] [INFO] Server: Server started on port 5000
+[2024-07-13 13:42:21] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 13:42:21] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 13:42:21] [INFO] Sync: Synced 3 users
+[2024-07-13 13:44:55] [INFO] Server: Server started on port 5000
+[2024-07-13 13:44:55] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 13:44:55] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 13:44:55] [INFO] Sync: Synced 3 users
+[2024-07-13 14:27:23] [INFO] Server: Server started on port 5000
+[2024-07-13 14:27:23] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 14:27:23] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 14:27:23] [INFO] Sync: Synced 3 users
+[2024-07-13 14:58:36] [INFO] Server: Server started on port 5000
+[2024-07-13 14:58:36] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 14:58:36] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 14:58:36] [INFO] Sync: Synced 3 users
+[2024-07-13 14:59:13] [INFO] Server: Server started on port 5000
+[2024-07-13 14:59:13] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 14:59:13] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 14:59:13] [INFO] Sync: Synced 3 users
+[2024-07-13 15:00:58] [INFO] Server: Server started on port 5000
+[2024-07-13 15:00:58] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:00:58] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:00:58] [INFO] Sync: Synced 3 users
+[2024-07-13 15:01:55] [INFO] Server: Server started on port 5000
+[2024-07-13 15:01:55] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:01:55] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:01:55] [INFO] Sync: Synced 3 users
+[2024-07-13 15:02:10] [INFO] Server: Server started on port 5000
+[2024-07-13 15:02:10] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:02:10] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:02:10] [INFO] Sync: Synced 3 users
+[2024-07-13 15:02:25] [INFO] Server: Server started on port 5000
+[2024-07-13 15:02:25] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:02:25] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:02:25] [INFO] Sync: Synced 3 users
+[2024-07-13 15:02:42] [INFO] Server: Server started on port 5000
+[2024-07-13 15:02:42] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:02:42] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:02:42] [INFO] Sync: Synced 3 users
+[2024-07-13 15:05:30] [INFO] Server: Server started on port 5000
+[2024-07-13 15:05:30] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:05:30] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:05:30] [INFO] Sync: Synced 3 users
+[2024-07-13 15:06:59] [INFO] Server: Server started on port 5000
+[2024-07-13 15:06:59] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:06:59] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:06:59] [INFO] Sync: Synced 3 users
+[2024-07-13 15:07:37] [INFO] Server: Server started on port 5000
+[2024-07-13 15:07:37] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:07:37] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:07:37] [INFO] Sync: Synced 3 users
+[2024-07-13 15:08:26] [INFO] Server: Server started on port 5000
+[2024-07-13 15:08:26] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:08:26] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:08:26] [INFO] Sync: Synced 3 users
+[2024-07-13 15:09:13] [INFO] Server: Server started on port 5000
+[2024-07-13 15:09:13] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:09:13] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:09:13] [INFO] Sync: Synced 3 users
+[2024-07-13 15:09:52] [INFO] Server: Server started on port 5000
+[2024-07-13 15:09:52] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:09:53] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:09:53] [INFO] Sync: Synced 3 users
+[2024-07-13 15:10:35] [INFO] Server: Server started on port 5000
+[2024-07-13 15:10:35] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:10:35] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:10:35] [INFO] Sync: Synced 3 users
+[2024-07-13 15:11:54] [INFO] Server: Server started on port 5000
+[2024-07-13 15:11:54] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:11:54] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:11:54] [INFO] Sync: Synced 3 users
+[2024-07-13 15:12:54] [INFO] Server: Server started on port 5000
+[2024-07-13 15:12:54] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:12:54] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:12:54] [INFO] Sync: Synced 3 users
+[2024-07-13 15:13:28] [INFO] Server: Server started on port 5000
+[2024-07-13 15:13:28] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:13:28] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:13:28] [INFO] Sync: Synced 3 users
+[2024-07-13 15:13:50] [INFO] Server: Server started on port 5000
+[2024-07-13 15:13:50] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:13:50] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:13:51] [INFO] Sync: Synced 3 users
+[2024-07-13 15:14:44] [INFO] Server: Server started on port 5000
+[2024-07-13 15:14:44] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:14:44] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:14:44] [INFO] Sync: Synced 3 users
+[2024-07-13 15:15:42] [INFO] Server: Server started on port 5000
+[2024-07-13 15:15:42] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:15:42] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:15:42] [INFO] Sync: Synced 3 users
+[2024-07-13 15:16:08] [INFO] Server: Server started on port 5000
+[2024-07-13 15:16:08] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:16:08] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:16:08] [INFO] Sync: Synced 3 users
+[2024-07-13 15:16:48] [INFO] Server: Server started on port 5000
+[2024-07-13 15:16:48] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:16:48] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:16:48] [INFO] Sync: Synced 3 users
+[2024-07-13 15:16:56] [INFO] Server: Server started on port 5000
+[2024-07-13 15:16:56] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:16:56] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:16:56] [INFO] Sync: Synced 3 users
+[2024-07-13 15:17:08] [INFO] Server: Server started on port 5000
+[2024-07-13 15:17:08] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:17:08] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:17:08] [INFO] Sync: Synced 3 users
+[2024-07-13 15:17:50] [INFO] Server: Server started on port 5000
+[2024-07-13 15:17:50] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:17:50] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:17:50] [INFO] Sync: Synced 3 users
+[2024-07-13 15:18:33] [INFO] Server: Server started on port 5000
+[2024-07-13 15:18:33] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:18:33] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:18:33] [INFO] Sync: Synced 3 users
+[2024-07-13 15:19:13] [INFO] Server: Server started on port 5000
+[2024-07-13 15:19:13] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:19:13] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:19:13] [INFO] Sync: Synced 3 users
+[2024-07-13 15:19:19] [INFO] Server: Server started on port 5000
+[2024-07-13 15:19:19] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:19:19] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:19:19] [INFO] Sync: Synced 3 users
+[2024-07-13 15:40:28] [INFO] Master worker: Job 1572 [login] completed at Sat Jul 13 2024 15:40:28 GMT+0700 (Western Indonesia Time)
+[2024-07-13 15:40:28] [INFO] Master worker: Job 1573 [insertStockOutTransfer] completed at Sat Jul 13 2024 15:40:28 GMT+0700 (Western Indonesia Time)
+[2024-07-13 15:40:28] [INFO] Master worker: Job 1574 [login] completed at Sat Jul 13 2024 15:40:28 GMT+0700 (Western Indonesia Time)
+[2024-07-13 15:40:48] [INFO] Master worker: Job 1575 [insertStockIn] completed at Sat Jul 13 2024 15:40:48 GMT+0700 (Western Indonesia Time)
+[2024-07-13 15:42:52] [INFO] Server: Server started on port 5000
+[2024-07-13 15:42:52] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:42:52] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:42:52] [INFO] Sync: Synced 3 users
+[2024-07-13 15:45:50] [INFO] Server: Server started on port 5000
+[2024-07-13 15:45:50] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:45:51] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:45:51] [INFO] Sync: Synced 3 users
+[2024-07-13 15:46:28] [INFO] Server: Server started on port 5000
+[2024-07-13 15:46:28] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:46:28] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:46:28] [INFO] Sync: Synced 3 users
+[2024-07-13 15:46:37] [INFO] Server: Server started on port 5000
+[2024-07-13 15:46:37] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:46:37] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:46:37] [INFO] Sync: Synced 3 users
+[2024-07-13 15:46:49] [INFO] Server: Server started on port 5000
+[2024-07-13 15:46:49] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:46:49] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:46:49] [INFO] Sync: Synced 3 users
+[2024-07-13 15:47:16] [INFO] Server: Server started on port 5000
+[2024-07-13 15:47:16] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:47:16] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:47:16] [INFO] Sync: Synced 3 users
+[2024-07-13 15:47:31] [INFO] Server: Server started on port 5000
+[2024-07-13 15:47:31] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:47:31] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:47:31] [INFO] Sync: Synced 3 users
+[2024-07-13 15:48:08] [INFO] Server: Server started on port 5000
+[2024-07-13 15:48:08] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:48:08] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:48:08] [INFO] Sync: Synced 3 users
+[2024-07-13 15:48:38] [INFO] Server: Server started on port 5000
+[2024-07-13 15:48:38] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:48:38] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:48:38] [INFO] Sync: Synced 3 users
+[2024-07-13 15:49:00] [INFO] Server: Server started on port 5000
+[2024-07-13 15:49:00] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:49:00] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:49:00] [INFO] Sync: Synced 3 users
+[2024-07-13 15:49:31] [INFO] Server: Server started on port 5000
+[2024-07-13 15:49:31] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:49:31] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:49:31] [INFO] Sync: Synced 3 users
+[2024-07-13 15:50:17] [INFO] Server: Server started on port 5000
+[2024-07-13 15:50:17] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:50:17] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:50:17] [INFO] Sync: Synced 3 users
+[2024-07-13 15:50:50] [INFO] Server: Server started on port 5000
+[2024-07-13 15:50:50] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:50:50] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:50:50] [INFO] Sync: Synced 3 users
+[2024-07-13 15:52:52] [INFO] Server: Server started on port 5000
+[2024-07-13 15:52:52] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:52:52] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:52:53] [INFO] Sync: Synced 3 users
+[2024-07-13 15:53:06] [INFO] Server: Server started on port 5000
+[2024-07-13 15:53:06] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:53:06] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:53:06] [INFO] Sync: Synced 3 users
+[2024-07-13 15:54:08] [INFO] Server: Server started on port 5000
+[2024-07-13 15:54:08] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:54:08] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:54:08] [INFO] Sync: Synced 3 users
+[2024-07-13 15:54:45] [INFO] Server: Server started on port 5000
+[2024-07-13 15:54:45] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:54:45] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:54:45] [INFO] Sync: Synced 3 users
+[2024-07-13 15:55:17] [INFO] Server: Server started on port 5000
+[2024-07-13 15:55:17] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:55:17] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:55:17] [INFO] Sync: Synced 3 users
+[2024-07-13 15:55:51] [INFO] Server: Server started on port 5000
+[2024-07-13 15:55:51] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:55:52] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:55:52] [INFO] Sync: Synced 3 users
+[2024-07-13 15:56:36] [INFO] Server: Server started on port 5000
+[2024-07-13 15:56:36] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:56:36] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:56:36] [INFO] Sync: Synced 3 users
+[2024-07-13 15:57:55] [INFO] Server: Server started on port 5000
+[2024-07-13 15:57:55] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:57:56] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:57:56] [INFO] Sync: Synced 3 users
+[2024-07-13 15:58:18] [INFO] Server: Server started on port 5000
+[2024-07-13 15:58:18] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:58:19] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:58:19] [INFO] Sync: Synced 3 users
+[2024-07-13 15:58:23] [INFO] Master worker: Job 1576 [deleteAdjustment] completed at Sat Jul 13 2024 15:58:23 GMT+0700 (Western Indonesia Time)
+[2024-07-13 15:58:23] [ERROR] Master worker: Job 1577 has failed with Cannot read properties of null (reading '_id')
+[2024-07-13 15:58:23] [INFO] Master worker: Job 1578 [checkOverflow] completed at Sat Jul 13 2024 15:58:23 GMT+0700 (Western Indonesia Time)
+[2024-07-13 15:58:23] [INFO] Master worker: Job 1579 [insertStockOutOnly] completed at Sat Jul 13 2024 15:58:23 GMT+0700 (Western Indonesia Time)
+[2024-07-13 15:59:01] [INFO] Server: Server started on port 5000
+[2024-07-13 15:59:01] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 15:59:01] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 15:59:01] [INFO] Sync: Synced 3 users
+[2024-07-13 15:59:08] [ERROR] Adjustment: Error on fetching adjustment event: TypeError: Cannot read properties of null (reading '_id')
+[2024-07-13 15:59:26] [ERROR] Adjustment: Error on fetching adjustment event: TypeError: Cannot read properties of null (reading '_id')
+[2024-07-13 15:59:58] [ERROR] Adjustment: Error on fetching adjustment event: TypeError: Cannot read properties of null (reading '_id')
+[2024-07-13 16:00:24] [INFO] Master worker: Job 1580 [insertStockIn] completed at Sat Jul 13 2024 16:00:24 GMT+0700 (Western Indonesia Time)
+[2024-07-13 16:00:32] [ERROR] Adjustment: Error on fetching adjustment event: TypeError: Cannot read properties of null (reading '_id')
+[2024-07-13 16:00:39] [ERROR] Adjustment: Error on fetching adjustment event: TypeError: Cannot read properties of null (reading '_id')
+[2024-07-13 16:01:04] [INFO] Server: Server started on port 5000
+[2024-07-13 16:01:04] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 16:01:04] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 16:01:04] [INFO] Sync: Synced 3 users
+[2024-07-13 16:01:55] [ERROR] Adjustment: Error on fetching adjustment event: TypeError: Cannot read properties of null (reading '_id')
+[2024-07-13 16:02:40] [INFO] Server: Server started on port 5000
+[2024-07-13 16:02:40] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 16:02:40] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 16:02:40] [INFO] Sync: Synced 3 users
+[2024-07-13 16:03:59] [ERROR] Adjustment: Error on fetching adjustment event: TypeError: Cannot read properties of null (reading '_id')
+[2024-07-13 16:04:18] [INFO] Server: Server started on port 5000
+[2024-07-13 16:04:18] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 16:04:19] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 16:04:19] [INFO] Sync: Synced 3 users
+[2024-07-13 16:04:37] [INFO] Server: Server started on port 5000
+[2024-07-13 16:04:37] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 16:04:38] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 16:04:45] [INFO] Server: Server started on port 5000
+[2024-07-13 16:04:45] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 16:04:45] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 16:04:45] [INFO] Sync: Synced 3 users
+[2024-07-13 16:05:07] [INFO] Server: Server started on port 5000
+[2024-07-13 16:05:07] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 16:05:07] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 16:05:07] [INFO] Sync: Synced 3 users
+[2024-07-13 16:05:10] [ERROR] Adjustment: Error on fetching adjustment event: TypeError: Cannot read properties of null (reading '_id')
+[2024-07-13 16:05:54] [INFO] Server: Server started on port 5000
+[2024-07-13 16:05:54] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 16:05:54] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 16:05:55] [INFO] Sync: Synced 3 users
+[2024-07-13 16:05:58] [INFO] Master worker: Job 1581 [deleteAdjustment] completed at Sat Jul 13 2024 16:05:58 GMT+0700 (Western Indonesia Time)
+[2024-07-13 16:05:58] [ERROR] Master worker: Job 1582 [removeStockIn] has failed with Cannot read properties of null (reading '_id')
+[2024-07-13 16:05:58] [INFO] Master worker: Job 1583 [checkOverflow] completed at Sat Jul 13 2024 16:05:58 GMT+0700 (Western Indonesia Time)
+[2024-07-13 16:05:58] [INFO] Master worker: Job 1584 [insertStockOutOnly] completed at Sat Jul 13 2024 16:05:58 GMT+0700 (Western Indonesia Time)
+[2024-07-13 16:05:58] [INFO] Master worker: Job 1585 [insertStockOutOnly] completed at Sat Jul 13 2024 16:05:58 GMT+0700 (Western Indonesia Time)
+[2024-07-13 16:07:43] [INFO] Server: Server started on port 5000
+[2024-07-13 16:07:43] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 16:07:43] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 16:07:44] [INFO] Sync: Synced 3 users
+[2024-07-13 16:08:03] [INFO] Server: Server started on port 5000
+[2024-07-13 16:08:03] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 16:08:04] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 16:08:04] [INFO] Sync: Synced 3 users
+[2024-07-13 16:08:11] [INFO] Master worker: Job 1586 [deleteAdjustment] completed at Sat Jul 13 2024 16:08:11 GMT+0700 (Western Indonesia Time)
+[2024-07-13 16:08:11] [ERROR] Master worker: Job 1587 [removeStockIn] has failed with Cannot read properties of null (reading '_id')
+[2024-07-13 16:08:11] [INFO] Master worker: Job 1588 [checkOverflow] completed at Sat Jul 13 2024 16:08:11 GMT+0700 (Western Indonesia Time)
+[2024-07-13 16:08:11] [INFO] Master worker: Job 1589 [insertStockOutOnly] completed at Sat Jul 13 2024 16:08:11 GMT+0700 (Western Indonesia Time)
+[2024-07-13 16:08:11] [INFO] Master worker: Job 1590 [insertStockOutOnly] completed at Sat Jul 13 2024 16:08:11 GMT+0700 (Western Indonesia Time)
+[2024-07-13 16:08:11] [INFO] Master worker: Job 1591 [insertStockOutOnly] completed at Sat Jul 13 2024 16:08:11 GMT+0700 (Western Indonesia Time)
+[2024-07-13 16:08:11] [INFO] Master worker: Job 1592 [insertStockOutOnly] completed at Sat Jul 13 2024 16:08:11 GMT+0700 (Western Indonesia Time)
+[2024-07-13 16:09:31] [INFO] Server: Server started on port 5000
+[2024-07-13 16:09:31] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 16:09:32] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 16:09:32] [INFO] Sync: Synced 3 users
+[2024-07-13 16:10:04] [INFO] Server: Server started on port 5000
+[2024-07-13 16:10:04] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-13 16:10:04] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-13 16:10:04] [INFO] Sync: Synced 3 users
+[2024-07-14 07:24:48] [INFO] Server: Server started on port 5000
+[2024-07-14 07:24:48] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-14 07:24:48] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-14 07:24:48] [INFO] Sync: Synced 3 users
+[2024-07-14 07:27:34] [INFO] Server: Server started on port 5000
+[2024-07-14 07:27:34] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-14 07:27:34] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-14 07:27:34] [INFO] Sync: Synced 3 users
+[2024-07-14 07:28:34] [INFO] Server: Server started on port 5000
+[2024-07-14 07:28:34] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-14 07:28:35] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-14 07:28:35] [INFO] Sync: Synced 3 users
+[2024-07-14 07:30:36] [INFO] Server: Server started on port 5000
+[2024-07-14 07:30:36] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-14 07:30:36] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-14 07:30:36] [INFO] Sync: Synced 3 users
+[2024-07-14 07:30:47] [INFO] Server: Server started on port 5000
+[2024-07-14 07:30:47] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-14 07:30:47] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-14 07:30:47] [INFO] Sync: Synced 3 users
+[2024-07-14 07:31:16] [INFO] Server: Server started on port 5000
+[2024-07-14 07:31:16] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-14 07:31:16] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-14 07:31:16] [INFO] Sync: Synced 3 users
+[2024-07-14 07:31:31] [INFO] Server: Server started on port 5000
+[2024-07-14 07:31:31] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-14 07:31:32] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-14 07:31:32] [INFO] Sync: Synced 3 users
+[2024-07-14 07:31:41] [INFO] Server: Server started on port 5000
+[2024-07-14 07:31:41] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-14 07:31:41] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-14 07:31:41] [INFO] Sync: Synced 3 users
+[2024-07-14 07:31:50] [INFO] Server: Server started on port 5000
+[2024-07-14 07:31:50] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-14 07:31:50] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-14 07:31:50] [INFO] Sync: Synced 3 users
+[2024-07-14 07:32:04] [INFO] Server: Server started on port 5000
+[2024-07-14 07:32:04] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-14 07:32:04] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-14 07:32:05] [INFO] Sync: Synced 3 users
+[2024-07-14 07:35:16] [INFO] Server: Server started on port 5000
+[2024-07-14 07:35:16] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-14 07:35:17] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-14 07:35:17] [INFO] Sync: Synced 3 users
+[2024-07-14 07:36:21] [INFO] Server: Server started on port 5000
+[2024-07-14 07:36:21] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-14 07:36:22] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-14 07:36:22] [INFO] Sync: Synced 3 users
+[2024-07-14 07:36:33] [INFO] Server: Server started on port 5000
+[2024-07-14 07:36:33] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-14 07:36:33] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-14 07:36:33] [INFO] Sync: Synced 3 users
+[2024-07-14 07:36:45] [INFO] Server: Server started on port 5000
+[2024-07-14 07:36:45] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-14 07:36:45] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-14 07:36:46] [INFO] Sync: Synced 3 users
+[2024-07-14 07:36:58] [INFO] Server: Server started on port 5000
+[2024-07-14 07:36:58] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-14 07:36:58] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-14 07:36:58] [INFO] Sync: Synced 3 users
+[2024-07-14 07:37:44] [INFO] Master worker: Job 1593 [insertStockIn] completed at Sun Jul 14 2024 07:37:44 GMT+0700 (Western Indonesia Time)
+[2024-07-14 07:39:18] [INFO] Server: Server started on port 5000
+[2024-07-14 07:39:18] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-14 07:39:19] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-14 07:39:19] [INFO] Sync: Synced 3 users
+[2024-07-14 07:40:33] [INFO] Server: Server started on port 5000
+[2024-07-14 07:40:33] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-14 07:40:33] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-14 07:40:33] [INFO] Sync: Synced 3 users
+[2024-07-14 07:41:15] [INFO] Server: Server started on port 5000
+[2024-07-14 07:41:15] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-14 07:41:15] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-14 07:41:15] [INFO] Sync: Synced 3 users
+[2024-07-14 07:41:48] [INFO] Server: Server started on port 5000
+[2024-07-14 07:41:48] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-14 07:41:48] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-14 07:41:48] [INFO] Sync: Synced 3 users
+[2024-07-14 07:42:08] [INFO] Server: Server started on port 5000
+[2024-07-14 07:42:08] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-14 07:42:09] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-14 07:42:09] [INFO] Sync: Synced 3 users
+[2024-07-14 07:43:02] [INFO] Server: Server started on port 5000
+[2024-07-14 07:43:02] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-14 07:43:02] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-14 07:43:02] [INFO] Sync: Synced 3 users
+[2024-07-14 07:43:40] [INFO] Server: Server started on port 5000
+[2024-07-14 07:43:40] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-14 07:43:41] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-14 07:43:41] [INFO] Sync: Synced 3 users
+[2024-07-14 07:43:56] [ERROR] Adjustment: Error on checking stock for adjustment event: CastError: Cast to ObjectId failed for value "" (type string) at path "storeID" for model "stocks"
+[2024-07-14 07:44:39] [ERROR] Adjustment: Error on checking stock for adjustment event: CastError: Cast to ObjectId failed for value "" (type string) at path "storeID" for model "stocks"
+[2024-07-14 07:45:01] [INFO] Server: Server started on port 5000
+[2024-07-14 07:45:01] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-14 07:45:01] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-14 07:45:01] [INFO] Sync: Synced 3 users
+[2024-07-14 07:45:11] [INFO] Master worker: Job 1594 [deleteAdjustment] completed at Sun Jul 14 2024 07:45:11 GMT+0700 (Western Indonesia Time)
+[2024-07-14 07:45:11] [INFO] Master worker: Job 1595 [removeStockIn] completed at Sun Jul 14 2024 07:45:11 GMT+0700 (Western Indonesia Time)
+[2024-07-14 07:45:11] [INFO] Master worker: Job 1596 [checkOverflow] completed at Sun Jul 14 2024 07:45:11 GMT+0700 (Western Indonesia Time)
+[2024-07-14 07:45:11] [INFO] Master worker: Job 1597 [insertStockOutOnly] completed at Sun Jul 14 2024 07:45:11 GMT+0700 (Western Indonesia Time)
+[2024-07-14 07:45:11] [INFO] Master worker: Job 1598 [insertStockOutOnly] completed at Sun Jul 14 2024 07:45:11 GMT+0700 (Western Indonesia Time)
+[2024-07-14 07:45:11] [INFO] Master worker: Job 1599 [insertStockOutOnly] completed at Sun Jul 14 2024 07:45:11 GMT+0700 (Western Indonesia Time)
+[2024-07-14 07:45:11] [INFO] Master worker: Job 1600 [insertStockOutOnly] completed at Sun Jul 14 2024 07:45:11 GMT+0700 (Western Indonesia Time)
+[2024-07-14 07:45:11] [INFO] Master worker: Job 1601 [insertStockOutOnly] completed at Sun Jul 14 2024 07:45:11 GMT+0700 (Western Indonesia Time)
+[2024-07-14 07:45:11] [INFO] Master worker: Job 1602 [insertStockOutOnly] completed at Sun Jul 14 2024 07:45:11 GMT+0700 (Western Indonesia Time)
+[2024-07-14 07:45:11] [INFO] Master worker: Job 1603 [insertStockOutOnly] completed at Sun Jul 14 2024 07:45:11 GMT+0700 (Western Indonesia Time)
+[2024-07-14 07:45:11] [INFO] Master worker: Job 1604 [insertStockOutOnly] completed at Sun Jul 14 2024 07:45:11 GMT+0700 (Western Indonesia Time)
+[2024-07-14 07:48:45] [INFO] Server: Server started on port 5000
+[2024-07-14 07:48:45] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-14 07:48:45] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-14 07:48:45] [INFO] Sync: Synced 3 users
+[2024-07-14 07:54:18] [INFO] Master worker: Job 1605 [createProduct] completed at Sun Jul 14 2024 07:54:18 GMT+0700 (Western Indonesia Time)
+[2024-07-14 07:54:18] [INFO] Master worker: Job 1606 [createProductImage] completed at Sun Jul 14 2024 07:54:18 GMT+0700 (Western Indonesia Time)
+[2024-07-14 07:54:18] [INFO] Worker: Product Testing_1 created
+[2024-07-14 07:57:23] [INFO] Master worker: Job 1607 [updateProduct] completed at Sun Jul 14 2024 07:57:23 GMT+0700 (Western Indonesia Time)
+[2024-07-14 07:58:03] [INFO] Master worker: Job 1608 [updateProduct] completed at Sun Jul 14 2024 07:58:03 GMT+0700 (Western Indonesia Time)
+[2024-07-14 08:01:59] [INFO] Server: Server started on port 5000
+[2024-07-14 08:01:59] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-14 08:01:59] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-14 08:01:59] [INFO] Sync: Synced 3 users
+[2024-07-14 08:02:29] [INFO] Server: Server started on port 5000
+[2024-07-14 08:02:29] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-14 08:02:29] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-14 08:02:30] [INFO] Sync: Synced 3 users
+[2024-07-14 08:03:05] [INFO] Server: Server started on port 5000
+[2024-07-14 08:03:05] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-14 08:03:06] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-14 08:03:06] [INFO] Sync: Synced 3 users
+[2024-07-14 08:06:14] [INFO] Server: Server started on port 5000
+[2024-07-14 08:06:14] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-14 08:06:15] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-14 08:06:15] [INFO] Sync: Synced 3 users
+[2024-07-14 08:06:26] [INFO] Master worker: Job 1609 [deleteProduct] completed at Sun Jul 14 2024 08:06:26 GMT+0700 (Western Indonesia Time)
+[2024-07-14 10:29:45] [INFO] Server: Server started on port 5000
+[2024-07-14 10:29:45] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-14 10:29:45] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-14 10:29:45] [INFO] Sync: Synced 3 users
+[2024-07-14 10:30:17] [INFO] Server: Server started on port 5000
+[2024-07-14 10:30:17] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-14 10:30:17] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-14 10:30:17] [INFO] Sync: Synced 3 users
+[2024-07-14 10:30:59] [INFO] Server: Server started on port 5000
+[2024-07-14 10:30:59] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-14 10:30:59] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-14 10:30:59] [INFO] Sync: Synced 3 users
+[2024-07-14 10:31:20] [INFO] Server: Server started on port 5000
+[2024-07-14 10:31:20] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-14 10:31:21] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-14 10:31:21] [INFO] Sync: Synced 3 users
+[2024-07-14 11:37:09] [INFO] Server: Server started on port 5000
+[2024-07-14 11:37:09] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-14 11:37:09] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-14 11:37:09] [INFO] Sync: Synced 3 users
+[2024-07-14 11:41:08] [ERROR] Stock transfer request: Error on fetching stock transfer request CastError: Cast to ObjectId failed for value "unsent" (type string) at path "_id" for model "stock-requests"
+[2024-07-14 19:13:41] [INFO] Server: Server started on port 5000
+[2024-07-14 19:13:41] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-14 19:13:42] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-14 19:13:42] [INFO] Sync: Synced 3 users
+[2024-07-14 19:14:01] [INFO] Server: Server started on port 5000
+[2024-07-14 19:14:01] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-14 19:14:01] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-14 19:14:01] [INFO] Sync: Synced 3 users
+[2024-07-14 19:26:09] [INFO] Server: Server started on port 5000
+[2024-07-14 19:26:09] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-14 19:26:09] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-14 19:26:09] [INFO] Sync: Synced 3 users
+[2024-07-14 19:26:57] [INFO] Server: Server started on port 5000
+[2024-07-14 19:26:57] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-14 19:26:57] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-14 19:26:58] [INFO] Sync: Synced 3 users
+[2024-07-14 19:29:06] [ERROR] Membership: Error on fetching membership by id: CastError: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "memberships"
+[2024-07-14 19:33:37] [INFO] Server: Server started on port 5000
+[2024-07-14 19:33:37] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-14 19:33:38] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-14 19:33:38] [INFO] Sync: Synced 3 users
+[2024-07-15 00:13:22] [INFO] Server: Server started on port 5000
+[2024-07-15 00:13:22] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-15 00:13:22] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-15 00:13:22] [INFO] Sync: Synced 3 users
+[2024-07-15 00:15:37] [INFO] Server: Server started on port 5000
+[2024-07-15 00:15:37] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-15 00:15:38] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-15 00:15:38] [INFO] Sync: Synced 3 users
+[2024-07-15 08:08:42] [INFO] Server: Server started on port 5000
+[2024-07-15 08:08:42] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-15 08:08:42] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-15 08:08:42] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-15 08:08:42] [INFO] Sync: Synced 3 users
+[2024-07-15 08:08:42] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-15 08:08:42] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-15 08:08:42] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-15 08:08:43] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-15 08:08:43] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-15 08:08:43] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-15 08:08:43] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-15 08:08:44] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-15 08:08:44] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-15 08:08:45] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-15 08:08:45] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-15 08:08:46] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-15 08:08:46] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-15 08:08:47] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-15 08:08:47] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-15 08:08:48] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-15 08:08:48] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-15 08:08:49] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-15 08:08:49] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-15 08:08:50] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-15 08:08:50] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-15 08:08:51] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-15 08:08:51] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-15 08:08:52] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-15 08:08:53] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-15 08:08:53] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-15 08:56:46] [INFO] Server: Server started on port 5000
+[2024-07-15 08:56:46] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-15 08:56:46] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-15 08:56:46] [INFO] Sync: Synced 3 users
+[2024-07-15 08:58:29] [INFO] Server: Server started on port 5000
+[2024-07-15 08:58:29] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-15 08:58:29] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-15 08:58:29] [INFO] Sync: Synced 3 users
+[2024-07-15 08:59:58] [INFO] Server: Server started on port 5000
+[2024-07-15 08:59:58] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-15 08:59:58] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-15 08:59:58] [INFO] Sync: Synced 3 users
+[2024-07-15 09:06:23] [INFO] Server: Server started on port 5000
+[2024-07-15 09:06:23] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-15 09:06:23] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-15 09:06:23] [INFO] Sync: Synced 3 users
+[2024-07-15 09:06:46] [INFO] Server: Server started on port 5000
+[2024-07-15 09:06:46] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-15 09:06:47] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-15 09:06:47] [INFO] Sync: Synced 3 users
+[2024-07-15 09:07:15] [INFO] Server: Server started on port 5000
+[2024-07-15 09:07:15] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-15 09:07:15] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-15 09:07:15] [INFO] Sync: Synced 3 users
+[2024-07-15 09:08:00] [INFO] Server: Server started on port 5000
+[2024-07-15 09:08:00] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-15 09:08:00] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-15 09:08:00] [INFO] Sync: Synced 3 users
+[2024-07-15 09:08:16] [INFO] Server: Server started on port 5000
+[2024-07-15 09:08:16] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-15 09:08:16] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-15 09:08:16] [INFO] Sync: Synced 3 users
+[2024-07-15 09:11:28] [INFO] Server: Server started on port 5000
+[2024-07-15 09:11:28] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-15 09:11:28] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-15 09:11:28] [INFO] Sync: Synced 3 users
+[2024-07-15 09:12:58] [INFO] Server: Server started on port 5000
+[2024-07-15 09:12:58] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-15 09:12:58] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-15 09:12:58] [INFO] Sync: Synced 3 users

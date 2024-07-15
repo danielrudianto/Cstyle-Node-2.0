@@ -22,7 +22,7 @@ router.post(
 
 router.get(
   "/:id",
-  body("id").notEmpty().withMessage(ErrorList["ID_REQUIRED"]),
+  param("id").notEmpty().withMessage(ErrorList["ID_REQUIRED"]),
   param("id").isMongoId().withMessage(ErrorList["ID_INVALID"]),
   ErrorInterceptor.intercept,
   StockRequestController.fetchByID

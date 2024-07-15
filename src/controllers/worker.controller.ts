@@ -17,6 +17,7 @@ import StockCardModelModel from "../models/stock-card.model";
 import OverflowModelModel from "../models/overflow.model";
 import {
   RemoveStockInInterface,
+  RemoveStockOutInterface,
   StockOutInterface,
   StockOutTempInterface,
   StockOutTransferInterface,
@@ -26,6 +27,8 @@ import {
   UpdateProductImageDataInterface,
   CommonWorkerInterface,
 } from "../interfaces/worker.interface";
+import AdjustmentModelModel from "../models/adjustment.model";
+import { DeleteStockInInterface } from "../interfaces/stock.interface";
 
 class WorkerController {
   static createProduct(data: CommonWorkerInterface): void {
@@ -150,6 +153,20 @@ class WorkerController {
     });
   }
 
+  static async deleteProduct(data: CommonWorkerInterface): Promise<any> {
+    const id = data.id;
+    ItemModelModel.fetchByID(id).then(async (item) => {
+      if (!item) {
+        throw Error(ErrorList["ITEM_NOT_FOUND"]);
+      }
+
+      await MigrationModelModel.deleteProduct(id);
+      item.images.forEach(async (x: string) => {
+        await MigrationModelModel.deleteProductImage(x, id);
+      });
+    });
+  }
+
   static createUser(data: CommonWorkerInterface) {
     UserModelModel.fetchByID(data.id)
       .then((user) => {
@@ -228,6 +245,46 @@ class WorkerController {
     }
   }
 
+  static async deleteAdjustment(data: CommonWorkerInterface) {
+    const adjustmentEvent = await AdjustmentModelModel.fetchByID(data.id);
+    if (!adjustmentEvent || !adjustmentEvent.isDelete) {
+      throw Error(ErrorList["ADJUSTMENT_EVENT_NOT_FOUND"]);
+    }
+
+    adjustmentEvent.items.forEach(async (x: any) => {
+      if (x.quantity > 0) {
+        const removeStockInData: RemoveStockInInterface = {
+          itemID: x.itemID._id,
+          quantity: x.quantity,
+          storeID:
+            adjustmentEvent.storeID == null
+              ? null
+              : adjustmentEvent.storeID._id,
+          goodReceiptID: null,
+          adjustmentCaseID: data.id,
+        };
+
+        await queue.add("removeStockIn", removeStockInData);
+      } else if (x.quantity < 0) {
+        const removeStockOutData: RemoveStockOutInterface = {
+          itemID: x.itemID,
+          quantity: x.quantity,
+          storeID:
+            adjustmentEvent.storeID == null
+              ? null
+              : adjustmentEvent.storeID._id,
+          billID: null,
+          invoiceID: null,
+          adjustmentCaseID: data.id,
+        };
+
+        await queue.add("removeStockOut", removeStockOutData);
+      }
+
+      await queue.add("checkOverflow", {});
+    });
+  }
+
   static async insertStockIn(data: StockInInterface) {
     const [result, _] = await Promise.all([
       new StockInModelModel({
@@ -256,38 +313,31 @@ class WorkerController {
   }
 
   static async removeStockIn(data: RemoveStockInInterface) {
-    await StockModelModel.removeStockIn(data);
-    Promise.all([
-      new StockModelModel({
-        storeID: data.storeID,
-        itemID: data.itemID,
-        quantity: data.quantity * -1,
-      }).update(),
-      StockInModelModel.delete({
-        goodReceiptID: data.goodReceiptID,
-        adjustmentEventID: data.adjustmentCaseID,
-        itemID: data.itemID,
-      }),
-    ])
-      .then(async ([_, stockIn]) => {
-        const stockInID = stockIn._id;
-        const stockOuts = await StockOutModelModel.fetchByStockInID(stockInID);
+    // MOVE THE STOCK OUTS WITH CORRESPONDING STOCK IN TO OVERFLOW
+    const result = await StockInModelModel.fetchDeletation(data);
+    const stockOuts = await StockOutModelModel.fetchByStockInID(result._id);
 
-        for (let i = 0; i < stockOuts.length; i++) {
+    if (stockOuts.length > 0) {
+      await Promise.all(
+        stockOuts.map(async (x) => {
           await new OverflowModelModel({
             itemID: data.itemID,
-            quantity: stockOuts[i].quantity,
-            billID: stockOuts[i].billID,
-            adjustmentEventID: stockOuts[i].adjustmentEventID,
-            invoiceID: stockOuts[i].invoiceID,
+            quantity: x.quantity,
+            billID: x.billID,
+            adjustmentEventID: x.adjustmentEventID,
+            invoiceID: x.invoiceID,
           }).create();
+        })
+      );
+    }
 
-          await StockOutModelModel.deleteByID(stockOuts[i]._id);
-        }
-
-        return true;
-      })
-      .catch((error) => {});
+    // Delete the stock in
+    const deleteStockIn: DeleteStockInInterface = {
+      itemID: data.itemID,
+      adjustmentEventID: data.adjustmentCaseID,
+      goodReceiptID: data.goodReceiptID,
+    };
+    await StockInModelModel.delete(deleteStockIn);
   }
 
   static async insertStockOut(data: StockOutInterface) {
@@ -355,6 +405,15 @@ class WorkerController {
       goodReceiptID: null,
       deliverySlipID: null,
     }).create();
+  }
+
+  static async removeStockOut(data: RemoveStockOutInterface) {
+    StockOutModelModel.fetchDeletation(data).then((result) => {
+      result.forEach((x) => {
+        const stockInID = x.stockInID;
+        StockInModelModel.updateResidue(stockInID, x.quantity);
+      });
+    });
   }
 
   static async insertStockOutOnly(data: StockOutInterface) {

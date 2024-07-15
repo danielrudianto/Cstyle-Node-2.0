@@ -38,6 +38,7 @@ export enum ErrorList {
   ITEM_TYPE_NOT_DELETED = "Item type not deleted",
   ITEM_TYPE_NOT_UPDATED = "Item type not updated",
   ITEM_TYPE_NOT_CREATED = "Item type not created",
+  ITEM_TYPE_REQUIRED = "Item type is required",
 
   ITEM_BRAND_NOT_FOUND = "Item brand not found",
   ITEM_BRAND_ALREADY_EXIST = "Item brand already exist",
@@ -47,6 +48,7 @@ export enum ErrorList {
   ITEM_BRAND_NOT_DELETED = "Item brand not deleted",
   ITEM_BRAND_NOT_UPDATED = "Item brand not updated",
   ITEM_BRAND_NOT_CREATED = "Item brand not created",
+  ITEM_BRAND_REQUIRED = "Item brand is required",
 
   ITEM_NOT_FOUND = "Item not found",
   ITEM_ALREADY_EXIST = "Item already exist",

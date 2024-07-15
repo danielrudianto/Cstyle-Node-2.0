@@ -31,3 +31,12 @@ export interface RemoveStockInInterface {
   quantity: number;
   storeID: string | null;
 }
+
+export interface RemoveStockOutInterface {
+  itemID: string;
+  adjustmentCaseID: string | null;
+  quantity: number;
+  storeID: string | null;
+  billID: string | null;
+  invoiceID: string | null;
+}

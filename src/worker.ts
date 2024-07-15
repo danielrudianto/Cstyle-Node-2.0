@@ -10,6 +10,7 @@ import {
 import { StockInInterface } from "./interfaces/stock-in.interface";
 import {
   RemoveStockInInterface,
+  RemoveStockOutInterface,
   StockOutInterface,
   StockOutTempInterface,
   StockOutTransferInterface,
@@ -27,6 +28,8 @@ interface JobDataMap {
   createProduct: CommonWorkerInterface;
   updateProduct: CommonWorkerInterface;
   updateProductImage: UpdateProductImageDataInterface;
+  deleteProduct: CommonWorkerInterface;
+
   createUser: CommonWorkerInterface;
   updateUser: CommonWorkerInterface;
   deleteUser: CommonWorkerInterface;
@@ -40,6 +43,8 @@ interface JobDataMap {
   insertStockInTransfer: StockOutTransferInterface;
   removeStockOutTemp: StockOutTempInterface;
   removeStockIn: RemoveStockInInterface;
+  removeStockOut: RemoveStockOutInterface;
+  deleteAdjustment: CommonWorkerInterface;
 }
 
 type JobName = keyof JobDataMap;
@@ -63,6 +68,9 @@ const workerHandler = async <T extends JobName>(job: Job<T>) => {
         job.data as UpdateProductImageDataInterface
       );
       break;
+    case "deleteProduct":
+      WorkerController.deleteProduct(job.data as CommonWorkerInterface);
+      break;
     case "createUser":
       WorkerController.createUser(job.data as CommonWorkerInterface);
       break;
@@ -74,6 +82,11 @@ const workerHandler = async <T extends JobName>(job: Job<T>) => {
       break;
     case "createBill":
       await WorkerController.createBill(job.data as CommonWorkerInterface);
+      break;
+    case "deleteAdjustment":
+      await WorkerController.deleteAdjustment(
+        job.data as CommonWorkerInterface
+      );
       break;
     case "insertStockIn":
       await WorkerController.insertStockIn(job.data as StockInInterface);
@@ -107,6 +120,10 @@ const workerHandler = async <T extends JobName>(job: Job<T>) => {
     case "removeStockIn":
       await WorkerController.removeStockIn(job.data as RemoveStockInInterface);
       break;
+    case "removeStockOut":
+      await WorkerController.removeStockOut(
+        job.data as RemoveStockOutInterface
+      );
     case "checkOverflow":
       await WorkerController.checkOverflow();
       break;
@@ -118,7 +135,7 @@ const worker = new Worker("queue", workerHandler, workerOptions);
 worker.on("failed", (job, err) => {
   new LoggerHelper({
     type: LoggerType.error,
-    message: `Job ${job?.id} has failed with ${err.message}`,
+    message: `Job ${job?.id} [${job?.name}] has failed with ${err.message}`,
     tag: "Master worker",
   }).log();
 });
@@ -126,7 +143,9 @@ worker.on("failed", (job, err) => {
 worker.on("completed", (job, result) => {
   new LoggerHelper({
     type: LoggerType.info,
-    message: `Job ${job.id} completed with result ${result}`,
+    message: `Job ${job.id} [${
+      job.name
+    }] completed at ${new Date().toString()}`,
     tag: "Master worker",
   }).log();
 });

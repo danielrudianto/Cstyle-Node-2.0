@@ -31,3 +31,8 @@ export interface ItemDeleteInterface {
   id: string;
   userID: string;
 }
+
+export interface ItemPriceFetchInterface {
+  brand: string[];
+  type: string[];
+}

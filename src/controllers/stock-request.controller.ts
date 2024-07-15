@@ -10,9 +10,7 @@ import { LoggerType } from "../interfaces/logger.interface";
 import StockModelModel from "../models/stock.model";
 import { queue } from "../utils/queue.utils";
 import { StockOutTransferInterface } from "../interfaces/stock-out.interface";
-import AsyncLock from "async-lock";
-
-const lock = new AsyncLock();
+import lock from "../utils/lock.utils";
 
 class StockRequestController {
   static create = async (req: Request, res: Response) => {
@@ -317,58 +315,62 @@ class StockRequestController {
       return res.status(405).send(ErrorList["STOCK_REQUEST_ALREADY_SENT"]);
     }
 
-    // Check if items has sufficient stock
-    StockModelModel.checkStockByItemIDs(
-      items.map((x: any) => {
-        return {
-          itemID: x.itemID,
-          quantity: x.quantity,
-        };
-      }),
-      stockRequest.requestTo
-    ).then((stocks) => {
-      let validation = true;
-      for (let i = 0; i < stockRequest.items.length; i++) {
-        const stockIndex = stocks.findIndex(
-          (x: any) => x.itemID.toString() == items[i].itemID
-        );
+    await lock.acquire(
+      items.map((x: any) => x.itemID.toString()),
+      async () => {
+        StockModelModel.checkStockByItemIDs(
+          items.map((x: any) => {
+            return {
+              itemID: x.itemID,
+              quantity: x.quantity,
+            };
+          }),
+          stockRequest.requestTo
+        ).then((stocks) => {
+          let validation = true;
+          for (let i = 0; i < stockRequest.items.length; i++) {
+            const stockIndex = stocks.findIndex(
+              (x: any) => x.itemID.toString() == items[i].itemID
+            );
 
-        const stock = stockIndex == -1 ? 0 : stocks[stockIndex].quantity;
-        if (stock < items[i].quantity) {
-          validation = false;
-        }
-      }
+            const stock = stockIndex == -1 ? 0 : stocks[stockIndex].quantity;
+            if (stock < items[i].quantity) {
+              validation = false;
+            }
+          }
 
-      if (!validation) {
-        return res.status(405).send(ErrorList["INSUFFICIENT_STOCK"]);
-      } else {
-        StockRequestModelModel.send({
-          id: id,
-          createdBy: userID,
-          items: items,
-        })
-          .then(async (result) => {
-            items.forEach(async (x: any) => {
-              await queue.add("insertStockOutTransfer", {
-                storeID: stockRequest.requestTo,
-                itemID: x.itemID,
-                quantity: x.quantity,
+          if (!validation) {
+            return res.status(405).send(ErrorList["INSUFFICIENT_STOCK"]);
+          } else {
+            StockRequestModelModel.send({
+              id: id,
+              createdBy: userID,
+              items: items,
+            })
+              .then(async (result) => {
+                items.forEach(async (x: any) => {
+                  await new StockModelModel({
+                    storeID: stockRequest.requestTo,
+                    itemID: x.itemID,
+                    quantity: x.quantity * -1,
+                  }).update();
+                });
+
+                return res.status(201).send(result);
+              })
+              .catch((error) => {
+                new LoggerHelper({
+                  type: LoggerType.error,
+                  message: `Error on sending stock request ${error}`,
+                  tag: "StockRequest",
+                }).log();
+
+                return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
               });
-            });
-
-            return res.status(201).send(result);
-          })
-          .catch((error) => {
-            new LoggerHelper({
-              type: LoggerType.error,
-              message: `Error on sending stock request ${error}`,
-              tag: "StockRequest",
-            }).log();
-
-            return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
-          });
+          }
+        });
       }
-    });
+    );
   };
 
   static checkStatus = async (
