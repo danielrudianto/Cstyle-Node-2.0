@@ -37,7 +37,7 @@ export function connectionFactory() {
   conn.model("bills", BillSchema);
   conn.model("delivery-slips", DeliverySlipSchema);
   conn.model("good-receipt", GoodReceiptSchema);
-  conn.model("invoice", InvoiceSchema);
+  conn.model("invoices", InvoiceSchema);
   conn.model("memberships", MembershipSchema);
   conn.model("membership-points", MembershipPointSchema);
   conn.model("packing-lists", PackingListSchema);

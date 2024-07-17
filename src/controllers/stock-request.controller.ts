@@ -1,9 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import StockModel from "../schemas/impl.stock.model";
 import { ErrorList } from "../data/error-list";
-import stockRequestModel from "../schemas/ins.stock-request.model";
-import UserModel from "../schemas/ins.user.model";
-import { Types } from "mongoose";
 import StockRequestModelModel from "../models/stock-request.model";
 import LoggerHelper from "../utils/logger.utils";
 import { LoggerType } from "../interfaces/logger.interface";
@@ -134,7 +130,7 @@ class StockRequestController {
           stockRequest.items.map((x: any) => {
             return x.itemID;
           }),
-          () => {
+          (done) => {
             stockRequest.items.forEach(async (x: any) => {
               const data: StockOutTransferInterface = {
                 itemID: x.itemID,
@@ -144,10 +140,12 @@ class StockRequestController {
 
               await new StockModelModel(data).update();
             });
+
+            done();
+
+            return res.status(201).send(result);
           }
         );
-
-        return res.status(201).send(result);
       }
     );
   };
@@ -317,7 +315,7 @@ class StockRequestController {
 
     await lock.acquire(
       items.map((x: any) => x.itemID.toString()),
-      async () => {
+      async (done) => {
         StockModelModel.checkStockByItemIDs(
           items.map((x: any) => {
             return {
@@ -356,6 +354,7 @@ class StockRequestController {
                   }).update();
                 });
 
+                done();
                 return res.status(201).send(result);
               })
               .catch((error) => {
@@ -365,6 +364,7 @@ class StockRequestController {
                   tag: "StockRequest",
                 }).log();
 
+                done();
                 return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
               });
           }
@@ -480,100 +480,60 @@ class StockRequestController {
   };
 
   static receive = (req: Request, res: Response) => {
-    // const id = req.body.id;
-    // const userID = req.body.updatedBy;
-    // const isConfirm = req.body.isConfirm;
-    // const rejectNote = req.body.rejectNote;
-    // // Check if user is active
-    // UserModel.findById(userID)
-    //   .then((user) => {
-    //     if (user == null) {
-    //       return res.status(404).send(ErrorList["USER_NOT_FOUND"]);
-    //     }
-    //     if (!user.isActive) {
-    //       return res.status(404).send(ErrorList["USER_NOT_ACTIVE"]);
-    //     }
-    //     stockRequestModel.findById(id).then((stockTransferRequest) => {
-    //       if (!stockTransferRequest) {
-    //         return res.status(404).send(ErrorList["STOCK_REQUEST_NOT_FOUND"]);
-    //       }
-    //       if (stockTransferRequest.isConfirm || stockTransferRequest.isReject) {
-    //         return res
-    //           .status(404)
-    //           .send(ErrorList["STOCK_REQUEST_ALREADY_RECEIVED"]);
-    //       } else {
-    //         if (isConfirm) {
-    //           // Is confirming stock transfer request
-    //           stockTransferRequest.isConfirm = true;
-    //           stockTransferRequest.updatedAt = new Date();
-    //           stockTransferRequest.updatedBy = userID;
-    //           stockTransferRequest
-    //             .save()
-    //             .then(async (result) => {
-    //               if (!result) {
-    //                 return res
-    //                   .status(500)
-    //                   .send(ErrorList["STOCK_REQUEST_UPDATE_FAILED"]);
-    //               }
-    //               const updateArray: any[] = [];
-    //               result.items.forEach((item: any) => {
-    //                 updateArray.push({
-    //                   itemID: item.itemID,
-    //                   storeID: result.requestFrom,
-    //                   quantity: item.quantity,
-    //                 });
-    //               });
-    //               await queue.add("updateStock", {
-    //                 data: updateArray,
-    //               });
-    //               return res.status(200).send(result);
-    //             })
-    //             .catch((error) => {
-    //               console.error(
-    //                 `[error]: Error on updating stock request. ${error}`
-    //               );
-    //               return res.status(500).send(error);
-    //             });
-    //         } else {
-    //           // Is rejecting stock transfer request
-    //           stockTransferRequest.isReject = true;
-    //           stockTransferRequest.rejectNote = rejectNote;
-    //           stockTransferRequest.updatedAt = new Date();
-    //           stockTransferRequest.updatedBy = userID;
-    //           stockTransferRequest
-    //             .save()
-    //             .then(async (result) => {
-    //               if (!result) {
-    //                 return res
-    //                   .status(500)
-    //                   .send(ErrorList["STOCK_REQUEST_UPDATE_FAILED"]);
-    //               }
-    //               const updateArray: any[] = [];
-    //               result.items.forEach((item: any) => {
-    //                 updateArray.push({
-    //                   itemID: item.itemID,
-    //                   storeID: result.requestTo,
-    //                   quantity: item.quantity,
-    //                 });
-    //               });
-    //               await queue.add("updateStock", {
-    //                 data: updateArray,
-    //               });
-    //               return res.status(201).send(result);
-    //             })
-    //             .catch((error) => {
-    //               console.error(
-    //                 `[error]: Error on updating stock request. ${error}`
-    //               );
-    //               return res.status(500).send(error);
-    //             });
-    //         }
-    //       }
-    //     });
-    //   })
-    //   .catch((error) => {
-    //     return res.status(500).send(error);
-    //   });
+    const id = req.body.id;
+    const userID = req.body.userID;
+
+    StockRequestModelModel.fetchByID(id)
+      .then((stockRequest) => {
+        if (!stockRequest || stockRequest.iDelete) {
+          return res.status(404).send(ErrorList["STOCK_REQUEST_NOT_FOUND"]);
+        } else if (!stockRequest.isSending) {
+          return res.status(400).send(ErrorList["STOCK_REQUEST_NOT_SENT"]);
+        } else if (stockRequest.isConfirm || stockRequest.isReject) {
+          return res
+            .status(400)
+            .send(ErrorList["STOCK_REQUEST_ALREADY_CONFIRMED"]);
+        } else {
+          StockRequestModelModel.confirmByID(id, userID)
+            .then(async () => {
+              await lock.acquire(
+                stockRequest.items.map((x: any) => {
+                  return `${x.itemID._id}:${stockRequest.requestFrom}`;
+                }),
+                (done) => {
+                  stockRequest.items.forEach(async (x: any) => {
+                    await new StockModelModel({
+                      itemID: x.itemID._id,
+                      quantity: x.quantity,
+                      storeID: stockRequest.requestFrom,
+                    }).update();
+                  });
+
+                  done();
+                  return res.status(201).send(stockRequest);
+                }
+              );
+            })
+            .catch((error) => {
+              new LoggerHelper({
+                message: `Error on receiving stock request ${error}`,
+                tag: "Stock request",
+                type: LoggerType.error,
+              }).log();
+
+              return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+            });
+        }
+      })
+      .catch((error) => {
+        new LoggerHelper({
+          message: `Error on fetching stock request ${error}`,
+          tag: "Stock request",
+          type: LoggerType.error,
+        }).log();
+
+        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+      });
   };
 
   static search = (req: Request, res: Response) => {

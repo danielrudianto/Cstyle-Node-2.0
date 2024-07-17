@@ -171,6 +171,23 @@ class ItemController {
       });
   };
 
+  static updatePrice = (req: Request, res: Response) => {
+    const items = req.body.items;
+    ItemModelModel.updatePrice(items)
+      .then((result) => {
+        return res.status(201).send(result);
+      })
+      .catch((error) => {
+        new LoggerHelper({
+          message: `Error on updating price ${error}`,
+          tag: "Item",
+          type: LoggerType.error,
+        }).log();
+
+        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+      });
+  };
+
   static deleteByID = (req: Request, res: Response) => {
     const id = req.params.id;
     const userID = req.body.userID;

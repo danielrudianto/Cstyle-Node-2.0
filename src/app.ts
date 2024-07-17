@@ -31,6 +31,7 @@ import LoggerHelper from "./utils/logger.utils";
 import { LoggerType } from "./interfaces/logger.interface";
 
 import cors from "cors";
+import InvoiceRoutes from "./routes/invoice.routes";
 
 export const app = express();
 
@@ -69,6 +70,7 @@ app.use("/packing-list", AuthInterceptor.intercept, PackingListRoutes);
 app.use("/delivery-slip", AuthInterceptor.intercept, DeliverySlipRoutes);
 app.use("/good-receipt", AuthInterceptor.intercept, GoodReceiptRoutes);
 app.use("/stock-transfer", AuthInterceptor.intercept, StockRequestRoutes);
+app.use("/invoice", AuthInterceptor.intercept, InvoiceRoutes);
 
 app.use("/adjustment", AuthInterceptor.intercept, AdjustmentEventRoutes);
 app.use("/cashier", CashierRoutes);

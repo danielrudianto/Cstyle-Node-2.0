@@ -36,3 +36,8 @@ export interface ItemPriceFetchInterface {
   brand: string[];
   type: string[];
 }
+
+export interface ItemUpdatePriceInterface {
+  id: string;
+  price: number;
+}

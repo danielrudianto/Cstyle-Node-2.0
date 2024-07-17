@@ -9,6 +9,7 @@ class StockOutModelModel {
   id?: string;
   billID: string | null;
   adjustmentEventID: string | null;
+  invoiceID: string | null;
   quantity: number;
   stockInID: string;
 
@@ -22,12 +23,14 @@ class StockOutModelModel {
     this.adjustmentEventID = data.adjustmentEventID;
     this.quantity = data.quantity;
     this.stockInID = data.stockInID!;
+    this.invoiceID = data.invoiceID;
   }
 
   create() {
     return conn.model("stock-outs").create({
       billID: this.billID,
       adjustmentEventID: this.adjustmentEventID,
+      invoiceID: this.invoiceID,
       quantity: this.quantity,
       stockInID: this.stockInID,
     });

@@ -24,6 +24,10 @@ class OverflowModelModel {
   static fetchAll() {
     return conn.model("overflows").find({});
   }
+
+  static deleteByID(id: string) {
+    return conn.model("overflows").findByIdAndDelete(id);
+  }
 }
 
 export default OverflowModelModel;

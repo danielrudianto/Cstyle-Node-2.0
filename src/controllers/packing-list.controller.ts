@@ -7,6 +7,7 @@ import StockModelModel from "../models/stock.model";
 import { queue } from "../utils/queue.utils";
 import { StockOutInterface } from "../interfaces/stock-out.interface";
 import InvoiceModelModel from "../models/invoice.model";
+import lock from "../utils/lock.utils";
 
 class PackingListController {
   static create = async (req: Request, res: Response) => {
@@ -71,22 +72,36 @@ class PackingListController {
               salesID: salesID,
             })
               .create()
-              .then(() => {
-                result.items
-                  .filter((x: any) => x.quantity > 0)
-                  .forEach(async (x: any) => {
-                    await queue.add("insertStockOut", {
-                      itemID: x.itemID,
-                      quantity: x.quantity,
-                      residue: x.quantity,
-                      price: 0,
-                      packingListID: result._id,
-                      goodReceiptID: null,
-                      storeID: null,
-                    });
-                  });
+              .then(async (salesInvoice) => {
+                await lock.acquire(
+                  result.items.map((x: any) => {
+                    return `${x.itemID}:`;
+                  }),
+                  (done) => {
+                    result.items.forEach(async (x: any) => {
+                      const data: StockOutInterface = {
+                        itemID: x.itemID,
+                        quantity: x.quantity,
+                        invoiceID: salesInvoice._id,
+                        billID: null,
+                        adjustmentEventID: null,
+                        date: date,
+                        storeID: null,
+                      };
 
-                return res.status(201).send(result);
+                      await queue.add("insertStockOut", data);
+
+                      await new StockModelModel({
+                        itemID: x.itemID,
+                        quantity: x.quantity * -1,
+                        storeID: null,
+                      }).update();
+                    });
+
+                    done();
+                    return res.status(201).send(result);
+                  }
+                );
               })
               .catch((error) => {
                 new LoggerHelper({

@@ -57,6 +57,19 @@ router.put(
   ErrorInterceptor.intercept,
   ItemController.updateFavoriteStatus
 );
+
+router.put(
+  "/price",
+  body("items").isArray().withMessage(ErrorList["ITEMS_INVALID"]),
+  body("items.*.id").isMongoId().withMessage(ErrorList["ID_INVALID"]),
+  body("items.*.price").isNumeric().withMessage(ErrorList["PRICE_INVALID"]),
+  body("items.*.price")
+    .isFloat({ min: 0 })
+    .withMessage(ErrorList["PRICE_NEGATIVE"]),
+  ErrorInterceptor.intercept,
+  ItemController.updatePrice
+);
+
 router.put(
   "/v2",
   (req, res, next) => {
@@ -82,6 +95,7 @@ router.get(
   ErrorInterceptor.intercept,
   ItemController.fetchByID
 );
+
 router.delete("/image/:id/:name", ItemController.deleteImage);
 router.delete(
   "/:id",

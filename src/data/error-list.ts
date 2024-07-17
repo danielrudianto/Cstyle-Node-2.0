@@ -200,4 +200,6 @@ export enum ErrorList {
   LOGIN_ERROR = "Invalid username / password. Please check again your input.",
   STOCK_REQUEST_SAME_STORE = "Stock request from and to store must be different",
   REJECT_NOTE_REQUIRED = "Reject note is required",
+  PRICE_INVALID = "Price is invalid",
+  PRICE_NEGATIVE = "Price cannot be negative",
 }

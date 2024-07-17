@@ -57,6 +57,7 @@ class AuthInterceptor {
       if (storeUID == undefined || storeUID == null || storeUID == "") {
         return res.status(401).send("Token unrecognized.");
       } else {
+        const promises = [];
         // Format storeUID from string with 32 length to UID format
         const formattedUID =
           storeUID.toString().substring(0, 8) +
@@ -69,37 +70,40 @@ class AuthInterceptor {
           "-" +
           storeUID.toString().substring(20, 32);
 
-        conn
-          .model("stores")
-          .find({
+        const employeeCode = req.headers["employee-code"];
+        Promise.all([
+          conn.model("stores").findOne({
             code: formattedUID,
             isActive: true,
-          })
-          .then((stores) => {
-            if (stores.length == 0) {
+          }),
+          employeeCode != undefined && employeeCode != null
+            ? conn.model("users").findOne({
+                code: employeeCode,
+                isActive: true,
+              })
+            : Promise.resolve(null),
+        ])
+          .then(([store, user]) => {
+            if (!store) {
               return res.status(401).send("Token unrecognized.");
             } else {
-              req.body.storeID = stores[0]._id;
-              next();
-            }
-          });
-      }
+              req.body.storeID = store._id;
 
-      const employeeCode = req.headers["employee-code"];
-      if (employeeCode != undefined && employeeCode != null) {
-        conn
-          .model("users")
-          .find({
-            code: employeeCode,
-            isActive: true,
-          })
-          .then((user) => {
-            if (user.length == 0) {
-              return res.status(401).send("Token unrecognized.");
-            } else {
-              req.body.employeeID = user[0]._id;
-              next();
+              if (employeeCode != undefined && employeeCode != null) {
+                if (!user) {
+                  return res.status(401).send("Token unrecognized.");
+                } else {
+                  req.body.employeeID = user._id;
+                  next();
+                }
+              } else {
+                next();
+              }
             }
+          })
+          .catch((error) => {
+            console.error(`[error]: Error on verifying token: ${error}`);
+            return res.status(401).send("Token unrecognized.");
           });
       }
     } else {

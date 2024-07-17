@@ -5,6 +5,7 @@ import {
   ItemInterface,
   ItemPriceFetchInterface,
   ItemUpdateFavorite,
+  ItemUpdatePriceInterface,
 } from "../interfaces/item.interface";
 import { Types } from "mongoose";
 import { connectionFactory } from "../utils/connector.utils";
@@ -125,7 +126,7 @@ class ItemModelModel {
     return conn
       .model("items")
       .find({
-        ...filters,
+        $and: [...filters],
         isDelete: false,
       })
       .select("_id reference description price")
@@ -333,6 +334,23 @@ class ItemModelModel {
       }),
       countItems,
     ];
+  }
+
+  static updatePrice(data: ItemUpdatePriceInterface[]) {
+    return conn.model("items").bulkWrite(
+      data.map((x) => ({
+        updateOne: {
+          filter: {
+            _id: x.id,
+          },
+          update: {
+            $set: {
+              price: x.price,
+            },
+          },
+        },
+      }))
+    );
   }
 
   static updateFavoriteStatus(data: ItemUpdateFavorite) {

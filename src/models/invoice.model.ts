@@ -1,4 +1,7 @@
-import { InvoiceInterface } from "../interfaces/invoice.interface";
+import {
+  InvoiceFetchInterface,
+  InvoiceInterface,
+} from "../interfaces/invoice.interface";
 import { connectionFactory } from "../utils/connector.utils";
 
 const conn = connectionFactory();
@@ -36,7 +39,7 @@ class InvoiceModelModel {
   }
 
   create() {
-    return conn.model("invoice").create({
+    return conn.model("invoices").create({
       name: this.name,
       date: this.date,
       note: this.note,
@@ -50,20 +53,85 @@ class InvoiceModelModel {
     });
   }
 
+  static fetch(data: InvoiceFetchInterface) {
+    const filters = [];
+
+    if (data.status.includes("active")) {
+      filters.push({
+        isDelete: false,
+      });
+    }
+
+    if (data.status.includes("deleted")) {
+      filters.push({
+        isDelete: true,
+      });
+    }
+    return Promise.all([
+      conn
+        .model("invoices")
+        .find({
+          $or: filters,
+          $expr: {
+            $and: [
+              { $eq: [{ $month: "$date" }, data.month] },
+              { $eq: [{ $year: "$date" }, data.year] },
+            ],
+          },
+        })
+        .populate("customerID", "name")
+        .populate("salesID", "name")
+        .populate("createdBy", "name")
+        .sort({
+          date: 1,
+        })
+        .limit(10)
+        .skip(10 * (data.page - 1)),
+      conn.model("invoices").countDocuments({
+        $or: filters,
+        $expr: {
+          $and: [
+            { $eq: [{ $month: "$date" }, data.month] },
+            { $eq: [{ $year: "$date" }, data.year] },
+          ],
+        },
+      }),
+    ]);
+  }
+
+  static fetchByID(id: string) {
+    return conn
+      .model("invoices")
+      .findById(id)
+      .populate("customerID", "name address phoneNumber")
+      .populate("salesID", "name")
+      .populate("createdBy", "name")
+      .populate("packingListID")
+      .populate("deliverySlipID");
+  }
+
   static fetchByPackingListID(id: string) {
-    return conn.model("invoice").findOne({
+    return conn.model("invoices").findOne({
       packingListID: id,
     });
   }
 
   static fetchByDeliverySlipID(id: string) {
-    return conn.model("invoice").findOne({
+    return conn.model("invoices").findOne({
       deliverySlipID: id,
     });
   }
 
+  static deleteByID(id: string, userID: string) {
+    return conn.model("invoices").findByIdAndUpdate(id, {
+      isDelete: true,
+      deletedBy: userID,
+      deletedAt: new Date(),
+    });
+  }
+
   static async generateName(date: Date): Promise<string> {
-    const count = await conn.model("invoice").countDocuments({
+    const count = await conn.model("invoices").countDocuments({
       $expr: {
         $and: [
           { $eq: [{ $month: "$date" }, date.getMonth() + 1] },

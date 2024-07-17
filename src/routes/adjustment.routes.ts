@@ -7,6 +7,7 @@ import ErrorInterceptor from "../interceptors/error.interceptor";
 const router = Router();
 
 router.post("/search/v2", AdjustmentEventController.fetch);
+
 router.post(
   "/",
   body("date").notEmpty().withMessage(ErrorList["DATE_REQUIRED"]),

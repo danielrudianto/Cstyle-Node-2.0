@@ -11,7 +11,6 @@ import { GoodReceiptStatus } from "../interfaces/good-receipt.interface";
 import StockModelModel from "../models/stock.model";
 import { StockInInterface } from "src/interfaces/stock-in.interface";
 import { RemoveStockInInterface } from "src/interfaces/stock-out.interface";
-import StockInModelModel from "../models/stock-in.model";
 import lock from "../utils/lock.utils";
 
 class GoodReceiptController {
@@ -42,7 +41,7 @@ class GoodReceiptController {
           items.map((x: any) => {
             return `${x.id}:`;
           }),
-          async () => {
+          async (done) => {
             items.forEach(async (x) => {
               await new StockModelModel({
                 itemID: x.id,
@@ -64,6 +63,7 @@ class GoodReceiptController {
               await queue.add("insertStockIn", stockInData);
             });
 
+            done();
             return res.status(201).send(result);
           }
         );
@@ -74,6 +74,7 @@ class GoodReceiptController {
           tag: "GoodReceipt",
           type: LoggerType.error,
         }).log();
+
         return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
       });
   };
@@ -113,7 +114,11 @@ class GoodReceiptController {
     const id = req.params.id;
     GoodReceiptModelModel.fetchByID(id)
       .then((result) => {
-        return res.status(200).send(result);
+        if (!result) {
+          return res.status(404).send(ErrorList["GOOD_RECEIPT_NOT_FOUND"]);
+        } else {
+          return res.status(200).send(result);
+        }
       })
       .catch((error) => {
         new LoggerHelper({
@@ -144,7 +149,8 @@ class GoodReceiptController {
       const stocks = await StockModelModel.checkStockByItemIDs(
         items.map((x: any) => {
           return {
-            id: x.itemID,
+            itemID: x.itemID,
+            quantity: x.quantity,
           };
         }),
         null
@@ -154,20 +160,20 @@ class GoodReceiptController {
 
       for (let i = 0; i < items.length; i++) {
         const stockIndex = stocks.findIndex(
-          (x: any) => x.id.toString() == items[i].itemID.toString()
+          (x: any) => x.itemID.toString() == items[i].itemID._id.toString()
         );
 
         if (stockIndex == -1) {
           validation = false;
         } else {
           const newIndex = newItems.findIndex(
-            (x: any) => x.id == items[i].itemID
+            (x: any) => x.itemID == items[i].itemID._id.toString()
           );
 
           if (newIndex != -1) {
             if (
               stocks[stockIndex].quantity <
-              req.body.items[newIndex].quantity - items[i].quantity
+              items[i].quantity - newItems[newIndex].quantity
             ) {
               validation = false;
             }
@@ -189,7 +195,7 @@ class GoodReceiptController {
           date: date,
           items: newItems.map((x: any) => {
             return {
-              itemID: x.id,
+              itemID: x.itemID,
               quantity: x.quantity,
               price: x.price,
               discount: (x.price * x.discount) / 100,
@@ -199,34 +205,60 @@ class GoodReceiptController {
         })
           .update()
           .then(async (goodReceipt) => {
-            for (let i = 0; i < result.items.length; i++) {
-              const data: RemoveStockInInterface = {
-                itemID: result.items[i].itemID,
-                quantity: result.items[i].quantity,
-                goodReceiptID: id,
-                adjustmentCaseID: null,
-                storeID: null,
-              };
-              await queue.add("removeStockIn", data);
-            }
+            const newItemIDs = newItems.map((x: any) => x.itemID);
+            const itemIDs = result.items.map((x: any) =>
+              x.itemID._id.toString()
+            );
+            // join these 2 arrays and remove duplicate
+            const newIDs = newItemIDs.concat(itemIDs);
+            const uniqueIDs = new Set(newIDs);
+            const uniqueArray = Array.from(uniqueIDs);
 
-            for (let i = 0; i < newItems.length; i++) {
-              const data: StockInInterface = {
-                goodReceiptID: id,
-                itemID: newItems[i].id,
-                quantity: newItems[i].quantity,
-                price: (newItems[i].price * (100 - newItems[i].discount)) / 100,
-                residue: newItems[i].quantity,
-                adjustmentEventID: null,
-                storeID: null,
-                date: new Date(date),
-              };
-              await queue.add("insertStockIn", data);
-            }
+            await lock.acquire(
+              uniqueArray.map((x) => {
+                return `${x}:`;
+              }),
+              async (done) => {
+                for (let i = 0; i < result.items.length; i++) {
+                  const data: RemoveStockInInterface = {
+                    itemID: result.items[i].itemID,
+                    quantity: result.items[i].quantity,
+                    goodReceiptID: id,
+                    adjustmentCaseID: null,
+                    storeID: null,
+                  };
+                  await queue.add("removeStockIn", data);
+                  await new StockModelModel({
+                    quantity: result.items[i].quantity * -1,
+                    itemID: result.items[i].itemID,
+                    storeID: null,
+                  }).update();
+                }
 
-            await queue.add("checkOverflow", {});
+                for (let i = 0; i < newItems.length; i++) {
+                  const data: StockInInterface = {
+                    goodReceiptID: id,
+                    itemID: newItems[i].itemID,
+                    quantity: newItems[i].quantity,
+                    price:
+                      (newItems[i].price * (100 - newItems[i].discount)) / 100,
+                    residue: newItems[i].quantity,
+                    adjustmentEventID: null,
+                    storeID: null,
+                    date: new Date(date),
+                  };
+                  await queue.add("insertStockIn", data);
+                  await new StockModelModel({
+                    quantity: newItems[i].quantity,
+                    itemID: newItems[i].itemID,
+                    storeID: null,
+                  }).update();
+                }
 
-            return res.status(201).send(goodReceipt);
+                done();
+                return res.status(201).send(goodReceipt);
+              }
+            );
           })
           .catch((error) => {
             new LoggerHelper({

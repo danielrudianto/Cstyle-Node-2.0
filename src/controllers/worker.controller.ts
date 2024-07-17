@@ -318,17 +318,22 @@ class WorkerController {
     const stockOuts = await StockOutModelModel.fetchByStockInID(result._id);
 
     if (stockOuts.length > 0) {
-      await Promise.all(
-        stockOuts.map(async (x) => {
-          await new OverflowModelModel({
-            itemID: data.itemID,
-            quantity: x.quantity,
-            billID: x.billID,
-            adjustmentEventID: x.adjustmentEventID,
-            invoiceID: x.invoiceID,
-          }).create();
+      const promises = stockOuts.map(async (x) => {
+        await new OverflowModelModel({
+          itemID: data.itemID,
+          quantity: x.quantity,
+          billID: x.billID,
+          adjustmentEventID: x.adjustmentEventID,
+          invoiceID: x.invoiceID,
+        }).create();
+      });
+
+      promises.push(
+        ...stockOuts.map(async (x) => {
+          await StockOutModelModel.deleteByID(x._id);
         })
       );
+      await Promise.all(promises);
     }
 
     // Delete the stock in
@@ -338,6 +343,7 @@ class WorkerController {
       goodReceiptID: data.goodReceiptID,
     };
     await StockInModelModel.delete(deleteStockIn);
+    await queue.add("checkOverflow", {});
   }
 
   static async insertStockOut(data: StockOutInterface) {
@@ -409,9 +415,10 @@ class WorkerController {
 
   static async removeStockOut(data: RemoveStockOutInterface) {
     StockOutModelModel.fetchDeletation(data).then((result) => {
-      result.forEach((x) => {
+      result.forEach(async (x) => {
         const stockInID = x.stockInID;
-        StockInModelModel.updateResidue(stockInID, x.quantity);
+        await StockInModelModel.updateResidue(stockInID, x.quantity);
+        await StockOutModelModel.deleteByID(x._id);
       });
     });
   }
@@ -541,7 +548,8 @@ class WorkerController {
         storeID: null,
         date: new Date(),
       };
-      queue.add("insertStockOutOnly", data);
+      await queue.add("insertStockOutOnly", data);
+      await OverflowModelModel.deleteByID(overflows[i]._id);
     }
   }
 }

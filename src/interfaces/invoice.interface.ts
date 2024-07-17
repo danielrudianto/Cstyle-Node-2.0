@@ -15,3 +15,11 @@ export interface InvoiceInterface {
   deletedBy?: string;
   deletedAt?: Date;
 }
+
+export interface InvoiceFetchInterface {
+  keyword: string;
+  status: string[];
+  page: number;
+  month: number;
+  year: number;
+}

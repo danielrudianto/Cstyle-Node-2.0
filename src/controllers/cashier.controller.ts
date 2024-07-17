@@ -101,7 +101,7 @@ class CashierController {
               Object.entries(groupedData).map(([_, value]) => {
                 return value.itemID;
               }),
-              async () => {
+              async (done) => {
                 const comparisonResults = result.map((item) => {
                   const groupedItem = groupedData[item.itemID];
                   return groupedItem.quantity <= item.quantity;
@@ -126,6 +126,7 @@ class CashierController {
                         });
                       });
 
+                      done();
                       return res.status(200).send(result);
                     })
                     .catch((error) => {
@@ -134,6 +135,9 @@ class CashierController {
                         type: LoggerType.error,
                         tag: "Cashier",
                       }).log();
+
+                      done();
+                      
                       return res
                         .status(500)
                         .send(ErrorList["INTERNAL_SERVER_ERROR"]);

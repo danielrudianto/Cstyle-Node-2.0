@@ -186,7 +186,7 @@ class AdjustmentEventController {
                   : adjustmentEvent.storeID._id.toString()
               }`;
             }),
-          () => {
+          (done) => {
             StockModelModel.checkStockByItemIDs(
               adjustmentEvent.items
                 .filter((x: any) => x.quantity > 0)
@@ -239,6 +239,7 @@ class AdjustmentEventController {
                         id: id,
                       });
 
+                      done();
                       return res.status(200).send(result);
                     }
                   );
@@ -251,6 +252,7 @@ class AdjustmentEventController {
                   type: LoggerType.error,
                 }).log();
 
+                done();
                 return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
               });
           }
