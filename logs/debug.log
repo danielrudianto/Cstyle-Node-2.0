@@ -7122,3 +7122,11 @@ Use mongoose.model(name, schema)
 [2024-07-18 17:10:50] [INFO] MongoDB: Connected with MongoDB Database Engine
 [2024-07-18 17:10:50] [INFO] Redis: Connected with Redis Database Engine
 [2024-07-18 17:10:50] [INFO] Sync: Synced 3 users
+[2024-07-18 17:33:30] [INFO] Server: Server started on port 5000
+[2024-07-18 17:33:30] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-18 17:33:30] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-18 17:33:30] [INFO] Sync: Synced 40 users
+[2024-07-18 17:35:25] [INFO] Server: Server started on port 5000
+[2024-07-18 17:35:25] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-18 17:35:26] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-18 17:35:26] [INFO] Sync: Synced 40 users

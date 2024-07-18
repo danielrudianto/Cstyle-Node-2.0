@@ -233,7 +233,7 @@ class CashierController {
         StockModelModel.fetchCashier(result.map((x) => x._id))
           .then((stocks) => {
             return res.status(200).send({
-              stores: stores,
+              store: stores,
               data: result.map((x) => {
                 const stockArray = stocks.filter(
                   (y) => y._id.itemID.toString() === x._id.toString()
