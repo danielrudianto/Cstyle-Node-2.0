@@ -38,6 +38,12 @@ router.post(
   ItemStockController.fetchStockByStoreID
 );
 
+router.post(
+  "/stock",
+  AuthInterceptor.anyIntercept,
+  CashierController.checkStock
+);
+
 router.post("/sync", AuthInterceptor.anyIntercept, CashierController.sync);
 
 export default router;

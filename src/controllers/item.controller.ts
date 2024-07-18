@@ -261,6 +261,7 @@ class ItemController {
     ItemModelModel.fetch({
       keyword: keyword,
       page: page,
+      onlyActive: false,
     })
       .then(([result, count]) => {
         return res.status(200).send({

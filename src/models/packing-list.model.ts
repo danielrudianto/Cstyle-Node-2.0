@@ -99,6 +99,14 @@ class PackingListModelModel {
       .populate("salesID", "name");
   }
 
+  static deleteByID(id: string, userID: string) {
+    return conn.model("packing-list").findByIdAndUpdate(id, {
+      isDelete: true,
+      deletedBy: userID,
+      deletedAt: new Date(),
+    });
+  }
+
   static preCreate(items: PackingListItem[]): PackingListItem[] {
     // Combine if it has the same price, discount, and itemID
     const modifiedItems: PackingListItem[] = [];

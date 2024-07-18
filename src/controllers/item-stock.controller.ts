@@ -14,6 +14,7 @@ class ItemStockController {
     ItemModelModel.fetch({
       keyword: keyword,
       page: page,
+      onlyActive: false,
     })
       .then(([items, itemCount]) => {
         StockModelModel.checkDashboardStockByItemIDs(

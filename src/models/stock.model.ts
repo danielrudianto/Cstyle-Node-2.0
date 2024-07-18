@@ -1,4 +1,7 @@
-import { CheckStockInterface } from "../interfaces/check-stock.interface";
+import {
+  CheckStockInterface,
+  FetchStockCashierInterface,
+} from "../interfaces/check-stock.interface";
 import { StockInterface } from "../interfaces/stock.interface";
 import { connectionFactory } from "../utils/connector.utils";
 import { RemoveStockInInterface } from "src/interfaces/stock-out.interface";
@@ -97,6 +100,25 @@ class StockModelModel {
         $gt: 0,
       },
     });
+  }
+
+  static fetchCashier(data: string[]) {
+    return conn.model("stocks").aggregate([
+      {
+        $match: {
+          itemID: { $in: data },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            storeID: "$storeID",
+            itemID: "$itemID",
+          },
+          quantity: { $sum: "$quantity" },
+        },
+      },
+    ]);
   }
 
   static fetchByItemID(itemID: string) {

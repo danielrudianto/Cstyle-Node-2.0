@@ -117,6 +117,7 @@ class StoreModelModel {
         },
         isActive: true,
       })
+      .select("name address")
       .sort({
         name: 1,
       });

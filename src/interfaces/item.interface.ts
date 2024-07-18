@@ -15,6 +15,7 @@ export interface ItemInterface {
 export interface ItemFetchInterface {
   page: number;
   keyword: string;
+  onlyActive: boolean;
 }
 
 export interface ItemFetchInterfaceBranch extends ItemFetchInterface {

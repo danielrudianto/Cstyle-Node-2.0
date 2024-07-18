@@ -1,6 +1,7 @@
 import {
   InvoiceFetchInterface,
   InvoiceInterface,
+  UpdateInvoicePaymentInterface,
 } from "../interfaces/invoice.interface";
 import { connectionFactory } from "../utils/connector.utils";
 
@@ -55,6 +56,7 @@ class InvoiceModelModel {
 
   static fetch(data: InvoiceFetchInterface) {
     const filters = [];
+    const paymentFilters = [];
 
     if (data.status.includes("active")) {
       filters.push({
@@ -67,11 +69,31 @@ class InvoiceModelModel {
         isDelete: true,
       });
     }
+
+    if (data.paymentStatus.includes("paid")) {
+      paymentFilters.push({
+        isPaid: true,
+      });
+    }
+
+    if (data.paymentStatus.includes("unpaid")) {
+      paymentFilters.push({
+        isPaid: false,
+      });
+    }
+
     return Promise.all([
       conn
         .model("invoices")
         .find({
-          $or: filters,
+          $and: [
+            {
+              $or: filters,
+            },
+            {
+              $or: paymentFilters,
+            },
+          ],
           $expr: {
             $and: [
               { $eq: [{ $month: "$date" }, data.month] },
@@ -88,7 +110,14 @@ class InvoiceModelModel {
         .limit(10)
         .skip(10 * (data.page - 1)),
       conn.model("invoices").countDocuments({
-        $or: filters,
+        $and: [
+          {
+            $or: filters,
+          },
+          {
+            $or: paymentFilters,
+          },
+        ],
         $expr: {
           $and: [
             { $eq: [{ $month: "$date" }, data.month] },
@@ -122,11 +151,32 @@ class InvoiceModelModel {
     });
   }
 
+  static updatePayment(data: UpdateInvoicePaymentInterface) {
+    return conn.model("invoices").findByIdAndUpdate(data.id, {
+      payments: [
+        {
+          paidAt: data.paidAt,
+          paidBy: data.paidBy,
+          paymentMethod: data.paymentMethod,
+          amount: data.amount,
+        },
+      ],
+      isPaid: true,
+    });
+  }
+
   static deleteByID(id: string, userID: string) {
     return conn.model("invoices").findByIdAndUpdate(id, {
       isDelete: true,
       deletedBy: userID,
       deletedAt: new Date(),
+    });
+  }
+
+  static deletePaymentByID(id: string) {
+    return conn.model("invoices").findByIdAndUpdate(id, {
+      isPaid: false,
+      payments: [],
     });
   }
 

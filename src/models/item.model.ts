@@ -60,6 +60,7 @@ class ItemModelModel {
         .model("items")
         .find({
           isDelete: false,
+          isActive: data.onlyActive ? true : {},
           $or: [
             {
               reference: {
@@ -72,6 +73,7 @@ class ItemModelModel {
               },
             },
           ],
+          
         })
         .skip((data.page - 1) * 20)
         .limit(20)
@@ -89,6 +91,7 @@ class ItemModelModel {
         }),
       conn.model("items").countDocuments({
         isDelete: false,
+        isActive: data.onlyActive ? true : {},
         $or: [
           {
             reference: {

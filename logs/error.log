@@ -433,3 +433,43 @@ Use mongoose.model(name, schema)
 Use mongoose.model(name, schema)
 [2024-07-17 16:53:47] [ERROR] Packing list: Error on creating packing list MissingSchemaError: Schema hasn't been registered for model "invoice".
 Use mongoose.model(name, schema)
+[2024-07-17 17:46:56] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-17 17:46:56] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-17 17:46:56] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-17 17:46:57] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-17 17:46:57] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-17 17:46:57] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-17 17:46:57] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-17 17:46:57] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-17 17:46:58] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-17 17:46:58] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-17 17:46:59] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-17 17:46:59] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-17 17:47:00] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-17 17:47:00] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-17 17:47:01] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-17 17:47:01] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-17 17:47:02] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-17 17:47:02] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-17 17:47:03] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-17 17:47:03] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-17 17:47:04] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-17 17:47:04] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-17 17:47:05] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-17 17:47:05] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-17 17:47:06] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-17 17:47:06] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-17 17:47:07] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-17 17:47:07] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-18 10:23:46] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-18 10:23:46] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-18 10:23:47] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-18 10:23:47] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-18 10:23:47] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-18 10:23:47] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-18 10:23:47] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-18 10:23:48] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-18 10:23:48] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-18 10:23:48] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-18 10:23:49] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-18 10:23:49] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379

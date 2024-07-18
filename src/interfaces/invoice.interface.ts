@@ -19,7 +19,16 @@ export interface InvoiceInterface {
 export interface InvoiceFetchInterface {
   keyword: string;
   status: string[];
+  paymentStatus: string[];
   page: number;
   month: number;
   year: number;
+}
+
+export interface UpdateInvoicePaymentInterface {
+  id: string;
+  paidAt: Date;
+  paymentMethod: string;
+  paidBy: string;
+  amount: number;
 }

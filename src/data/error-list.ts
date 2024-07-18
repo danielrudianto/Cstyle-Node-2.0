@@ -157,6 +157,7 @@ export enum ErrorList {
 
   PURCHASE_INVOICE_NOT_FOUND = "Purchase invoice not found",
   SALES_INVOICE_NOT_FOUND = "Sales invoice not found",
+  SALES_INVOICE_PAID = "Sales invoice already paid",
   STOCK_REQUEST_ALREADY_RECEIVED = "Stock request already received",
   STOCK_REQUEST_ALREADY_PROCESSED = "Stock request already processed",
   STOCK_REQUEST_ALREADY_SENT = "Stock request already sent",
@@ -189,6 +190,8 @@ export enum ErrorList {
 
   DUE_DATE_REQUIRED = "Due date is required",
   PAYMENT_METHOD_REQUIRED = "Payment method is required",
+  PAYMENT_METHOD_INVALID = "Payment method is invalid",
+  AMOUNT_INVALID = "Amount is invalid",
   REFRESH_TOKEN_NOT_FOUND = "Refresh token not found",
   OLD_PASSWORD_REQUIRED = "Old password is required",
   NEW_PASSWORD_REQUIRED = "New password is required",

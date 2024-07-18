@@ -1,17 +1,38 @@
 import { Router } from "express";
 import InvoiceController from "../controllers/invoice.controller";
-import { param } from "express-validator";
+import { body, param } from "express-validator";
 import { ErrorList } from "../data/error-list";
 import ErrorInterceptor from "../interceptors/error.interceptor";
 
 const router = Router();
 
 router.post("/search/v2", InvoiceController.fetch);
+router.post(
+  "/payment",
+  body("id").isMongoId().withMessage(ErrorList["ID_INVALID"]),
+  body("paidAt").exists().withMessage(ErrorList["DATE_REQUIRED"]),
+  body("paymentMethod")
+    .exists()
+    .withMessage(ErrorList["PAYMENT_METHOD_REQUIRED"]),
+  body("paymentMethod")
+    .isIn(["cash", "transfer"])
+    .withMessage(ErrorList["PAYMENT_METHOD_INVALID"]),
+  body("amount").isFloat({ min: 0 }).withMessage(ErrorList["AMOUNT_INVALID"]),
+  ErrorInterceptor.intercept,
+  InvoiceController.updatePayment
+);
 router.get(
   "/:id",
   param("id").isMongoId().withMessage(ErrorList["ID_INVALID"]),
   ErrorInterceptor.intercept,
   InvoiceController.fetchByID
+);
+
+router.delete(
+  "/payment/:id",
+  param("id").isMongoId().withMessage(ErrorList["ID_INVALID"]),
+  ErrorInterceptor.intercept,
+  InvoiceController.deletePaymentByID
 );
 router.delete(
   "/:id",

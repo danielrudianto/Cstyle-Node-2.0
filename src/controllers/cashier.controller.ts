@@ -12,6 +12,7 @@ import { queue } from "../utils/queue.utils";
 import StoreModelModel from "../models/store.model";
 import { StockOutInterface } from "../interfaces/stock-out.interface";
 import lock from "../utils/lock.utils";
+import ItemModelModel from "../models/item.model";
 
 class CashierController {
   static sync = async (req: Request, res: Response) => {
@@ -137,7 +138,7 @@ class CashierController {
                       }).log();
 
                       done();
-                      
+
                       return res
                         .status(500)
                         .send(ErrorList["INTERNAL_SERVER_ERROR"]);
@@ -213,6 +214,72 @@ class CashierController {
 
         return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
       });
+  };
+
+  static checkStock = (req: Request, res: Response) => {
+    const storeID = req.body.storeID;
+    const keyword = req.body.keyword;
+    const page = req.body.page;
+
+    Promise.all([
+      ItemModelModel.fetch({
+        keyword: keyword,
+        page: page,
+        onlyActive: true,
+      }),
+      StoreModelModel.fetchOthers(storeID),
+    ])
+      .then(([[result, count], stores]) => {
+        StockModelModel.fetchCashier(result.map((x) => x._id))
+          .then((stocks) => {
+            return res.status(200).send({
+              stores: stores,
+              data: result.map((x) => {
+                const stockArray = stocks.filter(
+                  (y) => y._id.itemID.toString() === x._id.toString()
+                );
+                return {
+                  id: x._id,
+                  reference: x.reference,
+                  description: x.description,
+                  brand: x.itemBrandID.name,
+                  type: x.itemTypeID.name,
+                  stock: stockArray.map((z) => {
+                    return {
+                      storeID: z._id.storeID,
+                      quantity: z.quantity,
+                    };
+                  }),
+                };
+              }),
+              count: count,
+            });
+          })
+          .catch((error) => {});
+      })
+      .catch((error) => {
+        new LoggerHelper({
+          message: `Error on fetching items ${error}`,
+          tag: "Cashier",
+          type: LoggerType.error,
+        }).log();
+
+        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+      });
+    // StockModelModel.fetchCashier({
+    //   keyword: keyword,
+    //   page: page,
+    // })
+    //   .then((value) => {})
+    //   .catch((error) => {
+    //     new LoggerHelper({
+    //       message: `Error on fetching stock ${error}`,
+    //       tag: "Cashier",
+    //       type: LoggerType.error,
+    //     }).log();
+
+    //     return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    //   });
   };
 }
 

@@ -150,6 +150,14 @@ class DeliverySlipModelModel {
     return deliverySlip;
   }
 
+  static deleteByID(id: string, userID: string) {
+    return conn.model("delivery-slip").findByIdAndUpdate(id, {
+      isDelete: true,
+      deletedBy: userID,
+      deletedAt: new Date(),
+    });
+  }
+
   static async generateName(date: Date): Promise<string> {
     const count = await conn.model("delivery-slip").countDocuments({
       $expr: {
