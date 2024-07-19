@@ -1,6 +1,6 @@
 import { Router } from "express";
 import AuthInterceptor from "../../interceptors/auth.interceptor";
-import { body } from "express-validator";
+import { body, param } from "express-validator";
 import { ErrorList } from "../../data/error-list";
 import ErrorInterceptor from "../../interceptors/error.interceptor";
 import MembershipController from "../../controllers/membership.controller";
@@ -24,6 +24,16 @@ router.post(
   }),
   ErrorInterceptor.intercept,
   MembershipController.create
+);
+
+router.get(
+  "/code/:membershipCode",
+  AuthInterceptor.anyIntercept,
+  param("membershipCode")
+    .isAlphanumeric()
+    .withMessage(ErrorList["UID_INVALID"]),
+  ErrorInterceptor.intercept,
+  MembershipController.fetchByCode
 );
 
 export default router;

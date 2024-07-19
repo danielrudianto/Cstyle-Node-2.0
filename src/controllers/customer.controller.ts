@@ -81,34 +81,26 @@ class CustomerController {
   static deleteByID = (req: Request, res: Response) => {
     const id = req.params.id;
     const userID = req.body.userID;
-    // CustomerModel.findById(id)
-    //   .then((customer) => {
-    //     if (!customer) {
-    //       return res.status(404).send(ErrorList["CUSTOMER_NOT_FOUND"]);
-    //     }
 
-    //     if (customer.isDelete) {
-    //       return res.status(404).send(ErrorList["CUSTOMER_NOT_FOUND"]);
-    //     }
+    CustomerModelModel.fetchByID(id).then((customer) => {
+      if (!customer || customer.isDelete) {
+        return res.status(404).send(ErrorList["CUSTOMER_NOT_FOUND"]);
+      } else {
+        CustomerModelModel.deleteByID(id, userID)
+          .then((result) => {
+            return res.status(200).send(result);
+          })
+          .catch((error) => {
+            new LoggerHelper({
+              message: `Error on deleting customer ${error}`,
+              type: LoggerType.error,
+              tag: "Customer",
+            }).log();
 
-    //     customer.isDelete = true;
-    //     customer.deletedAt = new Date();
-    //     customer.deletedBy = userID;
-
-    //     customer
-    //       .save()
-    //       .then((value) => {
-    //         return res.status(201).send(value);
-    //       })
-    //       .catch((error) => {
-    //         console.error(`[error]: Error on deleting customer: ${error}`);
-    //         return res.status(400).send(ErrorList["DELETE_CUSTOMER_FAILED"]);
-    //       });
-    //   })
-    //   .catch((error) => {
-    //     console.error(`[error]: Error on fetching customer: ${error}`);
-    //     return res.status(400).send(ErrorList["DELETE_CUSTOMER_FAILED"]);
-    //   });
+            return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+          });
+      }
+    });
   };
 
   static fetchV2 = (req: Request, res: Response) => {

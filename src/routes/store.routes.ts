@@ -4,12 +4,13 @@ import { body, param } from "express-validator";
 import ErrorInterceptor from "../interceptors/error.interceptor";
 import { ErrorList } from "../data/error-list";
 import StoreController from "../controllers/store.controller";
+import AccessInterceptor from "../interceptors/access.interceptor";
 
 const router = Router();
 
 router.post(
   "/",
-  AuthInterceptor.administratorInterceptor,
+  AccessInterceptor.administratorRequired,
   body("name").notEmpty().withMessage(ErrorList["STORE_NAME_REQUIRED"]),
   body("prefix").notEmpty().withMessage(ErrorList["STORE_PREFIX_REQUIRED"]),
   body("phoneNumber")
@@ -32,7 +33,7 @@ router.get("/", StoreController.fetch);
 
 router.put(
   "/",
-  AuthInterceptor.administratorInterceptor,
+  AccessInterceptor.administratorRequired,
   body("id").notEmpty().withMessage(ErrorList["ID_REQUIRED"]),
   body("id").isMongoId().withMessage(ErrorList["ID_INVALID"]),
   body("name").notEmpty().withMessage(ErrorList["STORE_NAME_REQUIRED"]),
@@ -47,9 +48,9 @@ router.put(
 
 router.delete(
   "/:id",
+  AccessInterceptor.administratorRequired,
   param("id").isMongoId().withMessage(ErrorList["ID_INVALID"]),
   ErrorInterceptor.intercept,
-  AuthInterceptor.administratorInterceptor,
   StoreController.deleteByID
 );
 

@@ -3,11 +3,13 @@ import { body, param } from "express-validator";
 import { ErrorList } from "../data/error-list";
 import ErrorInterceptor from "../interceptors/error.interceptor";
 import CustomerController from "../controllers/customer.controller";
+import AccessInterceptor from "../interceptors/access.interceptor";
 
 const router = Router();
 
 router.post(
   "/",
+  AccessInterceptor.salesRequired,
   body("name").notEmpty().withMessage(ErrorList["NAME_REQUIRED"]),
   body("address").notEmpty().withMessage(ErrorList["ADDRESS_REQUIRED"]),
   body("phone").notEmpty().withMessage(ErrorList["PHONE_NUMBER_REQUIRED"]),
@@ -22,6 +24,7 @@ router.post(
 
 router.put(
   "/v2",
+  AccessInterceptor.salesRequired,
   body("id").notEmpty().withMessage(ErrorList["ID_REQUIRED"]),
   body("id").isMongoId().withMessage(ErrorList["ID_INVALID"]),
   body("name").notEmpty().withMessage(ErrorList["NAME_REQUIRED"]),
@@ -36,14 +39,20 @@ router.put(
   CustomerController.updateV2
 );
 
-router.get("/v2", CustomerController.fetchV2);
-router.get("/bulk/autocomplete", CustomerController.fetchAutocompleteBulk);
+router.get("/v2", AccessInterceptor.salesRequired, CustomerController.fetchV2);
+router.get(
+  "/bulk/autocomplete",
+  AccessInterceptor.salesRequired,
+  CustomerController.fetchAutocompleteBulk
+);
 router.get(
   "/consignment/autocomplete",
+  AccessInterceptor.salesRequired,
   CustomerController.fetchAutocompleteConsignment
 );
 router.get(
   "/:id",
+  AccessInterceptor.salesRequired,
   param("id").isMongoId().withMessage(ErrorList["ID_INVALID"]),
   ErrorInterceptor.intercept,
   CustomerController.fetchByID
@@ -51,6 +60,7 @@ router.get(
 
 router.delete(
   "/:id",
+  AccessInterceptor.administratorRequired,
   param("id").isMongoId().withMessage(ErrorList["ID_INVALID"]),
   ErrorInterceptor.intercept,
   CustomerController.deleteByID

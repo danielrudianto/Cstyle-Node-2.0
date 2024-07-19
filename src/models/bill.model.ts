@@ -223,5 +223,62 @@ class BillModelModel {
       },
     });
   }
+
+  static countBills(storeID: string, period: number) {
+    return Promise.all([
+      period == -1
+        ? conn.model("bills").countDocuments({
+            isDelete: false,
+            storeID: storeID,
+          })
+        : conn.model("bills").countDocuments({
+            isDelete: false,
+            storeID: storeID,
+            date: {
+              $gte: new Date(Date.now() - period * 24 * 60 * 60 * 1000),
+            },
+          }),
+      conn.model("bills").aggregate([
+        period == -1
+          ? {
+              $match: {
+                storeID: storeID,
+                isDelete: false,
+              },
+            }
+          : {
+              $match: {
+                storeID: storeID,
+                isDelete: false,
+                date: {
+                  $gte: new Date(Date.now() - period * 24 * 60 * 60 * 1000),
+                },
+              },
+            },
+        {
+          $unwind: "$items",
+        },
+        {
+          $group: {
+            _id: null,
+            value: {
+              $sum: {
+                $multiply: [
+                  { $subtract: ["$items.price", "$items.discount"] },
+                  "$items.quantity",
+                ],
+              },
+            },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            value: "$value",
+          },
+        },
+      ]),
+    ]);
+  }
 }
 export default BillModelModel;

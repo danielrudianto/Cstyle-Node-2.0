@@ -473,3 +473,18 @@ Use mongoose.model(name, schema)
 [2024-07-18 10:23:48] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
 [2024-07-18 10:23:49] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
 [2024-07-18 10:23:49] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-18 23:28:49] [ERROR] Access Interceptor: Error on fetching user Error: Access denied
+[2024-07-18 23:28:50] [ERROR] Access Interceptor: Error on fetching user Error: Access denied
+[2024-07-18 23:28:52] [ERROR] Access Interceptor: Error on fetching user Error: Access denied
+[2024-07-18 23:28:52] [ERROR] Access Interceptor: Error on fetching user Error: Access denied
+[2024-07-18 23:28:53] [ERROR] Access Interceptor: Error on fetching user Error: Access denied
+[2024-07-18 23:29:46] [ERROR] Access Interceptor: Error on fetching user Error: Access denied
+[2024-07-19 11:23:24] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-19 11:23:24] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-19 11:23:24] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-19 11:23:24] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-19 11:23:25] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-19 11:23:25] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-19 11:23:25] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-19 11:23:25] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-07-19 12:22:30] [ERROR] Cashier: Error on fetching stats CastError: Cast to date failed for value "{}" (type Object) at path "date" for model "bills"

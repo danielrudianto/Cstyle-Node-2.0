@@ -163,12 +163,31 @@ class MembershipModelModel {
     ]);
   }
 
-  static countNewMembers() {
-    return conn.model("memberships").countDocuments({
-      createdAt: {
-        $gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
-      },
-    });
+  static countNewMembers(storeID: string | null = null) {
+    if (storeID == null) {
+      return conn.model("memberships").countDocuments({
+        createdAt: {
+          $gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+        },
+      });
+    } else {
+      return conn.model("memberships").countDocuments({
+        storeID: storeID,
+        createdAt: {
+          $gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+        },
+      });
+    }
+  }
+
+  static countMembers(storeID: string | null = null) {
+    if (storeID == null) {
+      return conn.model("memberships").countDocuments();
+    } else {
+      return conn.model("memberships").countDocuments({
+        storeID: storeID,
+      });
+    }
   }
 
   static updatePoint(memberID: string, point: number) {

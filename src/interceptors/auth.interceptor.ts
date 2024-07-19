@@ -124,62 +124,6 @@ class AuthInterceptor {
       }
     }
   };
-
-  /**
-   * Administrator intercept
-   * @param req
-   * @param res
-   * @param next
-   */
-  static administratorInterceptor = (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
-    const userID = req.body.userID;
-    redisClient
-      .get(`users:${userID}`)
-      .then((user) => {
-        if (!user) {
-          return res.status(401).send(ErrorList["USER_NOT_FOUND"]);
-        }
-
-        const parsedUser = JSON.parse(user);
-
-        if (parsedUser.accessLevel == 4 || parsedUser.accessLevel == 1) {
-          return next();
-        }
-
-        return res.status(401).send(ErrorList["ADMINISTRATOR_ONLY"]);
-      })
-      .catch((error) => {
-        console.error(
-          `[error]: Error on intercepting authentication for administrator ${error}`
-        );
-        return res.status(500).send(error);
-      });
-  };
-
-  static administratorOnlyInterceptor = (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
-    const userID = req.body.userID;
-    conn
-      .model("users")
-      .findById(userID)
-      .then((user) => {
-        if (user == null) {
-          return res.status(401).send(ErrorList["USER_NOT_FOUND"]);
-        }
-        if (user.accessLevel == 4) {
-          next();
-        } else {
-          return res.status(401).send(ErrorList["ADMINISTRATOR_ONLY"]);
-        }
-      });
-  };
 }
 
 export default AuthInterceptor;

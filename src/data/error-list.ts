@@ -87,11 +87,13 @@ export enum ErrorList {
   SUPPLIER_REQUIRED = "Supplier is required",
   ITEM_REQUIRED = "Item is required",
   QUANTITY_REQUIRED = "Quantity is required",
+  QUANTITY_INVALID = "Quantity invalid",
   PRICE_REQUIRED = "Price is required",
   DISCOUNT_REQUIRED = "Discount is required",
   CUSTOMER_REQUIRED = "Customer is required",
 
   NOTE_REQUIRED = "Note is required",
+  INVOICE_NOTE_REQUIRED = "Invoice note is required",
   DATE_REQUIRED = "Date is required",
   PURCHASE_ORDER_REQUIRED = "Purchase order is required",
   ITEMS_REQUIRED = "Items is required",
@@ -205,4 +207,5 @@ export enum ErrorList {
   REJECT_NOTE_REQUIRED = "Reject note is required",
   PRICE_INVALID = "Price is invalid",
   PRICE_NEGATIVE = "Price cannot be negative",
+  ACCESS_DENIED = "Access denied",
 }

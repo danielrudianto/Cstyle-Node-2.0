@@ -159,6 +159,37 @@ class CashierController {
     );
   };
 
+  static stats = (req: Request, res: Response) => {
+    const storeID = req.body.storeID;
+    const period = Number(req.query.period as string);
+
+    Promise.all([
+      MembershipModelModel.countNewMembers(storeID),
+      MembershipModelModel.countMembers(storeID),
+      BillModelModel.countBills(storeID, period),
+    ])
+      .then(([newMember, totalMember, [billCount, billSales]]) => {
+        console.log(billSales);
+        return res
+          .status(200)
+          .send([
+            newMember,
+            totalMember,
+            billCount,
+            billSales.length == 0 ? 0 : Math.round(billSales[0].value),
+          ]);
+      })
+      .catch((error) => {
+        new LoggerHelper({
+          message: `Error on fetching stats ${error}`,
+          type: LoggerType.error,
+          tag: "Cashier",
+        }).log();
+
+        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+      });
+  };
+
   static checkStore = (req: Request, res: Response) => {
     var uid = req.params.storeCode;
     let formattedUID = "";
@@ -244,12 +275,13 @@ class CashierController {
                   description: x.description,
                   brand: x.itemBrandID.name,
                   type: x.itemTypeID.name,
-                  stock: stockArray.map((z) => {
-                    return {
-                      storeID: z._id.storeID,
-                      quantity: z.quantity,
-                    };
-                  }),
+                  stock:
+                    stockArray.map((z) => {
+                      return {
+                        storeID: z._id.storeID,
+                        quantity: z.quantity,
+                      };
+                    }) ?? [],
                 };
               }),
               count: count,
@@ -266,20 +298,6 @@ class CashierController {
 
         return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
       });
-    // StockModelModel.fetchCashier({
-    //   keyword: keyword,
-    //   page: page,
-    // })
-    //   .then((value) => {})
-    //   .catch((error) => {
-    //     new LoggerHelper({
-    //       message: `Error on fetching stock ${error}`,
-    //       tag: "Cashier",
-    //       type: LoggerType.error,
-    //     }).log();
-
-    //     return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
-    //   });
   };
 }
 

@@ -73,7 +73,7 @@ class CustomerModelModel {
               },
             },
             {
-                phoneNumber: {
+              phoneNumber: {
                 $regex: data.keyword,
                 $options: "i",
               },
@@ -169,6 +169,14 @@ class CustomerModelModel {
 
   static fetchByID(id: string) {
     return conn.model("customer").findById(id);
+  }
+
+  static deleteByID(id: string, userID: string) {
+    return conn.model("customer").findByIdAndUpdate(id, {
+      isDelete: true,
+      deletedAt: new Date(),
+      deletedBy: userID,
+    });
   }
 }
 

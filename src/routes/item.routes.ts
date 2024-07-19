@@ -9,6 +9,7 @@ import ItemController from "../controllers/item.controller";
 import ErrorInterceptor from "../interceptors/error.interceptor";
 import LoggerHelper from "../utils/logger.utils";
 import { LoggerType } from "../interfaces/logger.interface";
+import AccessInterceptor from "../interceptors/access.interceptor";
 
 const router = Router();
 
@@ -37,6 +38,7 @@ router.post(
 router.post("/selector/v2", ItemController.fetchByBranchV2);
 router.post(
   "/v2",
+  AccessInterceptor.administratorRequired,
   upload.array("images", 8),
   (req, res, next) => {
     // Get the file names
@@ -52,6 +54,7 @@ router.post(
 
 router.put(
   "/like",
+  AccessInterceptor.administratorRequired,
   body("itemID").isMongoId().withMessage(ErrorList["ID_INVALID"]),
   body("isFavorite").isBoolean().withMessage(ErrorList["IS_FAVORITE_INVALID"]),
   ErrorInterceptor.intercept,
@@ -60,6 +63,7 @@ router.put(
 
 router.put(
   "/price",
+  AccessInterceptor.administratorRequired,
   body("items").isArray().withMessage(ErrorList["ITEMS_INVALID"]),
   body("items.*.id").isMongoId().withMessage(ErrorList["ID_INVALID"]),
   body("items.*.price").isNumeric().withMessage(ErrorList["PRICE_INVALID"]),
@@ -72,6 +76,7 @@ router.put(
 
 router.put(
   "/v2",
+  AccessInterceptor.administratorRequired,
   (req, res, next) => {
     upload.array("images", 8)(req, res, (err) => {
       if (err) {
@@ -91,15 +96,20 @@ router.put(
 router.get("/v2", ItemController.fetchV2);
 router.get(
   "/:id",
+  AccessInterceptor.administratorRequired,
   param("id").isMongoId().withMessage(ErrorList["ID_INVALID"]),
   ErrorInterceptor.intercept,
   ItemController.fetchByID
 );
 
-router.delete("/image/:id/:name", ItemController.deleteImage);
+router.delete(
+  "/image/:id/:name",
+  AccessInterceptor.administratorRequired,
+  ItemController.deleteImage
+);
 router.delete(
   "/:id",
-  AuthInterceptor.administratorInterceptor,
+  AccessInterceptor.administratorRequired,
   param("id").isMongoId().withMessage(ErrorList["ID_INVALID"]),
   ErrorInterceptor.intercept,
   ItemController.deleteByID
