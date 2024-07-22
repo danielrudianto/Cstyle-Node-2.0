@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import {
   RemoveStockOutInterface,
   StockOutInterface,
@@ -41,17 +42,37 @@ class StockOutModelModel {
   }
 
   static fetchDeletation(data: RemoveStockOutInterface) {
-    return conn.model("stock-outs").find({
-      billID: data.billID,
-      invoiceID: data.invoiceID,
-      adjustmentEventID: data.adjustmentCaseID,
-      itemID: data.itemID,
-      storeID: data.storeID,
-    });
+    return conn.model("stock-outs").aggregate([
+      {
+        $lookup: {
+          from: "stock-ins",
+          localField: "stockInID",
+          foreignField: "_id",
+          as: "stockIn",
+        },
+      },
+      {
+        $unwind: {
+          path: "$stockIn",
+        },
+      },
+      {
+        $match: {
+          billID: data.billID == null ? null : new Types.ObjectId(data.billID),
+          invoiceID:
+            data.invoiceID == null ? null : new Types.ObjectId(data.invoiceID),
+          adjustmentEventID:
+            data.adjustmentCaseID == null
+              ? null
+              : new Types.ObjectId(data.adjustmentCaseID),
+          "stockIn.itemID": new Types.ObjectId(data.itemID),
+        },
+      },
+    ]);
   }
 
   static deleteByID(id: string) {
-    return conn.model("stock-outs").deleteOne({ _id: id });
+    return conn.model("stock-outs").findByIdAndDelete(id);
   }
 }
 

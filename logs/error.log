@@ -488,3 +488,15 @@ Use mongoose.model(name, schema)
 [2024-07-19 11:23:25] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
 [2024-07-19 11:23:25] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
 [2024-07-19 12:22:30] [ERROR] Cashier: Error on fetching stats CastError: Cast to date failed for value "{}" (type Object) at path "date" for model "bills"
+[2024-07-20 15:46:18] [ERROR] Access Interceptor: Error on fetching user Error: User not found
+[2024-07-20 15:46:40] [ERROR] Access Interceptor: Error on fetching user Error: User not found
+[2024-07-20 15:48:15] [ERROR] Access Interceptor: Error on fetching user Error: User not found
+[2024-07-20 15:52:31] [ERROR] Access Interceptor: Error on fetching user Error: User not found
+[2024-07-20 15:52:34] [ERROR] Access Interceptor: Error on fetching user Error: User not found
+[2024-07-20 15:52:36] [ERROR] Access Interceptor: Error on fetching user Error: User not found
+[2024-07-20 15:52:37] [ERROR] Access Interceptor: Error on fetching user Error: User not found
+[2024-07-20 15:52:41] [ERROR] Access Interceptor: Error on fetching user Error: User not found
+[2024-07-21 10:06:40] [ERROR] ItemStockController: Error on fetching item stock: Cast to Boolean failed for value "{}" (type Object) at path "isActive" for model "items"
+[2024-07-21 10:06:43] [ERROR] ItemStockController: Error on fetching item stock: Cast to Boolean failed for value "{}" (type Object) at path "isActive" for model "items"
+[2024-07-21 10:41:40] [ERROR] Master worker: Error on completing job: Error: Missing lock for job 225. moveToFinished
+[2024-07-21 10:55:28] [ERROR] Master worker: Job 233 [insertStockOut] has failed with job stalled more than allowable limit

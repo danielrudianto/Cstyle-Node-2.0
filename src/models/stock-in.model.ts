@@ -12,9 +12,10 @@ class StockInModelModel {
   goodReceiptID: string | null;
   adjustmentEventID: string | null;
   storeID: string | null;
+  date: Date;
 
   constructor(data: StockInInterface) {
-    this.itemID = data.itemID;
+    (this.date = data.date), (this.itemID = data.itemID);
     this.quantity = data.quantity;
     this.residue = data.residue;
     this.price = data.price;
@@ -24,7 +25,16 @@ class StockInModelModel {
   }
 
   create() {
-    return conn.model("stock-ins").create(this);
+    return conn.model("stock-ins").create({
+      date: this.date,
+      itemID: this.itemID,
+      quantity: this.quantity,
+      residue: this.residue,
+      price: this.price,
+      goodReceiptID: this.goodReceiptID,
+      adjustmentEventID: this.adjustmentEventID,
+      storeID: this.storeID,
+    });
   }
 
   static fetchFifo(itemID: string) {
@@ -36,7 +46,7 @@ class StockInModelModel {
           $gt: 0,
         },
       })
-      .sort({ _id: 1 });
+      .sort({ date: 1 });
   }
 
   static fetchDeletation(data: RemoveStockInInterface) {

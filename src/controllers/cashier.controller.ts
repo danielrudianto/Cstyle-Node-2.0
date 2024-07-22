@@ -169,7 +169,6 @@ class CashierController {
       BillModelModel.countBills(storeID, period),
     ])
       .then(([newMember, totalMember, [billCount, billSales]]) => {
-        console.log(billSales);
         return res
           .status(200)
           .send([

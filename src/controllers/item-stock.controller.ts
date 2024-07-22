@@ -64,7 +64,7 @@ class ItemStockController {
       .catch((error) => {
         new LoggerHelper({
           type: LoggerType.error,
-          message: `Error on fetching item stock: ${error.message}`,
+          message: `Error on fetching item stock: ${error}`,
           tag: "ItemStockController",
         }).log();
 
@@ -93,7 +93,7 @@ class ItemStockController {
       .catch((error) => {
         new LoggerHelper({
           type: LoggerType.error,
-          message: `Error on fetching item stock: ${error.message}`,
+          message: `Error on fetching item stock: ${error}`,
           tag: "ItemStockController",
         }).log();
         return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
@@ -115,7 +115,7 @@ class ItemStockController {
       .catch((error) => {
         new LoggerHelper({
           type: LoggerType.error,
-          message: `Error on fetching item stock: ${error.message}`,
+          message: `Error on fetching item stock: ${error}`,
           tag: "ItemStockController",
         }).log();
 

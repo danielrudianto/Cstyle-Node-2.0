@@ -7381,3 +7381,235 @@ Use mongoose.model(name, schema)
 [2024-07-19 12:25:11] [INFO] MongoDB: Connected with MongoDB Database Engine
 [2024-07-19 12:25:11] [INFO] Redis: Connected with Redis Database Engine
 [2024-07-19 12:25:11] [INFO] Sync: Synced 3 users
+[2024-07-20 10:21:01] [INFO] Server: Server started on port 5000
+[2024-07-20 10:21:01] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-20 10:21:01] [INFO] Sync: Synced 40 users
+[2024-07-20 10:21:01] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-20 12:44:59] [INFO] Server: Server started on port 5000
+[2024-07-20 12:44:59] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-20 12:44:59] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-20 12:44:59] [INFO] Sync: Synced 40 users
+[2024-07-20 15:32:22] [INFO] Server: Server started on port 5000
+[2024-07-20 15:32:22] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-20 15:32:23] [INFO] Sync: Synced 40 users
+[2024-07-20 15:32:23] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-20 15:46:18] [ERROR] Access Interceptor: Error on fetching user Error: User not found
+[2024-07-20 15:46:40] [ERROR] Access Interceptor: Error on fetching user Error: User not found
+[2024-07-20 15:48:11] [INFO] Server: Server started on port 5000
+[2024-07-20 15:48:11] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-20 15:48:11] [INFO] Sync: Synced 40 users
+[2024-07-20 15:48:11] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-20 15:48:15] [ERROR] Access Interceptor: Error on fetching user Error: User not found
+[2024-07-20 15:49:07] [INFO] Server: Server started on port 5000
+[2024-07-20 15:49:07] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-20 15:49:07] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-20 15:49:07] [INFO] Sync: Synced 40 users
+[2024-07-20 15:50:07] [INFO] Master worker: Job 184 [createBill] completed at Sat Jul 20 2024 15:50:07 GMT+0700 (Indochina Time)
+[2024-07-20 15:50:07] [INFO] Master worker: Job 185 [createBill] completed at Sat Jul 20 2024 15:50:07 GMT+0700 (Indochina Time)
+[2024-07-20 15:50:07] [INFO] Master worker: Job 186 [insertStockOutTemp] completed at Sat Jul 20 2024 15:50:07 GMT+0700 (Indochina Time)
+[2024-07-20 15:50:07] [INFO] Master worker: Job 187 [updateProduct] completed at Sat Jul 20 2024 15:50:07 GMT+0700 (Indochina Time)
+[2024-07-20 15:50:07] [INFO] Master worker: Job 188 [updateProductImage] completed at Sat Jul 20 2024 15:50:07 GMT+0700 (Indochina Time)
+[2024-07-20 15:50:07] [INFO] Master worker: Job 189 [insertStockOutTemp] completed at Sat Jul 20 2024 15:50:07 GMT+0700 (Indochina Time)
+[2024-07-20 15:50:07] [INFO] Master worker: Job 190 [insertStockOut] completed at Sat Jul 20 2024 15:50:07 GMT+0700 (Indochina Time)
+[2024-07-20 15:50:07] [INFO] Master worker: Job 191 [insertStockIn] completed at Sat Jul 20 2024 15:50:07 GMT+0700 (Indochina Time)
+[2024-07-20 15:50:07] [INFO] Master worker: Job 192 [login] completed at Sat Jul 20 2024 15:50:07 GMT+0700 (Indochina Time)
+[2024-07-20 15:50:07] [INFO] Master worker: Job 193 [createProduct] completed at Sat Jul 20 2024 15:50:07 GMT+0700 (Indochina Time)
+[2024-07-20 15:50:07] [INFO] Master worker: Job 194 [createProductImage] completed at Sat Jul 20 2024 15:50:07 GMT+0700 (Indochina Time)
+[2024-07-20 15:50:07] [INFO] Worker: Product TESTING_1 created
+[2024-07-20 15:50:08] [INFO] Master worker: Job 195 [insertStockOut] completed at Sat Jul 20 2024 15:50:08 GMT+0700 (Indochina Time)
+[2024-07-20 15:50:08] [INFO] Master worker: Job 196 [createBill] completed at Sat Jul 20 2024 15:50:08 GMT+0700 (Indochina Time)
+[2024-07-20 15:50:08] [INFO] Master worker: Job 197 [createBill] completed at Sat Jul 20 2024 15:50:08 GMT+0700 (Indochina Time)
+[2024-07-20 15:50:08] [INFO] Master worker: Job 198 [login] completed at Sat Jul 20 2024 15:50:08 GMT+0700 (Indochina Time)
+[2024-07-20 15:50:08] [INFO] Master worker: Job 199 [insertStockIn] completed at Sat Jul 20 2024 15:50:08 GMT+0700 (Indochina Time)
+[2024-07-20 15:50:08] [INFO] Master worker: Job 200 [insertStockIn] completed at Sat Jul 20 2024 15:50:08 GMT+0700 (Indochina Time)
+[2024-07-20 15:50:08] [INFO] Master worker: Job 201 [insertStockOut] completed at Sat Jul 20 2024 15:50:08 GMT+0700 (Indochina Time)
+[2024-07-20 15:50:08] [INFO] Master worker: Job 202 [insertStockOut] completed at Sat Jul 20 2024 15:50:08 GMT+0700 (Indochina Time)
+[2024-07-20 15:50:08] [INFO] Master worker: Job 203 [insertStockOut] completed at Sat Jul 20 2024 15:50:08 GMT+0700 (Indochina Time)
+[2024-07-20 15:50:08] [INFO] Master worker: Job 204 [insertStockOut] completed at Sat Jul 20 2024 15:50:08 GMT+0700 (Indochina Time)
+[2024-07-20 15:51:24] [INFO] Master worker: Job 205 [insertStockIn] completed at Sat Jul 20 2024 15:51:24 GMT+0700 (Indochina Time)
+[2024-07-20 15:51:44] [INFO] Master worker: Job 206 [insertStockIn] completed at Sat Jul 20 2024 15:51:44 GMT+0700 (Indochina Time)
+[2024-07-20 15:52:31] [ERROR] Access Interceptor: Error on fetching user Error: User not found
+[2024-07-20 15:52:34] [ERROR] Access Interceptor: Error on fetching user Error: User not found
+[2024-07-20 15:52:36] [ERROR] Access Interceptor: Error on fetching user Error: User not found
+[2024-07-20 15:52:37] [ERROR] Access Interceptor: Error on fetching user Error: User not found
+[2024-07-20 15:52:41] [ERROR] Access Interceptor: Error on fetching user Error: User not found
+[2024-07-20 15:53:34] [INFO] Server: Server started on port 5000
+[2024-07-20 15:53:34] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-20 15:53:34] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-20 15:53:35] [INFO] Sync: Synced 40 users
+[2024-07-20 15:55:07] [INFO] Master worker: Job 207 [insertStockOut] completed at Sat Jul 20 2024 15:55:07 GMT+0700 (Indochina Time)
+[2024-07-20 15:56:31] [INFO] Master worker: Job 208 [insertStockOut] completed at Sat Jul 20 2024 15:56:31 GMT+0700 (Indochina Time)
+[2024-07-20 15:57:28] [INFO] Master worker: Job 209 [removeStockIn] completed at Sat Jul 20 2024 15:57:28 GMT+0700 (Indochina Time)
+[2024-07-20 15:57:28] [INFO] Master worker: Job 210 [insertStockIn] completed at Sat Jul 20 2024 15:57:28 GMT+0700 (Indochina Time)
+[2024-07-20 15:57:28] [INFO] Master worker: Job 211 [checkOverflow] completed at Sat Jul 20 2024 15:57:28 GMT+0700 (Indochina Time)
+[2024-07-20 15:57:28] [INFO] Master worker: Job 212 [insertStockOutOnly] completed at Sat Jul 20 2024 15:57:28 GMT+0700 (Indochina Time)
+[2024-07-20 15:57:28] [INFO] Master worker: Job 213 [insertStockOutOnly] completed at Sat Jul 20 2024 15:57:28 GMT+0700 (Indochina Time)
+[2024-07-21 09:54:02] [INFO] Server: Server started on port 5000
+[2024-07-21 09:54:02] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-21 09:54:02] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-21 09:54:02] [INFO] Sync: Synced 40 users
+[2024-07-21 09:55:16] [INFO] Master worker: Job 214 [insertStockIn] completed at Sun Jul 21 2024 09:55:16 GMT+0700 (Indochina Time)
+[2024-07-21 09:56:40] [INFO] Server: Server started on port 5000
+[2024-07-21 09:56:40] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-21 09:56:41] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-21 09:56:41] [INFO] Sync: Synced 40 users
+[2024-07-21 09:56:59] [INFO] Master worker: Job 215 [insertStockIn] completed at Sun Jul 21 2024 09:56:58 GMT+0700 (Indochina Time)
+[2024-07-21 09:58:09] [INFO] Server: Server started on port 5000
+[2024-07-21 09:58:09] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-21 09:58:09] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-21 09:58:09] [INFO] Sync: Synced 40 users
+[2024-07-21 10:00:57] [INFO] Master worker: Job 216 [insertStockOut] completed at Sun Jul 21 2024 10:00:57 GMT+0700 (Indochina Time)
+[2024-07-21 10:01:31] [INFO] Server: Server started on port 5000
+[2024-07-21 10:01:31] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-21 10:01:32] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-21 10:01:32] [INFO] Sync: Synced 40 users
+[2024-07-21 10:02:29] [INFO] Master worker: Job 217 [insertStockOut] completed at Sun Jul 21 2024 10:02:29 GMT+0700 (Indochina Time)
+[2024-07-21 10:05:00] [INFO] Server: Server started on port 5000
+[2024-07-21 10:05:00] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-21 10:05:01] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-21 10:05:01] [INFO] Sync: Synced 40 users
+[2024-07-21 10:06:40] [ERROR] ItemStockController: Error on fetching item stock: Cast to Boolean failed for value "{}" (type Object) at path "isActive" for model "items"
+[2024-07-21 10:06:43] [ERROR] ItemStockController: Error on fetching item stock: Cast to Boolean failed for value "{}" (type Object) at path "isActive" for model "items"
+[2024-07-21 10:08:05] [INFO] Server: Server started on port 5000
+[2024-07-21 10:08:05] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-21 10:08:06] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-21 10:08:06] [INFO] Sync: Synced 40 users
+[2024-07-21 10:09:11] [INFO] Server: Server started on port 5000
+[2024-07-21 10:09:11] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-21 10:09:11] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-21 10:09:11] [INFO] Sync: Synced 40 users
+[2024-07-21 10:09:59] [INFO] Master worker: Job 218 [insertStockIn] completed at Sun Jul 21 2024 10:09:59 GMT+0700 (Indochina Time)
+[2024-07-21 10:10:15] [INFO] Master worker: Job 219 [insertStockIn] completed at Sun Jul 21 2024 10:10:15 GMT+0700 (Indochina Time)
+[2024-07-21 10:11:13] [INFO] Master worker: Job 220 [insertStockOut] completed at Sun Jul 21 2024 10:11:13 GMT+0700 (Indochina Time)
+[2024-07-21 10:12:03] [INFO] Server: Server started on port 5000
+[2024-07-21 10:12:03] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-21 10:12:04] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-21 10:12:04] [INFO] Sync: Synced 40 users
+[2024-07-21 10:15:19] [INFO] Master worker: Job 221 [removeStockOut] completed at Sun Jul 21 2024 10:15:19 GMT+0700 (Indochina Time)
+[2024-07-21 10:17:07] [INFO] Server: Server started on port 5000
+[2024-07-21 10:17:07] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-21 10:17:08] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-21 10:17:08] [INFO] Sync: Synced 40 users
+[2024-07-21 10:17:33] [INFO] Master worker: Job 222 [insertStockOut] completed at Sun Jul 21 2024 10:17:33 GMT+0700 (Indochina Time)
+[2024-07-21 10:19:05] [INFO] Server: Server started on port 5000
+[2024-07-21 10:19:05] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-21 10:19:06] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-21 10:19:06] [INFO] Sync: Synced 40 users
+[2024-07-21 10:21:03] [INFO] Server: Server started on port 5000
+[2024-07-21 10:21:03] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-21 10:21:03] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-21 10:21:03] [INFO] Sync: Synced 40 users
+[2024-07-21 10:40:26] [INFO] Master worker: Job 224 [insertStockOut] completed at Sun Jul 21 2024 10:40:26 GMT+0700 (Indochina Time)
+[2024-07-21 10:41:40] [ERROR] Master worker: Error on completing job: Error: Missing lock for job 225. moveToFinished
+[2024-07-21 10:41:44] [INFO] Master worker: Job 226 [insertStockOutOnly] completed at Sun Jul 21 2024 10:41:44 GMT+0700 (Indochina Time)
+[2024-07-21 10:42:09] [INFO] Master worker: Job 225 [removeStockOut] completed at Sun Jul 21 2024 10:42:09 GMT+0700 (Indochina Time)
+[2024-07-21 10:42:09] [INFO] Master worker: Job 227 [insertStockOutOnly] completed at Sun Jul 21 2024 10:42:09 GMT+0700 (Indochina Time)
+[2024-07-21 10:43:47] [INFO] Server: Server started on port 5000
+[2024-07-21 10:43:47] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-21 10:43:47] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-21 10:43:47] [INFO] Sync: Synced 40 users
+[2024-07-21 10:45:20] [INFO] Master worker: Job 228 [insertStockIn] completed at Sun Jul 21 2024 10:45:20 GMT+0700 (Indochina Time)
+[2024-07-21 10:45:36] [INFO] Master worker: Job 229 [insertStockIn] completed at Sun Jul 21 2024 10:45:36 GMT+0700 (Indochina Time)
+[2024-07-21 10:45:58] [INFO] Master worker: Job 230 [insertStockOut] completed at Sun Jul 21 2024 10:45:58 GMT+0700 (Indochina Time)
+[2024-07-21 10:46:37] [INFO] Master worker: Job 231 [insertStockOut] completed at Sun Jul 21 2024 10:46:37 GMT+0700 (Indochina Time)
+[2024-07-21 10:51:34] [INFO] Server: Server started on port 5000
+[2024-07-21 10:51:34] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-21 10:51:34] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-21 10:51:34] [INFO] Sync: Synced 40 users
+[2024-07-21 10:51:54] [INFO] Master worker: Job 232 [insertStockOut] completed at Sun Jul 21 2024 10:51:54 GMT+0700 (Indochina Time)
+[2024-07-21 10:54:16] [INFO] Server: Server started on port 5000
+[2024-07-21 10:54:16] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-21 10:54:16] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-21 10:54:16] [INFO] Sync: Synced 40 users
+[2024-07-21 10:54:55] [INFO] Server: Server started on port 5000
+[2024-07-21 10:54:55] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-21 10:54:55] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-21 10:54:55] [INFO] Sync: Synced 40 users
+[2024-07-21 10:55:28] [ERROR] Master worker: Job 233 [insertStockOut] has failed with job stalled more than allowable limit
+[2024-07-21 10:55:47] [INFO] Master worker: Job 234 [insertStockOut] completed at Sun Jul 21 2024 10:55:47 GMT+0700 (Indochina Time)
+[2024-07-21 10:56:19] [INFO] Master worker: Job 235 [removeStockOut] completed at Sun Jul 21 2024 10:56:19 GMT+0700 (Indochina Time)
+[2024-07-21 10:56:19] [INFO] Master worker: Job 236 [insertStockOutOnly] completed at Sun Jul 21 2024 10:56:19 GMT+0700 (Indochina Time)
+[2024-07-21 10:59:01] [INFO] Server: Server started on port 5000
+[2024-07-21 10:59:01] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-21 10:59:01] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-21 10:59:01] [INFO] Sync: Synced 40 users
+[2024-07-21 10:59:26] [INFO] Master worker: Job 237 [insertStockIn] completed at Sun Jul 21 2024 10:59:26 GMT+0700 (Indochina Time)
+[2024-07-21 10:59:36] [INFO] Master worker: Job 238 [insertStockOut] completed at Sun Jul 21 2024 10:59:36 GMT+0700 (Indochina Time)
+[2024-07-21 11:00:05] [INFO] Master worker: Job 239 [removeStockOut] completed at Sun Jul 21 2024 11:00:05 GMT+0700 (Indochina Time)
+[2024-07-21 11:00:45] [INFO] Server: Server started on port 5000
+[2024-07-21 11:00:45] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-21 11:00:46] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-21 11:00:46] [INFO] Sync: Synced 40 users
+[2024-07-21 11:01:28] [INFO] Master worker: Job 240 [removeStockOut] completed at Sun Jul 21 2024 11:01:28 GMT+0700 (Indochina Time)
+[2024-07-21 11:02:13] [INFO] Server: Server started on port 5000
+[2024-07-21 11:02:13] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-21 11:02:14] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-21 11:02:14] [INFO] Sync: Synced 40 users
+[2024-07-21 11:03:28] [INFO] Master worker: Job 241 [insertStockOut] completed at Sun Jul 21 2024 11:03:28 GMT+0700 (Indochina Time)
+[2024-07-21 11:04:08] [INFO] Master worker: Job 242 [removeStockOut] completed at Sun Jul 21 2024 11:04:08 GMT+0700 (Indochina Time)
+[2024-07-21 11:05:41] [INFO] Server: Server started on port 5000
+[2024-07-21 11:05:41] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-21 11:05:42] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-21 11:05:42] [INFO] Sync: Synced 40 users
+[2024-07-21 11:07:13] [INFO] Server: Server started on port 5000
+[2024-07-21 11:07:13] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-21 11:07:13] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-21 11:07:13] [INFO] Sync: Synced 40 users
+[2024-07-21 11:08:11] [INFO] Master worker: Job 243 [insertStockIn] completed at Sun Jul 21 2024 11:08:11 GMT+0700 (Indochina Time)
+[2024-07-21 11:08:22] [INFO] Master worker: Job 244 [insertStockOut] completed at Sun Jul 21 2024 11:08:22 GMT+0700 (Indochina Time)
+[2024-07-21 11:19:33] [INFO] Server: Server started on port 5000
+[2024-07-21 11:19:33] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-21 11:19:33] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-21 11:19:33] [INFO] Sync: Synced 40 users
+[2024-07-21 11:20:26] [INFO] Master worker: Job 245 [removeStockOut] completed at Sun Jul 21 2024 11:20:26 GMT+0700 (Indochina Time)
+[2024-07-21 11:20:27] [INFO] Master worker: Job 246 [insertStockOut] completed at Sun Jul 21 2024 11:20:27 GMT+0700 (Indochina Time)
+[2024-07-21 11:20:32] [INFO] Master worker: Job 247 [removeStockOut] completed at Sun Jul 21 2024 11:20:32 GMT+0700 (Indochina Time)
+[2024-07-21 11:21:42] [INFO] Server: Server started on port 5000
+[2024-07-21 11:21:42] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-21 11:21:42] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-21 11:21:42] [INFO] Sync: Synced 40 users
+[2024-07-21 11:22:01] [INFO] Server: Server started on port 5000
+[2024-07-21 11:22:01] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-21 11:22:02] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-21 11:22:02] [INFO] Sync: Synced 40 users
+[2024-07-21 11:22:39] [INFO] Master worker: Job 248 [insertStockOut] completed at Sun Jul 21 2024 11:22:39 GMT+0700 (Indochina Time)
+[2024-07-21 11:23:08] [INFO] Master worker: Job 249 [removeStockOut] completed at Sun Jul 21 2024 11:23:08 GMT+0700 (Indochina Time)
+[2024-07-21 11:23:39] [INFO] Server: Server started on port 5000
+[2024-07-21 11:23:39] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-21 11:23:39] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-21 11:23:39] [INFO] Sync: Synced 40 users
+[2024-07-21 11:24:40] [INFO] Master worker: Job 250 [removeStockOut] completed at Sun Jul 21 2024 11:24:40 GMT+0700 (Indochina Time)
+[2024-07-21 11:25:07] [INFO] Server: Server started on port 5000
+[2024-07-21 11:25:07] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-21 11:25:07] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-21 11:25:07] [INFO] Sync: Synced 40 users
+[2024-07-21 11:25:33] [INFO] Server: Server started on port 5000
+[2024-07-21 11:25:33] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-21 11:25:34] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-21 11:25:34] [INFO] Sync: Synced 40 users
+[2024-07-21 11:26:11] [INFO] Master worker: Job 251 [removeStockOut] completed at Sun Jul 21 2024 11:26:11 GMT+0700 (Indochina Time)
+[2024-07-21 11:26:39] [INFO] Server: Server started on port 5000
+[2024-07-21 11:26:39] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-21 11:26:39] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-21 11:26:39] [INFO] Sync: Synced 40 users
+[2024-07-21 11:28:40] [INFO] Master worker: Job 252 [removeStockOut] completed at Sun Jul 21 2024 11:28:40 GMT+0700 (Indochina Time)
+[2024-07-21 15:00:35] [INFO] Server: Server started on port 5000
+[2024-07-21 15:00:35] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-21 15:00:35] [INFO] Sync: Synced 40 users
+[2024-07-21 15:00:35] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-21 15:00:45] [INFO] Master worker: Job 253 [insertStockOut] completed at Sun Jul 21 2024 15:00:45 GMT+0700 (Indochina Time)
+[2024-07-21 15:01:16] [INFO] Master worker: Job 254 [removeStockOut] completed at Sun Jul 21 2024 15:01:16 GMT+0700 (Indochina Time)
+[2024-07-21 15:01:34] [INFO] Server: Server started on port 5000
+[2024-07-21 15:01:34] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-21 15:01:34] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-21 15:01:34] [INFO] Sync: Synced 40 users
+[2024-07-21 15:03:04] [INFO] Server: Server started on port 5000
+[2024-07-21 15:03:04] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-21 15:03:04] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-21 15:03:04] [INFO] Sync: Synced 40 users
+[2024-07-21 15:03:16] [INFO] Master worker: Job 255 [insertStockOut] completed at Sun Jul 21 2024 15:03:16 GMT+0700 (Indochina Time)
+[2024-07-21 15:03:34] [INFO] Master worker: Job 256 [removeStockOut] completed at Sun Jul 21 2024 15:03:34 GMT+0700 (Indochina Time)
+[2024-07-21 15:04:19] [INFO] Server: Server started on port 5000
+[2024-07-21 15:04:19] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-07-21 15:04:20] [INFO] Redis: Connected with Redis Database Engine
+[2024-07-21 15:04:20] [INFO] Sync: Synced 40 users

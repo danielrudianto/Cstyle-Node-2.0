@@ -286,6 +286,7 @@ class WorkerController {
   }
 
   static async insertStockIn(data: StockInInterface) {
+    console.log(data.date);
     const [result, _] = await Promise.all([
       new StockInModelModel({
         date: data.date,
@@ -347,13 +348,13 @@ class WorkerController {
   }
 
   static async insertStockOut(data: StockOutInterface) {
-    let quantity = data.quantity;
+    var quantity = data.quantity;
     while (quantity > 0) {
       if (quantity == 0) {
         break;
       }
 
-      const stockIn = await StockInModelModel.fetchFifo(data.itemID);
+      var stockIn = await StockInModelModel.fetchFifo(data.itemID);
       if (!stockIn) {
         await new OverflowModelModel({
           itemID: data.itemID,
@@ -365,7 +366,7 @@ class WorkerController {
 
         quantity = 0;
         break;
-      } else if (stockIn.quantity >= quantity) {
+      } else if (stockIn.residue >= quantity) {
         await Promise.all([
           new StockOutModelModel({
             stockInID: stockIn._id.toString(),
@@ -382,22 +383,22 @@ class WorkerController {
 
         quantity = 0;
         break;
-      } else if (stockIn.quantity < quantity) {
+      } else if (stockIn.residue < quantity) {
         await Promise.all([
           new StockOutModelModel({
             stockInID: stockIn._id.toString(),
             itemID: data.itemID,
             date: data.date,
-            quantity: stockIn.quantity,
+            quantity: stockIn.residue,
             billID: data.billID,
             adjustmentEventID: data.adjustmentEventID,
             invoiceID: data.invoiceID,
             storeID: data.storeID,
           }).create(),
-          StockInModelModel.updateResidue(stockIn._id, stockIn.quantity),
+          StockInModelModel.updateResidue(stockIn._id, stockIn.residue),
         ]);
 
-        quantity = quantity - stockIn.quantity;
+        quantity = quantity - stockIn.residue;
       }
     }
 
@@ -414,12 +415,10 @@ class WorkerController {
   }
 
   static async removeStockOut(data: RemoveStockOutInterface) {
-    StockOutModelModel.fetchDeletation(data).then((result) => {
-      result.forEach(async (x) => {
-        const stockInID = x.stockInID;
-        await StockInModelModel.updateResidue(stockInID, x.quantity);
-        await StockOutModelModel.deleteByID(x._id);
-      });
+    const result = await StockOutModelModel.fetchDeletation(data);
+    result.forEach(async (x) => {
+      await StockInModelModel.updateResidue(x.stockIn._id, x.quantity * -1);
+      await StockOutModelModel.deleteByID(x._id);
     });
   }
 

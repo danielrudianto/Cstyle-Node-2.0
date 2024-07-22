@@ -23,7 +23,7 @@ class GoodReceiptController {
 
     new GoodReceiptCreateModel({
       name: name,
-      date: new Date(date),
+      date: date,
       supplierID: supplier,
       createdBy: userID,
       items: items.map((x) => {

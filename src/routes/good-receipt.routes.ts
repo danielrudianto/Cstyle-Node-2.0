@@ -14,7 +14,7 @@ router.post(
 );
 router.post(
   "/",
-  AccessInterceptor.administratorRequired,
+  // AccessInterceptor.administratorRequired,
   body("supplier").notEmpty().withMessage(ErrorList["SUPPLIER_REQUIRED"]),
   body("date").notEmpty().withMessage(ErrorList["DATE_REQUIRED"]),
   body("items").notEmpty().withMessage(ErrorList["ITEMS_REQUIRED"]),

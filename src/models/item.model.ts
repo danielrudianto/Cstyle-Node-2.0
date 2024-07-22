@@ -56,55 +56,102 @@ class ItemModelModel {
 
   static fetch(data: ItemFetchInterface) {
     return Promise.all([
-      conn
-        .model("items")
-        .find({
-          isDelete: false,
-          isActive: data.onlyActive ? true : {},
-          $or: [
-            {
-              reference: {
-                $regex: RegExp(data.keyword, "i"),
+      data.onlyActive
+        ? conn
+            .model("items")
+            .find({
+              isDelete: false,
+              isActive: true,
+              $or: [
+                {
+                  reference: {
+                    $regex: RegExp(data.keyword, "i"),
+                  },
+                },
+                {
+                  description: {
+                    $regex: RegExp(data.keyword, "i"),
+                  },
+                },
+              ],
+            })
+            .skip((data.page - 1) * 20)
+            .limit(20)
+            .populate({
+              path: "itemBrandID",
+              select: "name",
+            })
+            .populate("_id reference description createdAt images price")
+            .populate({
+              path: "itemTypeID",
+              select: "name description",
+            })
+            .sort({
+              reference: 1,
+            })
+        : conn
+            .model("items")
+            .find({
+              isDelete: false,
+              $or: [
+                {
+                  reference: {
+                    $regex: RegExp(data.keyword, "i"),
+                  },
+                },
+                {
+                  description: {
+                    $regex: RegExp(data.keyword, "i"),
+                  },
+                },
+              ],
+            })
+            .skip((data.page - 1) * 20)
+            .limit(20)
+            .populate({
+              path: "itemBrandID",
+              select: "name",
+            })
+            .populate("_id reference description createdAt images price")
+            .populate({
+              path: "itemTypeID",
+              select: "name description",
+            })
+            .sort({
+              reference: 1,
+            }),
+      data.onlyActive
+        ? conn.model("items").countDocuments({
+            isDelete: false,
+            isActive: true,
+            $or: [
+              {
+                reference: {
+                  $regex: RegExp(data.keyword, "i"),
+                },
               },
-            },
-            {
-              description: {
-                $regex: RegExp(data.keyword, "i"),
+              {
+                description: {
+                  $regex: RegExp(data.keyword, "i"),
+                },
               },
-            },
-          ],
-          
-        })
-        .skip((data.page - 1) * 20)
-        .limit(20)
-        .populate({
-          path: "itemBrandID",
-          select: "name",
-        })
-        .populate("_id reference description createdAt images price")
-        .populate({
-          path: "itemTypeID",
-          select: "name description",
-        })
-        .sort({
-          reference: 1,
-        }),
-      conn.model("items").countDocuments({
-        isDelete: false,
-        isActive: data.onlyActive ? true : {},
-        $or: [
-          {
-            reference: {
-              $regex: RegExp(data.keyword, "i"),
-            },
-          },
-          {
-            description: {
-              $regex: RegExp(data.keyword, "i"),
-            },
-          },
-        ],
-      }),
+            ],
+          })
+        : conn.model("items").countDocuments({
+            isDelete: false,
+            $or: [
+              {
+                reference: {
+                  $regex: RegExp(data.keyword, "i"),
+                },
+              },
+              {
+                description: {
+                  $regex: RegExp(data.keyword, "i"),
+                },
+              },
+            ],
+          }),
     ]);
   }
 
