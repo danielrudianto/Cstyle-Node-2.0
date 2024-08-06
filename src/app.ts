@@ -18,11 +18,14 @@ import DeliverySlipRoutes from "./routes/delivery-slip.routes";
 import GoodReceiptRoutes from "./routes/good-receipt.routes";
 import StockRequestRoutes from "./routes/stock-transfer.routes";
 import ItemStockRoutes from "./routes/item-stock.routes";
+import BillRoutes from "./routes/bill.routes";
+import InvoiceRoutes from "./routes/invoice.routes";
 
 import CashierRoutes from "./routes/cashier.routes";
 import MigrationRoutes from "./routes/migration.routes";
 
 import StatusRoutes from "./routes/status.routes";
+import ReportRoutes from "./routes/report.routes";
 
 import AuthInterceptor from "./interceptors/auth.interceptor";
 import helmet from "helmet";
@@ -31,7 +34,6 @@ import LoggerHelper from "./utils/logger.utils";
 import { LoggerType } from "./interfaces/logger.interface";
 
 import cors from "cors";
-import InvoiceRoutes from "./routes/invoice.routes";
 
 export const app = express();
 
@@ -71,12 +73,14 @@ app.use("/delivery-slip", AuthInterceptor.intercept, DeliverySlipRoutes);
 app.use("/good-receipt", AuthInterceptor.intercept, GoodReceiptRoutes);
 app.use("/stock-transfer", AuthInterceptor.intercept, StockRequestRoutes);
 app.use("/invoice", AuthInterceptor.intercept, InvoiceRoutes);
+app.use("/bill", AuthInterceptor.intercept, BillRoutes);
 
 app.use("/adjustment", AuthInterceptor.intercept, AdjustmentEventRoutes);
 app.use("/cashier", CashierRoutes);
 app.use("/migration", MigrationRoutes);
 
 app.use("/status", AuthInterceptor.intercept, StatusRoutes);
+app.use("/report", AuthInterceptor.intercept, ReportRoutes);
 
 redisClient.on("error", (error) => {
   new LoggerHelper({

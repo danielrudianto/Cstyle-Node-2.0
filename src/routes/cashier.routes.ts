@@ -15,6 +15,11 @@ router.use("/products", productCashierRoutes);
 router.use("/membership", membershipCashierRoutes);
 
 router.get("/stats", AuthInterceptor.anyIntercept, CashierController.stats);
+router.get(
+  "/report",
+  AuthInterceptor.anyIntercept,
+  CashierController.fetchReport
+);
 router.post("/sync", AuthInterceptor.anyIntercept, CashierController.sync);
 
 export default router;

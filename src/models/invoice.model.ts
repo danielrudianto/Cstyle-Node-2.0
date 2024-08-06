@@ -128,6 +128,76 @@ class InvoiceModelModel {
     ]);
   }
 
+  static fetchReport(month: number, year: number, shownOnly: boolean = true) {
+    if (shownOnly) {
+      return conn
+        .model("invoices")
+        .find({
+          $expr: {
+            $and: [
+              { $eq: [{ $month: "$date" }, month] },
+              { $eq: [{ $year: "$date" }, year] },
+            ],
+          },
+          isHidden: false,
+        })
+        .populate("customerID", "name")
+        .populate("salesID", "name")
+        .populate("createdBy", "name");
+    } else {
+      return conn
+        .model("invoices")
+        .find({
+          $expr: {
+            $and: [
+              { $eq: [{ $month: "$date" }, month] },
+              { $eq: [{ $year: "$date" }, year] },
+            ],
+          },
+        })
+        .populate("customerID", "name")
+        .populate("salesID", "name")
+        .populate("createdBy", "name");
+    }
+  }
+
+  static fetchProductReport(
+    month: number,
+    year: number,
+    shownOnly: boolean = true
+  ) {
+    if (shownOnly) {
+      return conn
+        .model("invoices")
+        .find({
+          $expr: {
+            $and: [
+              { $eq: [{ $month: "$date" }, month] },
+              { $eq: [{ $year: "$date" }, year] },
+            ],
+          },
+          isHidden: false,
+        })
+        .populate("deliverySlipID.items.itemID", "reference description")
+        .populate("packingListID.items.itemID", "reference description")
+        .populate("deliverySlipID.customerID", "name");
+    } else {
+      return conn
+        .model("invoices")
+        .find({
+          $expr: {
+            $and: [
+              { $eq: [{ $month: "$date" }, month] },
+              { $eq: [{ $year: "$date" }, year] },
+            ],
+          },
+        })
+        .populate("deliverySlipID.items.itemID", "reference description")
+        .populate("packingListID.items.itemID", "reference description")
+        .populate("deliverySlipID.customerID", "name");
+    }
+  }
+
   static fetchByID(id: string) {
     return conn
       .model("invoices")

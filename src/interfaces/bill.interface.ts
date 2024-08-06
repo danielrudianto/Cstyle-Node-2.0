@@ -24,3 +24,12 @@ export interface BillPaymentInterface {
   type: string;
   amount: number;
 }
+
+export interface BillFetchInterface {
+  page: number;
+  storeID: string[];
+  month: number;
+  year: number;
+  isOwner: boolean;
+  keyword: string;
+}

@@ -10,7 +10,6 @@ import LoggerHelper from "../utils/logger.utils";
 import { LoggerType } from "../interfaces/logger.interface";
 import { queue } from "../utils/queue.utils";
 import StoreModelModel from "../models/store.model";
-import { StockOutInterface } from "../interfaces/stock-out.interface";
 import lock from "../utils/lock.utils";
 import ItemModelModel from "../models/item.model";
 
@@ -238,6 +237,50 @@ class CashierController {
       .catch((error) => {
         new LoggerHelper({
           message: `Error on fetching stock data ${error}`,
+          type: LoggerType.error,
+          tag: "Cashier",
+        }).log();
+
+        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+      });
+  };
+
+  static fetchReport = (req: Request, res: Response) => {
+    const storeID = req.body.storeID;
+    BillModelModel.fetchStoreReport(storeID)
+      .then((bills) => {
+        console.log(bills);
+        const paymentMethods = [
+          "cash",
+          "card",
+          "qris",
+          "paypal",
+          "voucher",
+          "bank transfer",
+        ];
+
+        const payments = paymentMethods.map((x) => {
+          return {
+            type: x,
+            value: 0,
+          };
+        });
+
+        bills.forEach((bill) => {
+          bill.payment.forEach((payment: any) => {
+            const index = payments.findIndex((x) => x.type === payment.type);
+            payments[index].value += payment.amount;
+          });
+        });
+
+        return res.status(200).send({
+          count: bills.length,
+          payments: payments,
+        });
+      })
+      .catch((error) => {
+        new LoggerHelper({
+          message: `Error on fetching report ${error}`,
           type: LoggerType.error,
           tag: "Cashier",
         }).log();

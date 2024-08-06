@@ -1,6 +1,7 @@
 import { Types } from "mongoose";
 import { connectionFactory } from "../utils/connector.utils";
 import {
+  BillFetchInterface,
   BillInterface,
   BillItemInterface,
   BillPaymentInterface,
@@ -32,6 +33,63 @@ class BillModelModel {
 
   static insertMany(data: BillInterface[]) {
     return conn.model("bills").insertMany(data);
+  }
+
+  static fetch(data: BillFetchInterface) {
+    if (data.isOwner) {
+      return Promise.all([
+        conn
+          .model("bills")
+          .find({
+            isHidden: false,
+            name: RegExp(data.keyword, "i"),
+            $expr: {
+              $and: [
+                { $eq: [{ $month: "$date" }, data.month] },
+                { $eq: [{ $year: "$date" }, data.year] },
+              ],
+            },
+          })
+          .limit(20)
+          .skip((data.page - 1) * 20),
+        conn.model("bills").countDocuments({
+          isHidden: false,
+          name: RegExp(data.keyword, "i"),
+          $expr: {
+            $and: [
+              { $eq: [{ $month: "$date" }, data.month] },
+              { $eq: [{ $year: "$date" }, data.year] },
+            ],
+          },
+        }),
+      ]);
+    } else {
+      return Promise.all([
+        conn
+          .model("bills")
+          .find({
+            name: RegExp(data.keyword, "i"),
+            $expr: {
+              $and: [
+                { $eq: [{ $month: "$date" }, data.month] },
+                { $eq: [{ $year: "$date" }, data.year] },
+              ],
+            },
+          })
+          .limit(20)
+          .skip((data.page - 1) * 20),
+        ,
+        conn.model("bills").countDocuments({
+          name: RegExp(data.keyword, "i"),
+          $expr: {
+            $and: [
+              { $eq: [{ $month: "$date" }, data.month] },
+              { $eq: [{ $year: "$date" }, data.year] },
+            ],
+          },
+        }),
+      ]);
+    }
   }
 
   static fetchByID(id: string) {
@@ -203,6 +261,17 @@ class BillModelModel {
         isHidden: false,
       });
     }
+  }
+
+  static fetchStoreReport(storeID: string) {
+    const date = new Date();
+    date.setHours(0, 0, 0, 0);
+
+    return conn.model("bills").find({
+      storeID: storeID,
+      isDelete: false,
+      date: date,
+    });
   }
 
   static fetchProductReport(

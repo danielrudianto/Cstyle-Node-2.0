@@ -71,6 +71,28 @@ class StockOutModelModel {
     ]);
   }
 
+  static fetchProductReport(
+    storeID: string | null,
+    month: number,
+    year: number,
+  ) {
+    return conn.model("stock-outs").aggregate([
+      {
+        $lookup: {
+          from: "stock-ins",
+          localField: "stockInID",
+          foreignField: "_id",
+          as: "stockIn",
+        },
+      },
+      {
+        $unwind: {
+          path: "$stockIn",
+        },
+      },
+    ]);
+  }
+
   static deleteByID(id: string) {
     return conn.model("stock-outs").findByIdAndDelete(id);
   }

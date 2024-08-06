@@ -1,7 +1,7 @@
 import AsyncLock from "async-lock";
 
 const lock = new AsyncLock({
-  maxExecutionTime: 15000,
+  maxExecutionTime: 2000,
 });
 
 export default lock;

@@ -155,6 +155,12 @@ class ItemModelModel {
     ]);
   }
 
+  static count() {
+    return conn.model("items").countDocuments({
+      isDelete: false,
+    });
+  }
+
   static fetchPrices(data: ItemPriceFetchInterface) {
     const filters = [];
     if (data.brand.length > 0) {

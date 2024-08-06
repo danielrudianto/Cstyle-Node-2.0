@@ -36,4 +36,6 @@ router.get(
   MembershipController.fetchByCode
 );
 
+router.get("/", MembershipController.fetch);
+
 export default router;

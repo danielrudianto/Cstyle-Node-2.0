@@ -500,3 +500,17 @@ Use mongoose.model(name, schema)
 [2024-07-21 10:06:43] [ERROR] ItemStockController: Error on fetching item stock: Cast to Boolean failed for value "{}" (type Object) at path "isActive" for model "items"
 [2024-07-21 10:41:40] [ERROR] Master worker: Error on completing job: Error: Missing lock for job 225. moveToFinished
 [2024-07-21 10:55:28] [ERROR] Master worker: Job 233 [insertStockOut] has failed with job stalled more than allowable limit
+[2024-08-01 16:12:15] [ERROR] Bill: Error on fetching user on bill TypeError: Cannot read properties of undefined (reading 'forEach')
+[2024-08-01 19:41:59] [ERROR] Bill: Error on fetching bills MongoServerError: BSON field 'skip' value must be >= 0, actual value '-20'
+[2024-08-01 19:42:43] [ERROR] Bill: Error on fetching bills MongoServerError: BSON field 'skip' value must be >= 0, actual value '-20'
+[2024-08-01 19:43:09] [ERROR] Bill: Error on fetching bills MongoServerError: BSON field 'skip' value must be >= 0, actual value '-20'
+[2024-08-01 19:43:41] [ERROR] Bill: Error on fetching bills MongoServerError: BSON field 'skip' value must be >= 0, actual value '-20'
+[2024-08-01 19:43:45] [ERROR] Bill: Error on fetching bills MongoServerError: BSON field 'skip' value must be >= 0, actual value '-20'
+[2024-08-01 19:43:46] [ERROR] Bill: Error on fetching bills MongoServerError: BSON field 'skip' value must be >= 0, actual value '-20'
+[2024-08-01 19:44:06] [ERROR] Bill: Error on fetching bills MongoServerError: BSON field 'skip' value must be >= 0, actual value '-20'
+[2024-08-01 19:44:10] [ERROR] Bill: Error on fetching bills MongoServerError: BSON field 'skip' value must be >= 0, actual value '-20'
+[2024-08-01 19:45:18] [ERROR] Sales invoice: Error on fetching sales invoice MongoServerError: BSON field 'skip' value must be >= 0, actual value '-10'
+[2024-08-01 19:45:19] [ERROR] Sales invoice: Error on fetching sales invoice MongoServerError: BSON field 'skip' value must be >= 0, actual value '-10'
+[2024-08-01 19:45:21] [ERROR] Sales invoice: Error on fetching sales invoice MongoServerError: BSON field 'skip' value must be >= 0, actual value '-10'
+[2024-08-01 19:45:37] [ERROR] Sales invoice: Error on fetching sales invoice MongoServerError: BSON field 'skip' value must be >= 0, actual value '-10'
+[2024-08-01 19:46:15] [ERROR] Sales invoice: Error on fetching sales invoice MongoServerError: BSON field 'skip' value must be >= 0, actual value '-10'

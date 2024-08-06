@@ -53,13 +53,26 @@ router.post(
 
 router.post(
   "/receive",
-  body("id").isMongoId().withMessage(ErrorList["ID_INVALID"]),
   AuthInterceptor.anyIntercept,
+  body("id").isMongoId().withMessage(ErrorList["ID_INVALID"]),
   (req: Request, res: Response, next: NextFunction) => {
     req.body.userID = req.body.employeeID;
     next();
   },
   StockRequestController.receive
+);
+
+router.post(
+  "/reject",
+  body("id").isMongoId().withMessage(ErrorList["ID_INVALID"]),
+  body("rejectNote").notEmpty().withMessage(ErrorList["REJECT_NOTE_REQUIRED"]),
+  ErrorInterceptor.intercept,
+  AuthInterceptor.anyIntercept,
+  (req: Request, res: Response, next: NextFunction) => {
+    req.body.userID = req.body.employeeID;
+    next();
+  },
+  StockRequestController.reject
 );
 
 export default router;

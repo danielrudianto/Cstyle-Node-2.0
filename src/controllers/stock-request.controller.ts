@@ -121,21 +121,20 @@ class StockRequestController {
   static reject = async (req: Request, res: Response) => {
     const id = req.body.id;
     const rejectNote = req.body.reason;
-    const stockRequest = req.body.stockRequest;
     const userID = req.body.userID;
 
-    StockRequestModelModel.rejectByID(id, userID, rejectNote).then(
-      async (result) => {
+    StockRequestModelModel.rejectByID(id, userID, rejectNote)
+      .then(async (result) => {
         await lock.acquire(
-          stockRequest.items.map((x: any) => {
+          result.items.map((x: any) => {
             return x.itemID;
           }),
           (done) => {
-            stockRequest.items.forEach(async (x: any) => {
+            result.items.forEach(async (x: any) => {
               const data: StockOutTransferInterface = {
                 itemID: x.itemID,
                 quantity: x.quantity,
-                storeID: stockRequest.requestTo,
+                storeID: result.requestTo,
               };
 
               await new StockModelModel(data).update();
@@ -146,8 +145,15 @@ class StockRequestController {
             return res.status(201).send(result);
           }
         );
-      }
-    );
+      })
+      .catch((error) => {
+        new LoggerHelper({
+          message: `Error on rejecting stock transfer request ${error}`,
+          tag: "Stock transfer request",
+          type: LoggerType.error,
+        }).log();
+        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+      });
   };
 
   static deleteByID = (req: Request, res: Response) => {
@@ -390,21 +396,30 @@ class StockRequestController {
     }
   };
 
-  static confirm = async (req: Request, res: Response) => {
+  static confirm = (req: Request, res: Response) => {
     const id = req.body.id;
     const stockRequest = req.body.stockRequest;
     const userID = req.body.userID;
-    StockRequestModelModel.confirmByID(id, userID).then((result) => {
-      stockRequest.items.forEach(async (x: any) => {
-        const data: StockOutTransferInterface = {
-          itemID: x.itemID,
-          quantity: x.quantity,
-          storeID: stockRequest.requestFrom,
-        };
-        await queue.add("insertStokInTransfer", data);
-      });
+    StockRequestModelModel.confirmByID(id, userID).then(async (result) => {
+      await lock.acquire(
+        result.items.map((x: any) => {
+          return `${x.itemID}:${
+            stockRequest.requestFrom == null ? "" : stockRequest.requestFrom
+          }`;
+        }),
+        (done) => {
+          stockRequest.items.forEach(async (x: any) => {
+            await new StockModelModel({
+              itemID: x.itemID,
+              quantity: x.quantity,
+              storeID: stockRequest.requestFrom,
+            }).update();
+          });
 
-      return res.status(201).send(result);
+          done();
+          return res.status(201).send(result);
+        }
+      );
     });
   };
 
@@ -534,175 +549,6 @@ class StockRequestController {
 
         return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
       });
-  };
-
-  static search = (req: Request, res: Response) => {
-    //     const month = req.body.month;
-    //     const year = req.body.year;
-    //     const page = req.body.page;
-    //     const status = req.body.status;
-    //     switch (status.toLowerCase()) {
-    //       case "sent":
-    //         stockRequestModel
-    //           .find({
-    //             isDelete: false,
-    //             isSending: true,
-    //             isConfirm: false,
-    //             isReject: false,
-    //             $expr: {
-    //               $and: [
-    //                 {
-    //                   $eq: [{ $month: "$createdAt" }, month],
-    //                 },
-    //                 {
-    //                   $eq: [{ $year: "$createdAt" }, year],
-    //                 },
-    //               ],
-    //             },
-    //             name: { $regex: req.body.keyword, $options: "i" },
-    //           })
-    //           .limit(20)
-    //           .skip((page - 1) * 20)
-    //           .populate("createdBy", "name")
-    //           .populate("requestFrom", "name address")
-    //           .populate("requestTo", "name address")
-    //           .populate("sendBy", "name")
-    //           .populate("updatedBy", "name")
-    //           .populate("deletedBy", "name")
-    //           .then((result) => {
-    //             return res.status(200).send(result);
-    //           })
-    //           .catch((error) => {
-    //             return res.status(500).send(error);
-    //           });
-    //         break;
-    //       case "pending":
-    //         stockRequestModel
-    //           .find({
-    //             isDelete: false,
-    //             isSending: false,
-    //             $expr: {
-    //               $and: [
-    //                 {
-    //                   $eq: [{ $month: "$createdAt" }, month],
-    //                 },
-    //                 {
-    //                   $eq: [{ $year: "$createdAt" }, year],
-    //                 },
-    //               ],
-    //             },
-    //             name: { $regex: req.body.keyword, $options: "i" },
-    //           })
-    //           .limit(20)
-    //           .skip((page - 1) * 20)
-    //           .populate("createdBy", "name")
-    //           .populate("requestFrom", "name address")
-    //           .populate("requestTo", "name address")
-    //           .populate("sendBy", "name")
-    //           .populate("updatedBy", "name")
-    //           .populate("deletedBy", "name")
-    //           .then((result) => {
-    //             return res.status(200).send(result);
-    //           })
-    //           .catch((error) => {
-    //             return res.status(500).send(error);
-    //           });
-    //         break;
-    //       case "reject":
-    //         stockRequestModel
-    //           .find({
-    //             isReject: true,
-    //             isSending: true,
-    //             isDelete: false,
-    //             $expr: {
-    //               $and: [
-    //                 {
-    //                   $eq: [{ $month: "$createdAt" }, month],
-    //                 },
-    //                 {
-    //                   $eq: [{ $year: "$createdAt" }, year],
-    //                 },
-    //               ],
-    //             },
-    //             name: { $regex: req.body.keyword, $options: "i" },
-    //           })
-    //           .limit(20)
-    //           .skip((page - 1) * 20)
-    //           .populate("createdBy", "name")
-    //           .populate("requestFrom", "name address")
-    //           .populate("requestTo", "name address")
-    //           .populate("sendBy", "name")
-    //           .populate("updatedBy", "name")
-    //           .populate("deletedBy", "name")
-    //           .then((result) => {
-    //             return res.status(200).send(result);
-    //           })
-    //           .catch((error) => {
-    //             return res.status(500).send(error);
-    //           });
-    //         break;
-    //       case "delete":
-    //         stockRequestModel
-    //           .find({
-    //             $expr: {
-    //               $and: [
-    //                 {
-    //                   $eq: [{ $month: "$createdAt" }, month],
-    //                 },
-    //                 {
-    //                   $eq: [{ $year: "$createdAt" }, year],
-    //                 },
-    //               ],
-    //             },
-    //             isDelete: true,
-    //             name: { $regex: req.body.keyword, $options: "i" },
-    //           })
-    //           .limit(20)
-    //           .skip((page - 1) * 20)
-    //           .populate("createdBy", "name")
-    //           .populate("requestFrom", "name address")
-    //           .populate("requestTo", "name address")
-    //           .populate("sendBy", "name")
-    //           .populate("updatedBy", "name")
-    //           .populate("deletedBy", "name")
-    //           .then((result) => {
-    //             return res.status(200).send(result);
-    //           })
-    //           .catch((error) => {
-    //             return res.status(500).send(error);
-    //           });
-    //         break;
-    //       case "all":
-    //       default:
-    //         stockRequestModel
-    //           .find({
-    //             $expr: {
-    //               $and: [
-    //                 { $eq: [{ $month: "$createdAt" }, month] },
-    //                 { $eq: [{ $year: "$createdAt" }, year] },
-    //               ],
-    //             },
-    //             name: { $regex: req.body.keyword, $options: "i" },
-    //           })
-    //           .limit(20)
-    //           .skip((page - 1) * 20)
-    //           .populate("createdBy", "name")
-    //           .populate("requestFrom", "name address")
-    //           .populate("requestTo", "name address")
-    //           .populate("sendBy", "name")
-    //           .populate("updatedBy", "name")
-    //           .populate("deletedBy", "name")
-    //           .then((result) => {
-    //             return res.status(200).send(result);
-    //           })
-    //           .catch((error) => {
-    //             console.error(
-    //               `[error]: Error on searching stock request. ${error}`
-    //             );
-    //             return res.status(500).send(error);
-    //           });
-    //         break;
-    //     }
   };
 }
 

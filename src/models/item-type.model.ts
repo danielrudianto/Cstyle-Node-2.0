@@ -106,6 +106,12 @@ class ItemTypeModelModel {
     return conn.model("itemtypes").findById(id);
   }
 
+  static count() {
+    return conn.model("itemtypes").countDocuments({
+      isDelete: false,
+    });
+  }
+
   static async preCreate(data: ItemTypeInterface): Promise<boolean> {
     try {
       const count = await conn.model("itemtypes").countDocuments({

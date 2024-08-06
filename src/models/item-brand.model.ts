@@ -60,6 +60,12 @@ class ItemBrandModelModel {
     return conn.model("itembrands").findById(id);
   }
 
+  static count() {
+    return conn.model("itembrands").countDocuments({
+      isDelete: false,
+    });
+  }
+
   static async preCreate(data: ItemBrandInterface): Promise<boolean> {
     try {
       const count = await conn.model("itembrands").countDocuments({
