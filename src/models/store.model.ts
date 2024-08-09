@@ -108,19 +108,27 @@ class StoreModelModel {
     ]);
   }
 
-  static fetchOthers(storeID: string) {
-    return conn
-      .model("stores")
-      .find({
-        _id: {
-          $ne: storeID,
-        },
-        isActive: true,
-      })
-      .select("name address")
-      .sort({
-        name: 1,
-      });
+  static fetchOthers(storeID: string | null) {
+    return storeID == null
+      ? conn
+          .model("stores")
+          .find({ isActive: true })
+          .select("name address")
+          .sort({
+            name: 1,
+          })
+      : conn
+          .model("stores")
+          .find({
+            _id: {
+              $ne: storeID,
+            },
+            isActive: true,
+          })
+          .select("name address")
+          .sort({
+            name: 1,
+          });
   }
 
   static async fetchByCode(code: string): Promise<StoreModelModel> {

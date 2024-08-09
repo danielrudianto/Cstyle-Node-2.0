@@ -5,7 +5,7 @@ import LoggerHelper from "../utils/logger.utils";
 import { LoggerType } from "../interfaces/logger.interface";
 import InvoiceModelModel from "../models/invoice.model";
 import { redisClient } from "../app";
-import StockOutModelModel from "src/models/stock-out.model";
+import StockOutModelModel from "../models/stock-out.model";
 
 class ReportController {
   static fetchSalesReport = (req: Request, res: Response) => {
@@ -79,11 +79,10 @@ class ReportController {
             ),
             StockOutModelModel.fetchProductReport(storeID, month, year),
           ])
-            .then(([bills, invoices]) => {
-              return res.status(200).send({
-                bills: bills,
-                invoices: invoices,
-              });
+            .then(([bills, invoices, stockouts]) => {
+              const billsResult = [];
+
+              const invoicesResult = [];
             })
             .catch((error) => {
               new LoggerHelper({

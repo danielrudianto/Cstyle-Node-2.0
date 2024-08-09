@@ -278,8 +278,56 @@ class BillModelModel {
     storeID: string | null,
     month: number,
     year: number,
-    isHidden: boolean = true
-  ) {}
+    shownOnly: boolean = true
+  ) {
+    if (shownOnly) {
+      return conn.model("bills").aggregate([
+        {
+          $match: {
+            $and: [
+              {
+                date: {
+                  $gte: new Date(year, month, 1),
+                },
+              },
+              {
+                date: {
+                  $lt: new Date(year, month + 1, 1),
+                },
+              },
+              {
+                isHidden: false,
+              },
+            ],
+          },
+        },
+        {
+          $unwind: {
+            path: "$items",
+          },
+        },
+      ]);
+    } else {
+      return conn.model("bills").aggregate([
+        {
+          $match: {
+            $and: [
+              {
+                date: {
+                  $gte: new Date(year, month, 1),
+                },
+              },
+              {
+                date: {
+                  $lt: new Date(year, month + 1, 1),
+                },
+              },
+            ],
+          },
+        },
+      ]);
+    }
+  }
 
   static fetchMemberTransactions() {
     return conn.model("bills").countDocuments({

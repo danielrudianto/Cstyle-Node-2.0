@@ -514,3 +514,4 @@ Use mongoose.model(name, schema)
 [2024-08-01 19:45:21] [ERROR] Sales invoice: Error on fetching sales invoice MongoServerError: BSON field 'skip' value must be >= 0, actual value '-10'
 [2024-08-01 19:45:37] [ERROR] Sales invoice: Error on fetching sales invoice MongoServerError: BSON field 'skip' value must be >= 0, actual value '-10'
 [2024-08-01 19:46:15] [ERROR] Sales invoice: Error on fetching sales invoice MongoServerError: BSON field 'skip' value must be >= 0, actual value '-10'
+[2024-08-07 15:05:13] [ERROR] Item: Error on fetching item stock TypeError: Cannot read properties of undefined (reading 'toString')

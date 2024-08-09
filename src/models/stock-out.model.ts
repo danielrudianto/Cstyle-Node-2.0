@@ -8,6 +8,7 @@ import { connectionFactory } from "../utils/connector.utils";
 const conn = connectionFactory();
 class StockOutModelModel {
   id?: string;
+  date: Date;
   billID: string | null;
   adjustmentEventID: string | null;
   invoiceID: string | null;
@@ -25,10 +26,12 @@ class StockOutModelModel {
     this.quantity = data.quantity;
     this.stockInID = data.stockInID!;
     this.invoiceID = data.invoiceID;
+    this.date = data.date;
   }
 
   create() {
     return conn.model("stock-outs").create({
+      date: this.date,
       billID: this.billID,
       adjustmentEventID: this.adjustmentEventID,
       invoiceID: this.invoiceID,
@@ -74,9 +77,25 @@ class StockOutModelModel {
   static fetchProductReport(
     storeID: string | null,
     month: number,
-    year: number,
+    year: number
   ) {
     return conn.model("stock-outs").aggregate([
+      {
+        $match: {
+          $and: [
+            {
+              date: {
+                $gte: new Date(year, month, 1),
+              },
+            },
+            {
+              date: {
+                $lt: new Date(year, month + 1, 1),
+              },
+            },
+          ],
+        },
+      },
       {
         $lookup: {
           from: "stock-ins",

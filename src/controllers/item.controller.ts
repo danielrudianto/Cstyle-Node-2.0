@@ -6,6 +6,8 @@ import MigrationModelModel from "../models/migration.model";
 import ItemModelModel from "../models/item.model";
 import { queue } from "../utils/queue.utils";
 import LoggerHelper from "../utils/logger.utils";
+import StockModelModel from "../models/stock.model";
+import StoreModelModel from "../models/store.model";
 
 class ItemController {
   static createV2 = (req: Request, res: Response) => {
@@ -275,6 +277,52 @@ class ItemController {
           type: LoggerType.error,
           tag: "Item",
         }).log();
+        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+      });
+  };
+
+  static downloadV2 = (req: Request, res: Response) => {
+    const storeID = req.body.storeID;
+    Promise.all([
+      ItemModelModel.fetchInitial(),
+      StockModelModel.fetchInitial(),
+      StoreModelModel.fetchOthers(null),
+    ])
+      .then(([items, stocks, stores]) => {
+        const itemResult = [];
+
+        for (let i = 0; i < items.length; i++) {
+          const availableStocks = stocks.filter(
+            (x) => x.itemID.toString() == items[i]._id
+          );
+
+          itemResult.push({
+            id: items[i]._id,
+            reference: items[i].reference,
+            description: items[i].description,
+            brand: items[i].itemBrandID.name,
+            type: items[i].itemTypeID.name,
+            stock: availableStocks.map((x) => {
+              return {
+                quantity: x.quantity,
+                storeID: x.storeID,
+              };
+            }),
+          });
+        }
+
+        return res.status(200).send({
+          store: stores,
+          data: itemResult,
+        });
+      })
+      .catch((error) => {
+        new LoggerHelper({
+          message: `Error on fetching item stock ${error}`,
+          tag: "Item",
+          type: LoggerType.error,
+        }).log();
+
         return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
       });
   };

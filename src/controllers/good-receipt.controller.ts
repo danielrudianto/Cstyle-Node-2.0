@@ -9,8 +9,8 @@ import { ErrorList } from "../data/error-list";
 import { queue } from "../utils/queue.utils";
 import { GoodReceiptStatus } from "../interfaces/good-receipt.interface";
 import StockModelModel from "../models/stock.model";
-import { StockInInterface } from "src/interfaces/stock-in.interface";
-import { RemoveStockInInterface } from "src/interfaces/stock-out.interface";
+import { StockInInterface } from "../interfaces/stock-in.interface";
+import { RemoveStockInInterface } from "../interfaces/stock-out.interface";
 import lock from "../utils/lock.utils";
 
 class GoodReceiptController {

@@ -4,7 +4,7 @@ import {
 } from "../interfaces/check-stock.interface";
 import { StockInterface } from "../interfaces/stock.interface";
 import { connectionFactory } from "../utils/connector.utils";
-import { RemoveStockInInterface } from "src/interfaces/stock-out.interface";
+import { RemoveStockInInterface } from "../interfaces/stock-out.interface";
 
 const conn = connectionFactory();
 
@@ -12,6 +12,7 @@ class StockModelModel {
   itemID: string;
   storeID: string | null;
   quantity: number;
+
   constructor(data: StockInterface) {
     this.itemID = data.itemID;
     this.storeID = data.storeID;
@@ -49,6 +50,10 @@ class StockModelModel {
       itemID: { $in: items.map((x) => x.itemID) },
       storeID: storeID,
     });
+  }
+
+  static fetchInitial() {
+    return conn.model("stocks").find({});
   }
 
   static checkDashboardStockByItemIDs(

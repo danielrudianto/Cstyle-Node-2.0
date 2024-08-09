@@ -9,7 +9,7 @@ import InvoiceModelModel from "../models/invoice.model";
 import {
   StockOutInterface,
   StockOutTempInterface,
-} from "src/interfaces/stock-out.interface";
+} from "../interfaces/stock-out.interface";
 
 class DeliverySlipController {
   static create = (req: Request, res: Response) => {

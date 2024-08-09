@@ -5,6 +5,10 @@ const StockOutSchema = new Schema({
     type: Number,
     required: true,
   },
+  date: {
+    type: Date,
+    required: true,
+  },
   billID: {
     type: Schema.Types.ObjectId,
     required: false,
