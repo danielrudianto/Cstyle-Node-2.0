@@ -82,7 +82,37 @@ class ReportController {
             .then(([bills, invoices, stockouts]) => {
               const billsResult = [];
 
+              bills.forEach((bill) => {
+                const billID = bill._id;
+                // get the sum of stock out
+                const stockOut = stockouts.filter(
+                  (stockout) => stockout.billID === billID
+                );
+                const stockOutPrice = stockOut.reduce(
+                  (acc, stockout) =>
+                    acc + stockout.stockIn.price * stockout.stockIn.quantity,
+                  0
+                );
+
+                const averagePrice =
+                  (bill.totalPrice - stockOutPrice) / bill.quantity;
+
+                billsResult.push({
+                  billID: bill._id,
+                  itemID: bill.itemID,
+                  quantity: bill.quantity,
+                  price: bill.price,
+                  discount: bill.discount,
+                  cogs: averagePrice,
+                });
+              });
+
               const invoicesResult = [];
+
+              return res.status(200).send({
+                bills: bills,
+                invoices: invoices,
+              });
             })
             .catch((error) => {
               new LoggerHelper({
