@@ -74,41 +74,45 @@ class StockOutModelModel {
     ]);
   }
 
-  static fetchProductReport(
-    storeID: string | null,
-    month: number,
-    year: number
-  ) {
+  static fetchProductReport(month: number, year: number) {
+    console.log(month);
+    console.log(year);
+    // $expr: {
+    //   $and: [
+    //     { $eq: [{ $year: "$date" }, year] },
+    //     { $eq: [{ $month: "$date" }, month] },
+    //   ],
+    // },
     return conn.model("stock-outs").aggregate([
       {
         $match: {
           $and: [
             {
               date: {
-                $gte: new Date(year, month, 1),
+                $gte: new Date(year, month - 1, 1),
               },
             },
             {
               date: {
-                $lt: new Date(year, month + 1, 1),
+                $lt: new Date(year, month, 1),
               },
             },
           ],
         },
       },
-      {
-        $lookup: {
-          from: "stock-ins",
-          localField: "stockInID",
-          foreignField: "_id",
-          as: "stockIn",
-        },
-      },
-      {
-        $unwind: {
-          path: "$stockIn",
-        },
-      },
+      // {
+      //   $lookup: {
+      //     from: "stock-ins",
+      //     localField: "stockInID",
+      //     foreignField: "_id",
+      //     as: "stockIn",
+      //   },
+      // },
+      // {
+      //   $unwind: {
+      //     path: "$stockIn",
+      //   },
+      // },
     ]);
   }
 

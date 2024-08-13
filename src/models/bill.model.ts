@@ -243,24 +243,30 @@ class BillModelModel {
     storeID: string | null,
     month: number,
     year: number,
-    isHidden: boolean = true
+    shownOnly: boolean = true
   ) {
-    if (isHidden) {
-      return conn.model("bills").find({
-        isHidden: false,
-        storeID: storeID,
-        $expr: {
-          $and: [
-            { $eq: [{ $year: "$date" }, year] },
-            { $eq: [{ $month: "$date" }, month] },
-          ],
-        },
-      });
-    } else {
-      return conn.model("bills").find({
-        isHidden: false,
-      });
+    let query: any = {
+      $expr: {
+        $and: [
+          { $eq: [{ $year: "$date" }, year] },
+          { $eq: [{ $month: "$date" }, month] },
+        ],
+      },
+    };
+
+    if (shownOnly) {
+      query.isHidden = false;
     }
+
+    if (storeID) {
+      query.storeID = storeID;
+    }
+
+    return conn
+      .model("bills")
+      .find(query)
+      .populate("createdBy", "name")
+      .populate("memberID", "code");
   }
 
   static fetchStoreReport(storeID: string) {
@@ -280,53 +286,29 @@ class BillModelModel {
     year: number,
     shownOnly: boolean = true
   ) {
-    if (shownOnly) {
-      return conn.model("bills").aggregate([
-        {
-          $match: {
-            $and: [
-              {
-                date: {
-                  $gte: new Date(year, month, 1),
-                },
-              },
-              {
-                date: {
-                  $lt: new Date(year, month + 1, 1),
-                },
-              },
-              {
-                isHidden: false,
-              },
-            ],
-          },
-        },
-        {
-          $unwind: {
-            path: "$items",
-          },
-        },
-      ]);
-    } else {
-      return conn.model("bills").aggregate([
-        {
-          $match: {
-            $and: [
-              {
-                date: {
-                  $gte: new Date(year, month, 1),
-                },
-              },
-              {
-                date: {
-                  $lt: new Date(year, month + 1, 1),
-                },
-              },
-            ],
-          },
-        },
-      ]);
+    let query: any = {
+      $expr: {
+        $and: [
+          { $eq: [{ $year: "$date" }, year] },
+          { $eq: [{ $month: "$date" }, month] },
+        ],
+      },
+    };
+
+    if (storeID) {
+      query.storeID = storeID;
     }
+
+    if (shownOnly) {
+      query.isHidden = false;
+    }
+
+    return conn
+      .model("bills")
+      .find(query)
+      .populate("items.itemID", "reference description")
+      .populate("storeID", "name")
+      .populate("memberID", "code");
   }
 
   static fetchMemberTransactions() {

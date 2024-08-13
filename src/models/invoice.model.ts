@@ -129,36 +129,26 @@ class InvoiceModelModel {
   }
 
   static fetchReport(month: number, year: number, shownOnly: boolean = true) {
+    let query: any = {
+      $expr: {
+        $and: [
+          { $eq: [{ $month: "$date" }, month] },
+          { $eq: [{ $year: "$date" }, year] },
+        ],
+      },
+    };
+
     if (shownOnly) {
-      return conn
-        .model("invoices")
-        .find({
-          $expr: {
-            $and: [
-              { $eq: [{ $month: "$date" }, month] },
-              { $eq: [{ $year: "$date" }, year] },
-            ],
-          },
-          isHidden: false,
-        })
-        .populate("customerID", "name")
-        .populate("salesID", "name")
-        .populate("createdBy", "name");
-    } else {
-      return conn
-        .model("invoices")
-        .find({
-          $expr: {
-            $and: [
-              { $eq: [{ $month: "$date" }, month] },
-              { $eq: [{ $year: "$date" }, year] },
-            ],
-          },
-        })
-        .populate("customerID", "name")
-        .populate("salesID", "name")
-        .populate("createdBy", "name");
+      query.isHidden = false;
     }
+
+    return conn
+      .model("invoices")
+      .find(query)
+      .populate("customerID", "name")
+      .populate("salesID", "name")
+      .populate("createdBy", "name")
+      .populate("packingListID");
   }
 
   static fetchProductReport(
