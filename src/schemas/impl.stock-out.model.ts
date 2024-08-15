@@ -1,6 +1,11 @@
 import { model, Schema } from "mongoose";
 
 const StockOutSchema = new Schema({
+  itemID: {
+    type: Schema.Types.ObjectId,
+    required: true,
+    ref: "items",
+  },
   quantity: {
     type: Number,
     required: true,

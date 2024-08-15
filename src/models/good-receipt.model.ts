@@ -105,4 +105,38 @@ export class GoodReceiptModelModel {
       }),
     ]);
   }
+
+  static fetchReport(month: number, year: number) {
+    return conn
+      .model("good-receipts")
+      .find({
+        $expr: {
+          $and: [
+            { $eq: [{ $month: "$date" }, month] },
+            { $eq: [{ $year: "$date" }, year] },
+            { $eq: ["$isDelete", false] },
+          ],
+        },
+      })
+      .populate("supplierID", "name")
+      .populate("createdBy", "name")
+      .sort({
+        date: 1,
+      });
+  }
+
+  static fetchProductReport(month: number, year: number) {
+    return conn
+      .model("good-receipts")
+      .find({
+        $expr: {
+          $and: [
+            { $eq: [{ $month: "$date" }, month] },
+            { $eq: [{ $year: "$date" }, year] },
+            { $eq: ["$isDelete", false] },
+          ],
+        },
+      })
+      .populate("items.itemID", "reference description");
+  }
 }

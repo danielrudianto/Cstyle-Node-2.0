@@ -81,7 +81,7 @@ class ItemModelModel {
               path: "itemBrandID",
               select: "name",
             })
-            .populate("_id reference description createdAt images price")
+            .select("_id reference description createdAt images price")
             .populate({
               path: "itemTypeID",
               select: "name description",

@@ -6,6 +6,7 @@ import { LoggerType } from "../interfaces/logger.interface";
 import InvoiceModelModel from "../models/invoice.model";
 import { redisClient } from "../app";
 import StockOutModelModel from "../models/stock-out.model";
+import { GoodReceiptModelModel } from "../models/good-receipt.model";
 
 class ReportController {
   static fetchSalesReport = (req: Request, res: Response) => {
@@ -179,14 +180,12 @@ class ReportController {
               const billsResult: any[] = [];
 
               bills.forEach((bill) => {
-                const billID = bill._id;
+                const billID = bill._id.toString();
                 for (let i = 0; i < bill.items.length; i++) {
                   const itemID = bill.items[i].itemID;
-                  // get the sum of stock out
-                  console.log(itemID);
                   const stockOut = stockouts.filter(
                     (stockout) =>
-                      stockout.billID.toString() === billID.toString() &&
+                      stockout.billID.toString() === billID &&
                       stockout.itemID.toString() === itemID._id.toString()
                   );
 
@@ -203,7 +202,7 @@ class ReportController {
                     "Bill Number": bill.name,
                     Reference: bill.items[i].itemID.reference,
                     Description: bill.items[i].itemID.description,
-                    Quantity: bill.quantity,
+                    Quantity: bill.items[i].quantity,
                     Price: bill.items[i].price - bill.items[i].discount,
                     COGS: averagePrice,
                   });
@@ -211,6 +210,83 @@ class ReportController {
               });
 
               const invoicesResult = [];
+
+              invoices.forEach((invoice) => {
+                const invoiceID = invoice._id.toString();
+                if (invoice.packingListID != null) {
+                  for (let i = 0; i < invoice.packingListID.items.length; i++) {
+                    const itemID = invoice.packingListID.items[i].itemID;
+                    const stockOut = stockouts.filter(
+                      (stockout) =>
+                        stockout.invoiceID.toString() === invoiceID &&
+                        stockout.itemID.toString() === itemID._id.toString()
+                    );
+
+                    const stockOutPrice = stockOut.reduce(
+                      (acc, stockout) =>
+                        acc + stockout.stockIn.price * stockout.quantity,
+                      0
+                    );
+
+                    const averagePrice =
+                      stockOutPrice / invoice.packingListID.items[i].quantity;
+
+                    invoicesResult.push({
+                      ID: invoice._id,
+                      "Invoice Number": invoice.name,
+                      Reference:
+                        invoice.packingListID.items[i].itemID.reference,
+                      Description:
+                        invoice.packingListID.items[i].itemID.description,
+                      Quantity: invoice.packingListID.items[i].quantity,
+                      Price:
+                        invoice.packingListID.items[i].price -
+                        invoice.packingListID.items[i].discount,
+                      COGS: averagePrice,
+                    });
+                  }
+                } else if (invoice.deliverySlipID != null) {
+                  for (
+                    let i = 0;
+                    i < invoice.deliverySlipID.items.length;
+                    i++
+                  ) {
+                    const itemID = invoice.deliverySlipID.items[i].itemID;
+                    const stockOut = stockouts.filter(
+                      (stockout) =>
+                        stockout.invoiceID.toString() === invoiceID &&
+                        stockout.itemID.toString() === itemID._id.toString()
+                    );
+
+                    const stockOutPrice = stockOut.reduce(
+                      (acc, stockout) =>
+                        acc + stockout.stockIn.price * stockout.quantity,
+                      0
+                    );
+
+                    const averagePrice =
+                      stockOutPrice /
+                      (invoice.deliverySlipID.items[i].quantity -
+                        invoice.deliverySlipID.items[i].returned);
+
+                    invoicesResult.push({
+                      ID: invoice._id,
+                      "Invoice Number": invoice.name,
+                      Reference:
+                        invoice.deliverySlipID.items[i].itemID.reference,
+                      Description:
+                        invoice.deliverySlipID.items[i].itemID.description,
+                      Quantity:
+                        invoice.deliverySlipID.items[i].quantity -
+                        invoice.deliverySlipID.items[i].returned,
+                      Price:
+                        invoice.deliverySlipID.items[i].price -
+                        invoice.deliverySlipID.items[i].discount,
+                      COGS: averagePrice,
+                    });
+                  }
+                }
+              });
 
               return res.status(200).send({
                 bills: billsResult,
@@ -237,9 +313,68 @@ class ReportController {
       });
   };
 
-  static fetchPurchaseReport = (req: Request, res: Response) => {};
+  static fetchPurchaseReport = (req: Request, res: Response) => {
+    const month = req.body.month;
+    const year = req.body.year;
 
-  static fetchPurchaseProductReport = (req: Request, res: Response) => {};
+    GoodReceiptModelModel.fetchReport(month, year)
+      .then((result) => {
+        return res.status(200).send({
+          data: result.map((x, index) => {
+            return {
+              No: index + 1,
+              ID: x._id,
+              "Good Receipt Name": x.name,
+              Date: x.date.toString().split("T")[0],
+              Supplier: x.supplierID.name,
+              "Created by": x.createdBy.name,
+              Value: x.items.reduce(
+                (acc: any, item: any) =>
+                  acc + (item.price - item.discount) * item.quantity,
+                0
+              ),
+              Note: x.note,
+            };
+          }),
+        });
+      })
+      .catch((error) => {
+        console.error(`Error on fetching good receipt report ${error}`);
+        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+      });
+  };
+
+  static fetchPurchaseProductReport = (req: Request, res: Response) => {
+    const month = req.body.month;
+    const year = req.body.year;
+
+    GoodReceiptModelModel.fetchProductReport(month, year)
+      .then((result) => {
+        const data: any = [];
+        result.forEach((x) => {
+          x.items.forEach((y: any) => {
+            data.push({
+              ID: x._id,
+              "Good Receipt Name": x.name,
+              Date: x.date.toString().split("T")[0],
+              Supplier: x.supplierID.name,
+              "Created by": x.createdBy.name,
+              Reference: y.itemID.reference,
+              Description: y.itemID.description,
+              Quantity: y.quantity,
+              Price: y.price,
+              Discount: y.discount,
+            });
+          });
+        });
+
+        return res.status(200).send()
+      })
+      .catch((error) => {
+        console.error(`Error on fetching good receipt report ${error}`);
+        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+      });
+  };
 }
 
 export default ReportController;

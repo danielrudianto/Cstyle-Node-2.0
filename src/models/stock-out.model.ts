@@ -75,14 +75,6 @@ class StockOutModelModel {
   }
 
   static fetchProductReport(month: number, year: number) {
-    console.log(month);
-    console.log(year);
-    // $expr: {
-    //   $and: [
-    //     { $eq: [{ $year: "$date" }, year] },
-    //     { $eq: [{ $month: "$date" }, month] },
-    //   ],
-    // },
     return conn.model("stock-outs").aggregate([
       {
         $match: {
@@ -100,19 +92,19 @@ class StockOutModelModel {
           ],
         },
       },
-      // {
-      //   $lookup: {
-      //     from: "stock-ins",
-      //     localField: "stockInID",
-      //     foreignField: "_id",
-      //     as: "stockIn",
-      //   },
-      // },
-      // {
-      //   $unwind: {
-      //     path: "$stockIn",
-      //   },
-      // },
+      {
+        $lookup: {
+          from: "stock-ins",
+          localField: "stockInID",
+          foreignField: "_id",
+          as: "stockIn",
+        },
+      },
+      {
+        $unwind: {
+          path: "$stockIn",
+        },
+      },
     ]);
   }
 

@@ -105,6 +105,10 @@ const invoiceSchema = new mongoose.Schema({
 const Invoice = mongoose.model("invoices", invoiceSchema);
 
 const StockOutSchema = new mongoose.Schema({
+  itemID: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+  },
   quantity: {
     type: Number,
     required: true,
@@ -296,6 +300,7 @@ Promise.all([
               billID: stockOuts[i].billID,
               invoiceID: stockOuts[i].invoiceID,
               stockInID: stockIn._id,
+              itemID: stockIn.itemID,
             };
 
             quantity -= stockOut.quantity;

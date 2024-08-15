@@ -45,11 +45,17 @@ class BillModelModel {
             name: RegExp(data.keyword, "i"),
             $expr: {
               $and: [
-                { $eq: [{ $month: "$date" }, data.month] },
+                { $eq: [{ $month: "$date" }, data.month + 1] },
                 { $eq: [{ $year: "$date" }, data.year] },
               ],
             },
           })
+          .sort({
+            date: 1,
+          })
+          .populate("createdBy", "name")
+          .populate("memberID", "code name")
+          .populate("storeID", "name")
           .limit(20)
           .skip((data.page - 1) * 20),
         conn.model("bills").countDocuments({
@@ -57,7 +63,7 @@ class BillModelModel {
           name: RegExp(data.keyword, "i"),
           $expr: {
             $and: [
-              { $eq: [{ $month: "$date" }, data.month] },
+              { $eq: [{ $month: "$date" }, data.month + 1] },
               { $eq: [{ $year: "$date" }, data.year] },
             ],
           },
@@ -71,19 +77,24 @@ class BillModelModel {
             name: RegExp(data.keyword, "i"),
             $expr: {
               $and: [
-                { $eq: [{ $month: "$date" }, data.month] },
+                { $eq: [{ $month: "$date" }, data.month + 1] },
                 { $eq: [{ $year: "$date" }, data.year] },
               ],
             },
           })
+          .sort({
+            date: 1,
+          })
+          .populate("createdBy", "name")
+          .populate("memberID", "code name")
+          .populate("storeID", "name")
           .limit(20)
           .skip((data.page - 1) * 20),
-        ,
         conn.model("bills").countDocuments({
           name: RegExp(data.keyword, "i"),
           $expr: {
             $and: [
-              { $eq: [{ $month: "$date" }, data.month] },
+              { $eq: [{ $month: "$date" }, data.month + 1] },
               { $eq: [{ $year: "$date" }, data.year] },
             ],
           },
