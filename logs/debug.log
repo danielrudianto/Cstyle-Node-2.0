@@ -9084,3 +9084,61 @@ Use mongoose.model(name, schema)
 [2024-08-15 12:12:40] [INFO] MongoDB: Connected with MongoDB Database Engine
 [2024-08-15 12:12:40] [INFO] Redis: Connected with Redis Database Engine
 [2024-08-15 12:12:40] [INFO] Sync: Synced 38 users
+[2024-08-16 16:51:01] [INFO] Server: Server started on port 5000
+[2024-08-16 16:51:01] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-16 16:51:01] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:01] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:01] [INFO] Sync: Synced 38 users
+[2024-08-16 16:51:01] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:01] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:02] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:02] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:02] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:02] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:03] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:03] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:04] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:04] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:05] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:05] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:06] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:06] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:07] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:07] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:08] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:08] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:09] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:09] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:10] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:10] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:11] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:11] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:12] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-16 17:09:25] [INFO] Server: Server started on port 5000
+[2024-08-16 17:09:25] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-16 17:09:25] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-16 17:09:25] [INFO] Sync: Synced 38 users
+[2024-08-16 17:09:32] [INFO] Server: Server started on port 5000
+[2024-08-16 17:09:32] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-16 17:09:33] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-16 17:09:33] [INFO] Sync: Synced 38 users
+[2024-08-16 17:09:42] [INFO] Server: Server started on port 5000
+[2024-08-16 17:09:42] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-16 17:09:42] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-16 17:09:42] [INFO] Sync: Synced 38 users
+[2024-08-16 17:10:15] [INFO] Server: Server started on port 5000
+[2024-08-16 17:10:15] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-16 17:10:15] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-16 17:10:15] [INFO] Sync: Synced 38 users
+[2024-08-16 17:10:34] [INFO] Server: Server started on port 5000
+[2024-08-16 17:10:34] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-16 17:10:34] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-16 17:10:34] [INFO] Sync: Synced 38 users
+[2024-08-16 18:19:18] [INFO] Server: Server started on port 5000
+[2024-08-16 18:19:18] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-16 18:19:19] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-16 18:19:19] [INFO] Sync: Synced 38 users
+[2024-08-16 18:22:02] [INFO] Server: Server started on port 5000
+[2024-08-16 18:22:02] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-16 18:22:02] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-16 18:22:02] [INFO] Sync: Synced 38 users

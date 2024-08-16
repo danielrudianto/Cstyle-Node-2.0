@@ -1165,3 +1165,29 @@ Use mongoose.model(name, schema)
 [2024-08-15 10:16:42] [ERROR] Access Interceptor: Error on fetching user Error: User not found
 [2024-08-15 10:16:44] [ERROR] Access Interceptor: Error on fetching user Error: User not found
 [2024-08-15 10:46:45] [ERROR] Access Interceptor: Error on fetching user Error: User not found
+[2024-08-16 16:51:01] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:01] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:01] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:01] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:02] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:02] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:02] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:02] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:03] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:03] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:04] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:04] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:05] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:05] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:06] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:06] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:07] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:07] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:08] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:08] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:09] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:09] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:10] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:10] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:11] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-16 16:51:11] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379

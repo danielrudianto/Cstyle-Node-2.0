@@ -7,6 +7,7 @@ import InvoiceModelModel from "../models/invoice.model";
 import { redisClient } from "../app";
 import StockOutModelModel from "../models/stock-out.model";
 import { GoodReceiptModelModel } from "../models/good-receipt.model";
+import moment from "moment";
 
 class ReportController {
   static fetchSalesReport = (req: Request, res: Response) => {
@@ -91,8 +92,8 @@ class ReportController {
                     No: index + 1,
                     ID: x._id,
                     BillNumber: x.name,
-                    Date: x.date.toString().split("T")[0],
-                    Time: x.createdAt.toString().split("T")[1],
+                    Date: moment(x.date, "YYYY-MM-DD").format("DD/MM/YYYY"),
+                    Time: moment(x.createdAt).format("HH:mm:ss"),
                     Value: x.items.reduce(
                       (acc: any, item: any) =>
                         acc + (item.price - item.discount) * item.quantity,
@@ -106,7 +107,7 @@ class ReportController {
                     Voucher: VoucherPayment,
                     "Created by": x.createdBy.name,
                     Member: x.memberID == null ? "NO" : x.memberID,
-                    Remakrs: x.isHidden ? "H" : "",
+                    Remarks: x.isHidden ? "H" : "",
                   };
                 }),
                 invoices: invoices.map((x, index) => {
@@ -114,8 +115,8 @@ class ReportController {
                     No: index + 1,
                     ID: x._id,
                     "Invoice number": x.name,
-                    Date: x.date.toString().split("T")[0],
-                    Time: x.createdAt.toString().split("T")[1],
+                    Date: moment(x.date, "YYYY-MM-DD").format("DD/MM/YYYY"),
+                    Time: moment(x.createdAt).format("HH:mm:ss"),
                     Value: x.packingListID.items.reduce(
                       (acc: any, item: any) =>
                         acc + (item.price - item.discount) * item.quantity,
@@ -368,7 +369,7 @@ class ReportController {
           });
         });
 
-        return res.status(200).send()
+        return res.status(200).send();
       })
       .catch((error) => {
         console.error(`Error on fetching good receipt report ${error}`);
