@@ -108,7 +108,7 @@ export class GoodReceiptModelModel {
 
   static fetchReport(month: number, year: number) {
     return conn
-      .model("good-receipts")
+      .model("good-receipt")
       .find({
         $expr: {
           $and: [
@@ -127,7 +127,7 @@ export class GoodReceiptModelModel {
 
   static fetchProductReport(month: number, year: number) {
     return conn
-      .model("good-receipts")
+      .model("good-receipt")
       .find({
         $expr: {
           $and: [
@@ -137,6 +137,7 @@ export class GoodReceiptModelModel {
           ],
         },
       })
+      .populate("supplierID", "name")
       .populate("items.itemID", "reference description");
   }
 }

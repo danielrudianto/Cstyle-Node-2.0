@@ -208,4 +208,9 @@ export enum ErrorList {
   PRICE_INVALID = "Price is invalid",
   PRICE_NEGATIVE = "Price cannot be negative",
   ACCESS_DENIED = "Access denied",
+
+  INVOICE_REQUIRED = "Invoice is required",
+  INVOICE_ID_REQUIRED = "Invoice id is required",
+  BILL_REQUIRED = "Bill is required",
+  BILL_ID_REQUIRED = "Bill id is required",
 }

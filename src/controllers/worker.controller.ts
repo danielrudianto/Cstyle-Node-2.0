@@ -286,7 +286,6 @@ class WorkerController {
   }
 
   static async insertStockIn(data: StockInInterface) {
-    console.log(data.date);
     const [result, _] = await Promise.all([
       new StockInModelModel({
         date: data.date,

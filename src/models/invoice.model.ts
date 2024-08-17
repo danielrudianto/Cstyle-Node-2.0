@@ -1,6 +1,7 @@
 import {
   InvoiceFetchInterface,
   InvoiceInterface,
+  InvoiceUpdateInterface,
   UpdateInvoicePaymentInterface,
 } from "../interfaces/invoice.interface";
 import { connectionFactory } from "../utils/connector.utils";
@@ -253,6 +254,16 @@ class InvoiceModelModel {
       ],
       isPaid: true,
     });
+  }
+
+  static updateReport(data: InvoiceUpdateInterface[]) {
+    return Promise.all(
+      data.map((item) =>
+        conn.model("invoices").findByIdAndUpdate(item.id, {
+          isHidden: item.isHidden,
+        })
+      )
+    );
   }
 
   static deleteByID(id: string, userID: string) {

@@ -32,3 +32,8 @@ export interface UpdateInvoicePaymentInterface {
   paidBy: string;
   amount: number;
 }
+
+export interface InvoiceUpdateInterface {
+  id: string;
+  isHidden: boolean;
+}

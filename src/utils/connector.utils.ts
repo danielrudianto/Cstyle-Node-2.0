@@ -11,7 +11,7 @@ import MembershipSchema from "../schemas/ins.membership.model";
 import PackingListSchema from "../schemas/ins.packing-list.model";
 import PointSchema from "../schemas/ins.point.model";
 import PurchaseInvoiceSchema from "../schemas/ins.purchase-invoice.model";
-import { QuotationSchema } from "../schemas/ins.quotation.model";
+import QuotationSchema from "../schemas/ins.quotation.model";
 import StockRequestSchema from "../schemas/ins.stock-request.model";
 import StoreSchema from "../schemas/ins.store.model";
 import UserSchema from "../schemas/ins.user.model";
@@ -52,8 +52,6 @@ export function connectionFactory() {
   conn.model("itemtypes", itemTypeSchema);
   conn.model("items", ItemSchema);
   conn.model("suppliers", SupplierSchema);
-  conn.model("packing-list", PackingListSchema);
-  conn.model("delivery-slip", DeliverySlipSchema);
 
   conn.model("stock-ins", StockInSchema);
   conn.model("stock-outs", StockOutSchema);

@@ -1242,3 +1242,28 @@ Use mongoose.model(name, schema)
 [2024-08-17 09:57:35] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading 'toString')
 [2024-08-17 09:59:01] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading 'toString')
 [2024-08-17 09:59:36] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading 'toString')
+[2024-08-17 12:52:19] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 12:52:19] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 12:52:19] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 12:52:20] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 12:52:20] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 12:52:20] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 12:52:20] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 12:52:20] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 12:52:21] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 12:52:21] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 12:52:22] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 12:52:22] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 12:52:23] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 12:52:23] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 12:52:24] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 12:52:24] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 12:52:25] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 12:52:25] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 12:52:26] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 12:52:26] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 12:52:27] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 12:52:27] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 12:52:28] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 12:52:28] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 12:52:29] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379

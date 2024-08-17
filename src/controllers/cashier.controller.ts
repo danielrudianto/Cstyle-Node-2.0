@@ -249,7 +249,6 @@ class CashierController {
     const storeID = req.body.storeID;
     BillModelModel.fetchStoreReport(storeID)
       .then((bills) => {
-        console.log(bills);
         const paymentMethods = [
           "cash",
           "card",

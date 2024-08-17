@@ -33,3 +33,8 @@ export interface BillFetchInterface {
   isOwner: boolean;
   keyword: string;
 }
+
+export interface BillUpdateInterface {
+  id: string;
+  isHidden: boolean;
+}

@@ -5,6 +5,7 @@ import {
   BillInterface,
   BillItemInterface,
   BillPaymentInterface,
+  BillUpdateInterface,
 } from "../interfaces/bill.interface";
 
 const conn = connectionFactory();
@@ -277,7 +278,8 @@ class BillModelModel {
       .model("bills")
       .find(query)
       .populate("createdBy", "name")
-      .populate("memberID", "code");
+      .populate("memberID", "code")
+      .populate("storeID", "name");
   }
 
   static fetchStoreReport(storeID: string) {
@@ -389,6 +391,16 @@ class BillModelModel {
         },
       ]),
     ]);
+  }
+
+  static updateReport(data: BillUpdateInterface[]) {
+    return Promise.all(
+      data.map((item) =>
+        conn.model("bills").findByIdAndUpdate(item.id, {
+          isHidden: item.isHidden,
+        })
+      )
+    );
   }
 }
 export default BillModelModel;

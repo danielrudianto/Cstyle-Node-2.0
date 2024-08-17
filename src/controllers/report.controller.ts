@@ -91,7 +91,8 @@ class ReportController {
                   return {
                     No: index + 1,
                     ID: x._id,
-                    BillNumber: x.name,
+                    Store: x.storeID == null ? "" : x.storeID.name,
+                    "Bill number": x.name,
                     Date: moment(x.date, "YYYY-MM-DD").format("DD/MM/YYYY"),
                     Time: moment(x.createdAt).format("HH:mm:ss"),
                     Value: x.items.reduce(
@@ -211,7 +212,7 @@ class ReportController {
                 }
               });
 
-              const invoicesResult = [];
+              const invoicesResult: any[] = [];
 
               invoices.forEach((invoice) => {
                 const invoiceID = invoice._id.toString();
@@ -293,7 +294,7 @@ class ReportController {
 
               return res.status(200).send({
                 bills: billsResult,
-                invoices: invoices,
+                invoices: invoicesResult,
               });
             })
             .catch((error) => {
@@ -328,8 +329,8 @@ class ReportController {
               No: index + 1,
               ID: x._id,
               "Good Receipt Name": x.name,
-              Date: x.date.toString().split("T")[0],
-              Supplier: x.supplierID.name,
+              Date: moment(x.date, "YYYY-MM-DD").format("DD/MM/YYYY"),
+              Supplier: x.supplierID == null ? "" : x.supplierID.name,
               "Created by": x.createdBy.name,
               Value: x.items.reduce(
                 (acc: any, item: any) =>
@@ -359,8 +360,8 @@ class ReportController {
             data.push({
               ID: x._id,
               "Good Receipt Name": x.name,
-              Date: x.date.toString().split("T")[0],
-              Supplier: x.supplierID.name,
+              Date: moment(x.date, "YYYY-MM-DD").format("DD/MM/YYYY"),
+              Supplier: x.supplierID == null ? "" : x.supplierID.name,
               "Created by": x.createdBy.name,
               Reference: y.itemID.reference,
               Description: y.itemID.description,
@@ -371,10 +372,32 @@ class ReportController {
           });
         });
 
-        return res.status(200).send();
+        return res.status(200).send({
+          data: data,
+        });
       })
       .catch((error) => {
         console.error(`Error on fetching good receipt report ${error}`);
+        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+      });
+  };
+
+  static updateSalesReport = (req: Request, res: Response) => {
+    const invoices = req.body.invoices;
+    const bills = req.body.bills;
+
+    Promise.all([
+      InvoiceModelModel.updateReport(invoices),
+      BillModelModel.updateReport(bills),
+    ])
+      .then(() => {
+        return res.status(200).send({
+          invoices: invoices.length,
+          bills: bills.length,
+        });
+      })
+      .catch((error) => {
+        console.error(`Error on updating sales report ${error}`);
         return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
       });
   };
