@@ -1,7 +1,7 @@
 import { model, Schema, Types } from "mongoose";
 
 const PackingListItemSchema = new Schema({
-  itemID: { type: Types.ObjectId, required: true, ref: "items" },
+  itemID: { type: Types.ObjectId, required: true, ref: "item" },
   quantity: { type: Number, required: true },
   price: { type: Number, required: true },
   discount: { type: Number, required: true },

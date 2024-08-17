@@ -169,12 +169,12 @@ class ReportController {
           Promise.all([
             BillModelModel.fetchProductReport(storeID, month, year),
             storeID == null
-              ? Promise.resolve([])
-              : InvoiceModelModel.fetchProductReport(
+              ? InvoiceModelModel.fetchProductReport(
                   month,
                   year,
                   accessLevel === 0
-                ),
+                )
+              : Promise.resolve([]),
             StockOutModelModel.fetchProductReport(month, year),
           ])
             .then(([bills, invoices, stockouts]) => {
@@ -184,11 +184,12 @@ class ReportController {
                 const billID = bill._id.toString();
                 for (let i = 0; i < bill.items.length; i++) {
                   const itemID = bill.items[i].itemID;
-                  const stockOut = stockouts.filter(
-                    (stockout) =>
+                  const stockOut = stockouts.filter((stockout) => {
+                    return (
                       stockout.billID.toString() === billID &&
                       stockout.itemID.toString() === itemID._id.toString()
-                  );
+                    );
+                  });
 
                   const stockOutPrice = stockOut.reduce(
                     (acc, stockout) =>
@@ -217,11 +218,12 @@ class ReportController {
                 if (invoice.packingListID != null) {
                   for (let i = 0; i < invoice.packingListID.items.length; i++) {
                     const itemID = invoice.packingListID.items[i].itemID;
-                    const stockOut = stockouts.filter(
-                      (stockout) =>
-                        stockout.invoiceID.toString() === invoiceID &&
-                        stockout.itemID.toString() === itemID._id.toString()
-                    );
+                    const stockOut = stockouts.filter((stockout) => {
+                      return (
+                        stockout.itemID.toString() === itemID._id.toString() &&
+                        stockout.invoiceID.toString() === invoiceID
+                      );
+                    });
 
                     const stockOutPrice = stockOut.reduce(
                       (acc, stockout) =>

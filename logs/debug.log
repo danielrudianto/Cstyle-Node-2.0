@@ -9142,3 +9142,172 @@ Use mongoose.model(name, schema)
 [2024-08-16 18:22:02] [INFO] MongoDB: Connected with MongoDB Database Engine
 [2024-08-16 18:22:02] [INFO] Redis: Connected with Redis Database Engine
 [2024-08-16 18:22:02] [INFO] Sync: Synced 38 users
+[2024-08-17 08:31:49] [INFO] Server: Server started on port 5000
+[2024-08-17 08:31:49] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-17 08:31:49] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:49] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:49] [INFO] Sync: Synced 38 users
+[2024-08-17 08:31:49] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:49] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:50] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:50] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:50] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:50] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:51] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:51] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:52] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:52] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:53] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:53] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:54] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:54] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:55] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:55] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:56] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:56] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:57] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:57] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:58] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:58] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:59] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:59] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:32:00] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:32:00] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:32:01] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:32:01] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-17 08:40:44] [INFO] Server: Server started on port 5000
+[2024-08-17 08:40:44] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-17 08:40:45] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-17 08:40:45] [INFO] Sync: Synced 38 users
+[2024-08-17 08:42:15] [INFO] Server: Server started on port 5000
+[2024-08-17 08:42:15] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-17 08:42:15] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-17 08:42:15] [INFO] Sync: Synced 38 users
+[2024-08-17 08:42:22] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of undefined (reading 'length')
+[2024-08-17 08:43:38] [INFO] Server: Server started on port 5000
+[2024-08-17 08:43:38] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-17 08:43:38] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-17 08:43:38] [INFO] Sync: Synced 38 users
+[2024-08-17 08:43:44] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of undefined (reading 'length')
+[2024-08-17 08:43:59] [INFO] Server: Server started on port 5000
+[2024-08-17 08:43:59] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-17 08:43:59] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-17 08:43:59] [INFO] Sync: Synced 38 users
+[2024-08-17 08:44:04] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of undefined (reading 'length')
+[2024-08-17 08:44:23] [INFO] Server: Server started on port 5000
+[2024-08-17 08:44:23] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-17 08:44:23] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-17 08:44:23] [INFO] Sync: Synced 38 users
+[2024-08-17 08:44:53] [INFO] Server: Server started on port 5000
+[2024-08-17 08:44:53] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-17 08:44:53] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-17 08:44:53] [INFO] Sync: Synced 38 users
+[2024-08-17 08:45:07] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of undefined (reading 'length')
+[2024-08-17 08:45:33] [INFO] Server: Server started on port 5000
+[2024-08-17 08:45:33] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-17 08:45:33] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-17 08:45:33] [INFO] Sync: Synced 38 users
+[2024-08-17 08:45:52] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading 'toString')
+[2024-08-17 08:48:16] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading 'toString')
+[2024-08-17 08:49:06] [INFO] Server: Server started on port 5000
+[2024-08-17 08:49:06] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-17 08:49:06] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-17 08:49:06] [INFO] Sync: Synced 38 users
+[2024-08-17 08:49:23] [INFO] Server: Server started on port 5000
+[2024-08-17 08:49:23] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-17 08:49:23] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-17 08:49:23] [INFO] Sync: Synced 38 users
+[2024-08-17 08:50:26] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading 'toString')
+[2024-08-17 08:50:49] [INFO] Server: Server started on port 5000
+[2024-08-17 08:50:49] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-17 08:50:49] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-17 08:50:49] [INFO] Sync: Synced 38 users
+[2024-08-17 08:51:03] [INFO] Server: Server started on port 5000
+[2024-08-17 08:51:03] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-17 08:51:03] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-17 08:51:04] [INFO] Sync: Synced 38 users
+[2024-08-17 08:54:32] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading 'toString')
+[2024-08-17 08:54:58] [INFO] Server: Server started on port 5000
+[2024-08-17 08:54:58] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-17 08:54:58] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-17 08:54:58] [INFO] Sync: Synced 38 users
+[2024-08-17 08:55:05] [INFO] Server: Server started on port 5000
+[2024-08-17 08:55:05] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-17 08:55:05] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-17 08:55:05] [INFO] Sync: Synced 38 users
+[2024-08-17 09:16:29] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading 'toString')
+[2024-08-17 09:16:46] [INFO] Server: Server started on port 5000
+[2024-08-17 09:16:46] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-17 09:16:47] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-17 09:16:47] [INFO] Sync: Synced 38 users
+[2024-08-17 09:20:52] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading 'toString')
+[2024-08-17 09:21:11] [INFO] Server: Server started on port 5000
+[2024-08-17 09:21:11] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-17 09:21:11] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-17 09:21:11] [INFO] Sync: Synced 38 users
+[2024-08-17 09:39:32] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading 'toString')
+[2024-08-17 09:39:50] [INFO] Server: Server started on port 5000
+[2024-08-17 09:39:50] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-17 09:39:50] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-17 09:39:50] [INFO] Sync: Synced 38 users
+[2024-08-17 09:40:00] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading 'toString')
+[2024-08-17 09:43:13] [INFO] Server: Server started on port 5000
+[2024-08-17 09:43:13] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-17 09:43:13] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-17 09:43:13] [INFO] Sync: Synced 38 users
+[2024-08-17 09:43:35] [INFO] Server: Server started on port 5000
+[2024-08-17 09:43:35] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-17 09:43:35] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-17 09:43:35] [INFO] Sync: Synced 38 users
+[2024-08-17 09:49:10] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading 'toString')
+[2024-08-17 09:49:50] [INFO] Server: Server started on port 5000
+[2024-08-17 09:49:50] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-17 09:49:50] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-17 09:49:51] [INFO] Sync: Synced 38 users
+[2024-08-17 09:50:01] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading 'toString')
+[2024-08-17 09:53:50] [INFO] Server: Server started on port 5000
+[2024-08-17 09:53:50] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-17 09:53:50] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-17 09:53:50] [INFO] Sync: Synced 38 users
+[2024-08-17 09:53:53] [ERROR] Sales report: Error on fetching sales product report data MissingSchemaError: Schema hasn't been registered for model "Item".
+Use mongoose.model(name, schema)
+[2024-08-17 09:54:12] [INFO] Server: Server started on port 5000
+[2024-08-17 09:54:12] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-17 09:54:12] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-17 09:54:12] [INFO] Sync: Synced 38 users
+[2024-08-17 09:54:19] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading 'toString')
+[2024-08-17 09:55:16] [INFO] Server: Server started on port 5000
+[2024-08-17 09:55:16] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-17 09:55:16] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-17 09:55:16] [INFO] Sync: Synced 38 users
+[2024-08-17 09:55:27] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading 'toString')
+[2024-08-17 09:56:11] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading 'toString')
+[2024-08-17 09:56:45] [INFO] Server: Server started on port 5000
+[2024-08-17 09:56:45] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-17 09:56:45] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-17 09:56:45] [INFO] Sync: Synced 38 users
+[2024-08-17 09:57:35] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading 'toString')
+[2024-08-17 09:58:41] [INFO] Server: Server started on port 5000
+[2024-08-17 09:58:41] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-17 09:58:41] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-17 09:58:41] [INFO] Sync: Synced 38 users
+[2024-08-17 09:59:01] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading 'toString')
+[2024-08-17 09:59:29] [INFO] Server: Server started on port 5000
+[2024-08-17 09:59:29] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-17 09:59:29] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-17 09:59:29] [INFO] Sync: Synced 38 users
+[2024-08-17 09:59:36] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading 'toString')
+[2024-08-17 09:59:53] [INFO] Server: Server started on port 5000
+[2024-08-17 09:59:53] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-17 09:59:59] [INFO] Server: Server started on port 5000
+[2024-08-17 09:59:59] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-17 09:59:59] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-17 09:59:59] [INFO] Sync: Synced 38 users
+[2024-08-17 10:00:35] [INFO] Server: Server started on port 5000
+[2024-08-17 10:00:35] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-17 10:00:35] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-17 10:00:35] [INFO] Sync: Synced 38 users
+[2024-08-17 10:00:45] [INFO] Server: Server started on port 5000
+[2024-08-17 10:00:45] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-17 10:00:45] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-17 10:00:45] [INFO] Sync: Synced 38 users

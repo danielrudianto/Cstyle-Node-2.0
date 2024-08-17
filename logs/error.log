@@ -1191,3 +1191,54 @@ Use mongoose.model(name, schema)
 [2024-08-16 16:51:10] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
 [2024-08-16 16:51:11] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
 [2024-08-16 16:51:11] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:49] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:49] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:49] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:49] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:50] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:50] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:50] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:50] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:51] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:51] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:52] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:52] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:53] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:53] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:54] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:54] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:55] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:55] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:56] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:56] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:57] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:57] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:58] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:58] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:59] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:31:59] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:32:00] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:32:00] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:32:01] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-17 08:42:22] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of undefined (reading 'length')
+[2024-08-17 08:43:44] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of undefined (reading 'length')
+[2024-08-17 08:44:04] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of undefined (reading 'length')
+[2024-08-17 08:45:07] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of undefined (reading 'length')
+[2024-08-17 08:45:52] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading 'toString')
+[2024-08-17 08:48:16] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading 'toString')
+[2024-08-17 08:50:26] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading 'toString')
+[2024-08-17 08:54:32] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading 'toString')
+[2024-08-17 09:16:29] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading 'toString')
+[2024-08-17 09:20:52] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading 'toString')
+[2024-08-17 09:39:32] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading 'toString')
+[2024-08-17 09:40:00] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading 'toString')
+[2024-08-17 09:49:10] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading 'toString')
+[2024-08-17 09:50:01] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading 'toString')
+[2024-08-17 09:53:53] [ERROR] Sales report: Error on fetching sales product report data MissingSchemaError: Schema hasn't been registered for model "Item".
+Use mongoose.model(name, schema)
+[2024-08-17 09:54:19] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading 'toString')
+[2024-08-17 09:55:27] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading 'toString')
+[2024-08-17 09:56:11] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading 'toString')
+[2024-08-17 09:57:35] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading 'toString')
+[2024-08-17 09:59:01] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading 'toString')
+[2024-08-17 09:59:36] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading 'toString')

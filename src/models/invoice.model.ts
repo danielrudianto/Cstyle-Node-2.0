@@ -168,8 +168,23 @@ class InvoiceModelModel {
           },
           isHidden: false,
         })
-        .populate("deliverySlipID.items.itemID", "reference description")
-        .populate("packingListID.items.itemID", "reference description")
+        .populate({
+          path: "packingListID",
+          populate: {
+            path: "items.itemID",
+            model: "items",
+            select: "reference description _id", // add _id to retrieve the entire document
+          },
+        })
+        .populate({
+          path: "deliverySlipID",
+          populate: {
+            path: "items.itemID",
+            model: "items",
+            select: "reference description _id", // add _id to retrieve the entire document
+          },
+        })
+        .populate("packingListID.customerID", "name")
         .populate("deliverySlipID.customerID", "name");
     } else {
       return conn
@@ -182,8 +197,23 @@ class InvoiceModelModel {
             ],
           },
         })
-        .populate("deliverySlipID.items.itemID", "reference description")
-        .populate("packingListID.items.itemID", "reference description")
+        .populate({
+          path: "packingListID",
+          populate: {
+            path: "items.itemID",
+            model: "items",
+            select: "reference description _id", // add _id to retrieve the entire document
+          },
+        })
+        .populate({
+          path: "deliverySlipID",
+          populate: {
+            path: "items.itemID",
+            model: "items",
+            select: "reference description _id", // add _id to retrieve the entire document
+          },
+        })
+        .populate("packingListID.customerID", "name")
         .populate("deliverySlipID.customerID", "name");
     }
   }
