@@ -50,7 +50,7 @@ class PackingListModelModel {
         }
         return Promise.all([
             conn
-                .model("packing-list")
+                .model("packing-lists")
                 .find({
                 $or: filters,
                 name: { $regex: data.keyword, $options: "i" },
@@ -82,7 +82,7 @@ class PackingListModelModel {
     }
     static fetchByID(id) {
         return conn
-            .model("packing-list")
+            .model("packing-lists")
             .findById(id)
             .populate("items.itemID")
             .populate("customerID", "name address phoneNumber")
