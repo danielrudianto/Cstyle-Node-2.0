@@ -31,7 +31,7 @@ class PackingListModelModel {
   }
 
   create() {
-    return conn.model("packing-list").create({
+    return conn.model("packing-lists").create({
       name: this.name,
       date: this.date,
       note: this.note,
@@ -77,7 +77,7 @@ class PackingListModelModel {
         .populate("deletedBy", "name")
         .limit(20)
         .skip((data.page - 1) * 20),
-      conn.model("packing-list").countDocuments({
+      conn.model("packing-lists").countDocuments({
         $or: filters,
         name: { $regex: data.keyword, $options: "i" },
         $expr: {
@@ -100,7 +100,7 @@ class PackingListModelModel {
   }
 
   static deleteByID(id: string, userID: string) {
-    return conn.model("packing-list").findByIdAndUpdate(id, {
+    return conn.model("packing-lists").findByIdAndUpdate(id, {
       isDelete: true,
       deletedBy: userID,
       deletedAt: new Date(),
@@ -135,7 +135,7 @@ class PackingListModelModel {
   }
 
   static async generateName(date: Date): Promise<string> {
-    const count = await conn.model("packing-list").countDocuments({
+    const count = await conn.model("packing-lists").countDocuments({
       $expr: {
         $and: [
           { $eq: [{ $month: "$date" }, date.getMonth() + 1] },
