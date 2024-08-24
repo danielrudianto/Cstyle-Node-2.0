@@ -1314,3 +1314,18 @@ Use mongoose.model(name, schema)
 [2024-08-23 21:54:40] [ERROR] Master worker: Job 1828 [removeStockIn] has failed with Cannot read properties of null (reading '_id')
 [2024-08-23 21:54:40] [ERROR] Master worker: Job 1829 [removeStockIn] has failed with Cannot read properties of null (reading '_id')
 [2024-08-23 21:54:40] [ERROR] Master worker: Job 1830 [removeStockIn] has failed with Cannot read properties of null (reading '_id')
+[2024-08-24 18:38:57] [ERROR] Redis: Error: Socket closed unexpectedly
+[2024-08-24 18:38:57] [ERROR] Redis: Error: read ECONNRESET
+[2024-08-24 18:38:57] [ERROR] Redis: Error: read ECONNRESET
+[2024-08-24 18:38:57] [ERROR] Redis: Error: Socket closed unexpectedly
+[2024-08-24 18:38:57] [ERROR] Redis: Error: Socket closed unexpectedly
+[2024-08-24 18:38:57] [ERROR] Redis: Error: Socket closed unexpectedly
+[2024-08-24 18:38:57] [ERROR] Redis: Error: Socket closed unexpectedly
+[2024-08-24 18:38:57] [ERROR] Redis: Error: Socket closed unexpectedly
+[2024-08-24 18:38:57] [ERROR] Redis: Error: Socket closed unexpectedly
+[2024-08-24 18:38:57] [ERROR] Redis: Error: Socket closed unexpectedly
+[2024-08-24 18:38:57] [ERROR] Redis: Error: Socket closed unexpectedly
+[2024-08-24 18:38:57] [ERROR] Redis: Error: Socket closed unexpectedly
+[2024-08-24 18:38:57] [ERROR] Redis: Error: Socket closed unexpectedly
+[2024-08-24 18:38:57] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-24 18:38:58] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379

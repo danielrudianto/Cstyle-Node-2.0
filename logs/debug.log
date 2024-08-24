@@ -9689,3 +9689,22 @@ Use mongoose.model(name, schema)
 [2024-08-23 21:58:59] [INFO] Sync: Synced 38 users
 [2024-08-23 22:02:59] [INFO] Master worker: Job 1833 [insertStockIn] completed at Fri Aug 23 2024 22:02:59 GMT+0700 (Western Indonesia Time)
 [2024-08-23 22:02:59] [INFO] Master worker: Job 1834 [insertStockIn] completed at Fri Aug 23 2024 22:02:59 GMT+0700 (Western Indonesia Time)
+[2024-08-24 14:30:43] [INFO] Server: Server started on port 5000
+[2024-08-24 14:30:43] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-24 14:30:43] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-24 14:30:43] [INFO] Sync: Synced 38 users
+[2024-08-24 18:38:57] [ERROR] Redis: Error: Socket closed unexpectedly
+[2024-08-24 18:38:57] [ERROR] Redis: Error: read ECONNRESET
+[2024-08-24 18:38:57] [ERROR] Redis: Error: read ECONNRESET
+[2024-08-24 18:38:57] [ERROR] Redis: Error: Socket closed unexpectedly
+[2024-08-24 18:38:57] [ERROR] Redis: Error: Socket closed unexpectedly
+[2024-08-24 18:38:57] [ERROR] Redis: Error: Socket closed unexpectedly
+[2024-08-24 18:38:57] [ERROR] Redis: Error: Socket closed unexpectedly
+[2024-08-24 18:38:57] [ERROR] Redis: Error: Socket closed unexpectedly
+[2024-08-24 18:38:57] [ERROR] Redis: Error: Socket closed unexpectedly
+[2024-08-24 18:38:57] [ERROR] Redis: Error: Socket closed unexpectedly
+[2024-08-24 18:38:57] [ERROR] Redis: Error: Socket closed unexpectedly
+[2024-08-24 18:38:57] [ERROR] Redis: Error: Socket closed unexpectedly
+[2024-08-24 18:38:57] [ERROR] Redis: Error: Socket closed unexpectedly
+[2024-08-24 18:38:57] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-24 18:38:58] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
