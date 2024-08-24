@@ -4,6 +4,7 @@ import { LoggerType } from "../interfaces/logger.interface";
 import ItemModelModel from "../models/item.model";
 import StockModelModel from "../models/stock.model";
 import LoggerHelper from "../utils/logger.utils";
+import StoreModelModel from "../models/store.model";
 
 class ItemStockController {
   static fetch = (req: Request, res: Response) => {
@@ -116,6 +117,30 @@ class ItemStockController {
         new LoggerHelper({
           type: LoggerType.error,
           message: `Error on fetching item stock: ${error}`,
+          tag: "ItemStockController",
+        }).log();
+
+        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+      });
+  };
+
+  static download = (req: Request, res: Response) => {
+    Promise.all([
+      StockModelModel.fetchInitial(),
+      ItemModelModel.download(),
+      StoreModelModel.fetchOthers(null),
+    ])
+      .then(([stocks, items, stores]) => {
+        return res.status(200).send({
+          stores: stores,
+          items: items,
+          stocks: stocks,
+        });
+      })
+      .catch((error) => {
+        new LoggerHelper({
+          type: LoggerType.error,
+          message: `Error on downloading item stock: ${error}`,
           tag: "ItemStockController",
         }).log();
 

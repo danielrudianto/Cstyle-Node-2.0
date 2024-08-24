@@ -3,6 +3,7 @@ import ItemStockController from "../controllers/item-stock.controller";
 
 const router = Router();
 
+router.get("/download", ItemStockController.download);
 router.get("/:id", ItemStockController.fetchByItemID);
 router.get("/", ItemStockController.fetch);
 

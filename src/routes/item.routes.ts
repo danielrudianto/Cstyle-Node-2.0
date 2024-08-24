@@ -94,6 +94,7 @@ router.put(
 );
 
 router.get("/v2", ItemController.fetchV2);
+router.get("/download", ItemController.download);
 router.get(
   "/:id",
   AccessInterceptor.administratorRequired,

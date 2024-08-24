@@ -1295,3 +1295,22 @@ Use mongoose.model(name, schema)
 [2024-08-21 22:27:22] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
 [2024-08-21 22:27:23] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
 [2024-08-21 22:27:23] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-23 10:36:51] [ERROR] Item: Error on fetching item TypeError: Cannot read properties of null (reading 'name')
+[2024-08-23 15:28:01] [ERROR] Sales invoice: Error on fetching sales invoice MissingSchemaError: Schema hasn't been registered for model "item".
+Use mongoose.model(name, schema)
+[2024-08-23 15:28:55] [ERROR] Sales invoice: Error on fetching sales invoice MissingSchemaError: Schema hasn't been registered for model "item".
+Use mongoose.model(name, schema)
+[2024-08-23 15:53:42] [ERROR] Sales invoice: Error on fetching sales invoice MissingSchemaError: Schema hasn't been registered for model "item".
+Use mongoose.model(name, schema)
+[2024-08-23 15:57:29] [ERROR] Sales invoice: Error on fetching sales invoice MissingSchemaError: Schema hasn't been registered for model "item".
+Use mongoose.model(name, schema)
+[2024-08-23 16:00:24] [ERROR] Sales invoice: Error on fetching sales invoice MissingSchemaError: Schema hasn't been registered for model "item".
+Use mongoose.model(name, schema)
+[2024-08-23 16:04:55] [ERROR] Sales invoice: Error on fetching sales invoice MissingSchemaError: Schema hasn't been registered for model "item".
+Use mongoose.model(name, schema)
+[2024-08-23 16:05:36] [ERROR] Sales invoice: Error on fetching sales invoice MissingSchemaError: Schema hasn't been registered for model "item".
+Use mongoose.model(name, schema)
+[2024-08-23 21:53:58] [ERROR] Good receipt: Error on fetching good receipt Error: Maximum execution time is exceeded 651d274a72d3c82697513024:
+[2024-08-23 21:54:40] [ERROR] Master worker: Job 1828 [removeStockIn] has failed with Cannot read properties of null (reading '_id')
+[2024-08-23 21:54:40] [ERROR] Master worker: Job 1829 [removeStockIn] has failed with Cannot read properties of null (reading '_id')
+[2024-08-23 21:54:40] [ERROR] Master worker: Job 1830 [removeStockIn] has failed with Cannot read properties of null (reading '_id')

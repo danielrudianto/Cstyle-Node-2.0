@@ -272,5 +272,111 @@ class GoodReceiptController {
       }
     });
   };
+
+  static deleteByID = (req: Request, res: Response) => {
+    const id = req.params.id;
+    const userID = req.body.userID;
+    GoodReceiptModelModel.fetchByID(id)
+      .then(async (goodReceipt) => {
+        if (!goodReceipt) {
+          return res.status(404).send(ErrorList["GOOD_RECEIPT_NOT_FOUND"]);
+        }
+
+        if (goodReceipt.isDelete) {
+          return res
+            .status(404)
+            .send(ErrorList["GOOD_RECEIPT_ALREADY_DELETED"]);
+        }
+
+        await lock.acquire(
+          goodReceipt.items.map((x: any) => {
+            return `${x.itemID._id.toString()}:`;
+          }),
+          (done) => {
+            StockModelModel.checkStockByItemIDs(
+              goodReceipt.items.map((x: any) => {
+                return x.itemID._id;
+              }),
+              null
+            ).then((stocks) => {
+              let validation = true;
+
+              for (let i = 0; i < goodReceipt.items.length; i++) {
+                const stockIndex = stocks.findIndex(
+                  (x: any) =>
+                    x.itemID.toString() ==
+                    goodReceipt.items[i].itemID._id.toString()
+                );
+
+                if (stockIndex == -1) {
+                  validation = false;
+                } else {
+                  if (
+                    stocks[stockIndex].quantity < goodReceipt.items[i].quantity
+                  ) {
+                    validation = false;
+                  }
+                }
+              }
+
+              if (!validation) {
+                done();
+                return res.status(400).send(ErrorList["INSUFFICIENT_STOCK"]);
+              }
+
+              GoodReceiptModelModel.deleteByID(id, userID)
+                .then((result) => {
+                  if (result) {
+                    goodReceipt.items.forEach(async (x: any) => {
+                      await new StockModelModel({
+                        quantity: x.quantity * -1,
+                        itemID: x.itemID,
+                        storeID: null,
+                      }).update();
+
+                      const data: RemoveStockInInterface = {
+                        itemID: x.itemID,
+                        quantity: x.quantity,
+                        goodReceiptID: id,
+                        adjustmentCaseID: null,
+                        storeID: null,
+                      };
+                      await queue.add("removeStockIn", data);
+
+                      done();
+                      return res.status(200).send(result);
+                    });
+                  } else {
+                    return res
+                      .status(404)
+                      .send(ErrorList["GOOD_RECEIPT_NOT_FOUND"]);
+                  }
+                })
+                .catch((error) => {
+                  done();
+                  
+                  new LoggerHelper({
+                    message: `Error on deleting good receipt ${error}`,
+                    tag: "Good receipt",
+                    type: LoggerType.error,
+                  }).log();
+
+                  return res
+                    .status(500)
+                    .send(ErrorList["INTERNAL_SERVER_ERROR"]);
+                });
+            });
+          }
+        );
+      })
+      .catch((error) => {
+        new LoggerHelper({
+          message: `Error on fetching good receipt ${error}`,
+          tag: "Good receipt",
+          type: LoggerType.error,
+        }).log();
+        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+      });
+  };
 }
 export default GoodReceiptController;

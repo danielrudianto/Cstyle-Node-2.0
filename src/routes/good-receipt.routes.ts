@@ -14,7 +14,7 @@ router.post(
 );
 router.post(
   "/",
-  // AccessInterceptor.administratorRequired,
+  AccessInterceptor.administratorRequired,
   body("supplier").notEmpty().withMessage(ErrorList["SUPPLIER_REQUIRED"]),
   body("date").notEmpty().withMessage(ErrorList["DATE_REQUIRED"]),
   body("items").notEmpty().withMessage(ErrorList["ITEMS_REQUIRED"]),
@@ -40,6 +40,14 @@ router.put(
   body("date").notEmpty().withMessage(ErrorList["DATE_REQUIRED"]),
   ErrorInterceptor.intercept,
   GoodReceiptController.updateByID
+);
+
+router.delete(
+  "/:id",
+  AccessInterceptor.administratorRequired,
+  param("id").isMongoId().withMessage(ErrorList["ID_INVALID"]),
+  ErrorInterceptor.intercept,
+  GoodReceiptController.deleteByID
 );
 
 export default router;

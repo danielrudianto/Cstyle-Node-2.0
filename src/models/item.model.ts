@@ -187,7 +187,10 @@ class ItemModelModel {
       })
       .select("_id reference description price")
       .populate("itemTypeID", "name")
-      .populate("itemBrandID", "name");
+      .populate("itemBrandID", "name")
+      .sort({
+        reference: 1,
+      });
   }
 
   static fetchPopular() {
@@ -419,6 +422,7 @@ class ItemModelModel {
       }
     );
   }
+
   update() {
     return conn.model("items").updateOne(
       {
@@ -512,6 +516,18 @@ class ItemModelModel {
     } catch (error) {
       throw error;
     }
+  }
+
+  static async download() {
+    return conn
+      .model("items")
+      .find({ isDelete: false })
+      .select("reference description price barcode")
+      .populate("itemTypeID", "name")
+      .populate("itemBrandID", "name")
+      .sort({
+        reference: 1,
+      });
   }
 }
 

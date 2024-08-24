@@ -327,6 +327,22 @@ class ItemController {
       });
   };
 
+  static download = (req: Request, res: Response) => {
+    ItemModelModel.download()
+      .then((result) => {
+        return res.status(200).send(result);
+      })
+      .catch((error) => {
+        new LoggerHelper({
+          message: `Error on downloading item ${error}`,
+          type: LoggerType.error,
+          tag: "Item",
+        }).log();
+
+        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+      });
+  };
+
   static fetchByBranchV2 = (req: Request, res: Response) => {
     const page = req.body.page;
     const keyword = req.body.keyword;

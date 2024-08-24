@@ -140,4 +140,12 @@ export class GoodReceiptModelModel {
       .populate("supplierID", "name")
       .populate("items.itemID", "reference description");
   }
+
+  static deleteByID(id: string, userID: string) {
+    return conn.model("good-receipt").findByIdAndUpdate(id, {
+      isDelete: true,
+      deletedBy: userID,
+      deletedAt: new Date(),
+    });
+  }
 }
