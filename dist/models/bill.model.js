@@ -85,6 +85,29 @@ class BillModelModel {
             ]);
         }
     }
+    static fetchStore(data) {
+        const page = data.page;
+        const storeID = data.storeID;
+        return Promise.all([
+            conn
+                .model("bills")
+                .find({
+                storeID: storeID,
+                isDelete: false,
+            })
+                .sort({
+                date: -1,
+            })
+                .populate("createdBy", "name")
+                .populate("memberID", "code name")
+                .limit(20)
+                .skip((page - 1) * 20),
+            conn.model("bills").countDocuments({
+                storeID: storeID,
+                isDelete: false,
+            }),
+        ]);
+    }
     static fetchByID(id) {
         return conn.model("bills").findById(id);
     }

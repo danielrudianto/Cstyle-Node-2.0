@@ -18,6 +18,7 @@ const logger_interface_1 = require("../interfaces/logger.interface");
 const item_model_1 = __importDefault(require("../models/item.model"));
 const stock_model_1 = __importDefault(require("../models/stock.model"));
 const logger_utils_1 = __importDefault(require("../utils/logger.utils"));
+const store_model_1 = __importDefault(require("../models/store.model"));
 class ItemStockController {
 }
 _a = ItemStockController;
@@ -114,6 +115,28 @@ ItemStockController.fetchByItemID = (req, res) => {
         new logger_utils_1.default({
             type: logger_interface_1.LoggerType.error,
             message: `Error on fetching item stock: ${error}`,
+            tag: "ItemStockController",
+        }).log();
+        return res.status(500).send(error_list_1.ErrorList["INTERNAL_SERVER_ERROR"]);
+    });
+};
+ItemStockController.download = (req, res) => {
+    Promise.all([
+        stock_model_1.default.fetchInitial(),
+        item_model_1.default.download(),
+        store_model_1.default.fetchOthers(null),
+    ])
+        .then(([stocks, items, stores]) => {
+        return res.status(200).send({
+            stores: stores,
+            items: items,
+            stocks: stocks,
+        });
+    })
+        .catch((error) => {
+        new logger_utils_1.default({
+            type: logger_interface_1.LoggerType.error,
+            message: `Error on downloading item stock: ${error}`,
             tag: "ItemStockController",
         }).log();
         return res.status(500).send(error_list_1.ErrorList["INTERNAL_SERVER_ERROR"]);

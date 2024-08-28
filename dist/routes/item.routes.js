@@ -56,6 +56,7 @@ router.put("/v2", access_interceptor_1.default.administratorRequired, (req, res,
     });
 }, item_controller_1.default.updateV2);
 router.get("/v2", item_controller_1.default.fetchV2);
+router.get("/download", item_controller_1.default.download);
 router.get("/:id", access_interceptor_1.default.administratorRequired, (0, express_validator_1.param)("id").isMongoId().withMessage(error_list_1.ErrorList["ID_INVALID"]), error_interceptor_1.default.intercept, item_controller_1.default.fetchByID);
 router.delete("/image/:id/:name", access_interceptor_1.default.administratorRequired, item_controller_1.default.deleteImage);
 router.delete("/:id", access_interceptor_1.default.administratorRequired, (0, express_validator_1.param)("id").isMongoId().withMessage(error_list_1.ErrorList["ID_INVALID"]), error_interceptor_1.default.intercept, item_controller_1.default.deleteByID);

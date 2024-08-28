@@ -9708,3 +9708,104 @@ Use mongoose.model(name, schema)
 [2024-08-24 18:38:57] [ERROR] Redis: Error: Socket closed unexpectedly
 [2024-08-24 18:38:57] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
 [2024-08-24 18:38:58] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-25 18:42:54] [INFO] Server: Server started on port 5000
+[2024-08-25 18:42:54] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-25 18:42:54] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-25 18:42:54] [INFO] Sync: Synced 38 users
+[2024-08-25 18:46:49] [INFO] Server: Server started on port 5000
+[2024-08-25 18:46:49] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-25 18:46:49] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-25 18:46:50] [INFO] Sync: Synced 38 users
+[2024-08-25 18:48:00] [INFO] Server: Server started on port 5000
+[2024-08-25 18:48:00] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-25 18:48:00] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-25 18:48:00] [INFO] Sync: Synced 38 users
+[2024-08-25 18:48:27] [INFO] Server: Server started on port 5000
+[2024-08-25 18:48:27] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-25 18:48:27] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-25 18:48:27] [INFO] Sync: Synced 38 users
+[2024-08-25 18:49:10] [INFO] Server: Server started on port 5000
+[2024-08-25 18:49:10] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-25 18:49:11] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-25 18:49:11] [INFO] Sync: Synced 38 users
+[2024-08-25 18:49:45] [INFO] Server: Server started on port 5000
+[2024-08-25 18:49:45] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-25 18:49:45] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-25 18:49:45] [INFO] Sync: Synced 38 users
+[2024-08-25 18:50:42] [INFO] Server: Server started on port 5000
+[2024-08-25 18:50:42] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-25 18:50:42] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-25 18:50:42] [INFO] Sync: Synced 38 users
+[2024-08-25 18:51:45] [INFO] Server: Server started on port 5000
+[2024-08-25 18:51:45] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-25 18:51:45] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-25 18:51:46] [INFO] Sync: Synced 38 users
+[2024-08-25 18:55:24] [ERROR] Cashier: Error on fetching stock TypeError: Cannot read properties of null (reading 'name')
+[2024-08-25 18:55:24] [ERROR] Cashier: Error on fetching stock TypeError: Cannot read properties of null (reading 'name')
+[2024-08-25 18:55:52] [INFO] Server: Server started on port 5000
+[2024-08-25 18:55:52] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-25 18:55:52] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-25 18:55:52] [INFO] Sync: Synced 38 users
+[2024-08-25 18:56:32] [INFO] Server: Server started on port 5000
+[2024-08-25 18:56:32] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-25 18:56:32] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-25 18:56:32] [INFO] Sync: Synced 38 users
+[2024-08-25 18:57:43] [INFO] Server: Server started on port 5000
+[2024-08-25 18:57:43] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-25 18:57:44] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-25 18:57:44] [INFO] Sync: Synced 38 users
+[2024-08-25 18:58:08] [INFO] Server: Server started on port 5000
+[2024-08-25 18:58:08] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-25 18:58:08] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-25 18:58:08] [INFO] Sync: Synced 38 users
+[2024-08-25 19:00:05] [INFO] Server: Server started on port 5000
+[2024-08-25 19:00:05] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-25 19:00:05] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-25 19:00:05] [INFO] Sync: Synced 38 users
+[2024-08-25 19:00:29] [INFO] Server: Server started on port 5000
+[2024-08-25 19:00:29] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-25 19:00:29] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-25 19:00:29] [INFO] Sync: Synced 38 users
+[2024-08-25 19:01:13] [INFO] Server: Server started on port 5000
+[2024-08-25 19:01:13] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-25 19:01:13] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-25 19:01:13] [INFO] Sync: Synced 38 users
+[2024-08-25 19:01:40] [INFO] Server: Server started on port 5000
+[2024-08-25 19:01:40] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-25 19:01:40] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-25 19:01:40] [INFO] Sync: Synced 38 users
+[2024-08-25 20:06:26] [ERROR] Cashier: Error on fetching stock TypeError: Cannot read properties of null (reading 'name')
+[2024-08-25 20:06:58] [INFO] Server: Server started on port 5000
+[2024-08-25 20:06:58] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-25 20:06:58] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-25 20:06:58] [INFO] Sync: Synced 38 users
+[2024-08-25 21:40:32] [INFO] Server: Server started on port 5000
+[2024-08-25 21:40:32] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-25 21:40:32] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-25 21:40:32] [INFO] Sync: Synced 38 users
+[2024-08-25 21:40:49] [INFO] Server: Server started on port 5000
+[2024-08-25 21:40:49] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-25 21:40:49] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-25 21:40:49] [INFO] Sync: Synced 38 users
+[2024-08-25 22:36:47] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0776384796" }
+[2024-08-25 23:39:52] [ERROR] Item: Error on fetching item stock TypeError: Cannot read properties of null (reading 'name')
+[2024-08-27 12:30:06] [INFO] Server: Server started on port 5000
+[2024-08-27 12:30:06] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-27 12:30:06] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-27 12:30:06] [INFO] Sync: Synced 38 users
+[2024-08-27 20:25:15] [INFO] Server: Server started on port 5000
+[2024-08-27 20:25:15] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-27 20:25:15] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-27 20:25:15] [INFO] Sync: Synced 38 users
+[2024-08-27 20:25:26] [INFO] Server: Server started on port 5000
+[2024-08-27 20:25:26] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-27 20:25:27] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-27 20:25:27] [INFO] Sync: Synced 38 users
+[2024-08-27 20:26:58] [INFO] Server: Server started on port 5000
+[2024-08-27 20:26:58] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-27 20:26:58] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-27 20:26:58] [INFO] Sync: Synced 38 users
+[2024-08-27 20:28:49] [INFO] Server: Server started on port 5000
+[2024-08-27 20:28:49] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-27 20:28:49] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-27 20:28:49] [INFO] Sync: Synced 38 users

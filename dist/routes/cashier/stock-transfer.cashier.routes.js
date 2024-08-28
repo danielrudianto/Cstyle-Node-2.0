@@ -20,6 +20,11 @@ router.get("/unreceived", auth_interceptor_1.default.anyIntercept, (req, res, ne
     req.body.page = !req.query.page ? 1 : parseInt(req.query.page);
     next();
 }, stock_request_controller_1.default.fetchUnreceivedRequests);
+router.get("/created", auth_interceptor_1.default.anyIntercept, (req, res, next) => {
+    req.body.requestFrom = req.body.storeID;
+    req.body.page = !req.query.page ? 1 : parseInt(req.query.page);
+    next();
+}, stock_request_controller_1.default.fetchCreatedRequests);
 router.get("/:id", (0, express_validator_1.param)("id").isMongoId().withMessage(error_list_1.ErrorList["ID_INVALID"]), error_interceptor_1.default.intercept, auth_interceptor_1.default.anyIntercept, stock_request_controller_1.default.fetchByID);
 router.post("/", auth_interceptor_1.default.anyIntercept, stock_request_controller_1.default.create);
 router.post("/send", (0, express_validator_1.body)("id").isMongoId().withMessage(error_list_1.ErrorList["ID_INVALID"]), error_interceptor_1.default.intercept, auth_interceptor_1.default.anyIntercept, (req, res, next) => {

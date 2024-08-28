@@ -65,6 +65,7 @@ InvoiceController.fetchByID = (req, res) => {
         else {
             if (result.packingListID) {
                 const packingList = yield packing_list_model_1.default.fetchByID(result.packingListID._id);
+                console.log(packingList);
                 result.packingListID = packingList;
                 return res.status(200).send(result);
             }

@@ -1329,3 +1329,8 @@ Use mongoose.model(name, schema)
 [2024-08-24 18:38:57] [ERROR] Redis: Error: Socket closed unexpectedly
 [2024-08-24 18:38:57] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
 [2024-08-24 18:38:58] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-25 18:55:24] [ERROR] Cashier: Error on fetching stock TypeError: Cannot read properties of null (reading 'name')
+[2024-08-25 18:55:24] [ERROR] Cashier: Error on fetching stock TypeError: Cannot read properties of null (reading 'name')
+[2024-08-25 20:06:26] [ERROR] Cashier: Error on fetching stock TypeError: Cannot read properties of null (reading 'name')
+[2024-08-25 22:36:47] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0776384796" }
+[2024-08-25 23:39:52] [ERROR] Item: Error on fetching item stock TypeError: Cannot read properties of null (reading 'name')

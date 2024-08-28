@@ -243,5 +243,91 @@ GoodReceiptController.updateByID = (req, res) => {
         }
     }));
 };
+GoodReceiptController.deleteByID = (req, res) => {
+    const id = req.params.id;
+    const userID = req.body.userID;
+    good_receipt_model_1.GoodReceiptModelModel.fetchByID(id)
+        .then((goodReceipt) => __awaiter(void 0, void 0, void 0, function* () {
+        if (!goodReceipt) {
+            return res.status(404).send(error_list_1.ErrorList["GOOD_RECEIPT_NOT_FOUND"]);
+        }
+        if (goodReceipt.isDelete) {
+            return res
+                .status(404)
+                .send(error_list_1.ErrorList["GOOD_RECEIPT_ALREADY_DELETED"]);
+        }
+        yield lock_utils_1.default.acquire(goodReceipt.items.map((x) => {
+            return `${x.itemID._id.toString()}:`;
+        }), (done) => {
+            stock_model_1.default.checkStockByItemIDs(goodReceipt.items.map((x) => {
+                return x.itemID._id;
+            }), null).then((stocks) => {
+                let validation = true;
+                for (let i = 0; i < goodReceipt.items.length; i++) {
+                    const stockIndex = stocks.findIndex((x) => x.itemID.toString() ==
+                        goodReceipt.items[i].itemID._id.toString());
+                    if (stockIndex == -1) {
+                        validation = false;
+                    }
+                    else {
+                        if (stocks[stockIndex].quantity < goodReceipt.items[i].quantity) {
+                            validation = false;
+                        }
+                    }
+                }
+                if (!validation) {
+                    done();
+                    return res.status(400).send(error_list_1.ErrorList["INSUFFICIENT_STOCK"]);
+                }
+                good_receipt_model_1.GoodReceiptModelModel.deleteByID(id, userID)
+                    .then((result) => {
+                    if (result) {
+                        goodReceipt.items.forEach((x) => __awaiter(void 0, void 0, void 0, function* () {
+                            yield new stock_model_1.default({
+                                quantity: x.quantity * -1,
+                                itemID: x.itemID,
+                                storeID: null,
+                            }).update();
+                            const data = {
+                                itemID: x.itemID,
+                                quantity: x.quantity,
+                                goodReceiptID: id,
+                                adjustmentCaseID: null,
+                                storeID: null,
+                            };
+                            yield queue_utils_1.queue.add("removeStockIn", data);
+                            done();
+                            return res.status(200).send(result);
+                        }));
+                    }
+                    else {
+                        return res
+                            .status(404)
+                            .send(error_list_1.ErrorList["GOOD_RECEIPT_NOT_FOUND"]);
+                    }
+                })
+                    .catch((error) => {
+                    done();
+                    new logger_utils_1.default({
+                        message: `Error on deleting good receipt ${error}`,
+                        tag: "Good receipt",
+                        type: logger_interface_1.LoggerType.error,
+                    }).log();
+                    return res
+                        .status(500)
+                        .send(error_list_1.ErrorList["INTERNAL_SERVER_ERROR"]);
+                });
+            });
+        });
+    }))
+        .catch((error) => {
+        new logger_utils_1.default({
+            message: `Error on fetching good receipt ${error}`,
+            tag: "Good receipt",
+            type: logger_interface_1.LoggerType.error,
+        }).log();
+        return res.status(500).send(error_list_1.ErrorList["INTERNAL_SERVER_ERROR"]);
+    });
+};
 exports.default = GoodReceiptController;
 //# sourceMappingURL=good-receipt.controller.js.map

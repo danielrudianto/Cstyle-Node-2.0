@@ -13,6 +13,7 @@ router.use("/stores", storeRoutes);
 router.use("/stock-transfer", stockTransferRoutes);
 router.use("/products", productCashierRoutes);
 router.use("/membership", membershipCashierRoutes);
+router.get("/bills", AuthInterceptor.anyIntercept, CashierController.fetchBill);
 
 router.get("/stats", AuthInterceptor.anyIntercept, CashierController.stats);
 router.get(

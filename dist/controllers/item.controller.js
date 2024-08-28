@@ -317,6 +317,20 @@ ItemController.downloadV2 = (req, res) => {
         return res.status(500).send(error_list_1.ErrorList["INTERNAL_SERVER_ERROR"]);
     });
 };
+ItemController.download = (req, res) => {
+    item_model_1.default.download()
+        .then((result) => {
+        return res.status(200).send(result);
+    })
+        .catch((error) => {
+        new logger_utils_1.default({
+            message: `Error on downloading item ${error}`,
+            type: logger_interface_1.LoggerType.error,
+            tag: "Item",
+        }).log();
+        return res.status(500).send(error_list_1.ErrorList["INTERNAL_SERVER_ERROR"]);
+    });
+};
 ItemController.fetchByBranchV2 = (req, res) => {
     const page = req.body.page;
     const keyword = req.body.keyword;

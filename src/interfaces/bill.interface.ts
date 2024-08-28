@@ -38,3 +38,8 @@ export interface BillUpdateInterface {
   id: string;
   isHidden: boolean;
 }
+
+export interface StoreBillFetchInterface {
+  page: number;
+  storeID: string;
+}

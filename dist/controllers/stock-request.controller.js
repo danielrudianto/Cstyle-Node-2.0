@@ -99,6 +99,25 @@ StockRequestController.searchV2 = (req, res) => {
         return res.status(500).send(error_list_1.ErrorList["INTERNAL_SERVER_ERROR"]);
     });
 };
+StockRequestController.fetchCreatedRequests = (req, res) => {
+    const storeID = req.body.storeID;
+    const page = req.body.page;
+    stock_request_model_1.default.fetchCreated(page, storeID)
+        .then(([result, count]) => {
+        return res.status(200).send({
+            data: result,
+            count: count,
+        });
+    })
+        .catch((error) => {
+        new logger_utils_1.default({
+            message: `Error on fetching created request ${error}`,
+            tag: "Stock request",
+            type: logger_interface_1.LoggerType.error,
+        }).log();
+        return res.status(500).send(error_list_1.ErrorList["INTERNAL_SERVER_ERROR"]);
+    });
+};
 StockRequestController.fetchByID = (req, res) => {
     const id = req.params.id;
     stock_request_model_1.default.fetchByID(id)

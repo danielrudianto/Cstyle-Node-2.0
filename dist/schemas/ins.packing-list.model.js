@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
 const PackingListItemSchema = new mongoose_1.Schema({
-    itemID: { type: mongoose_1.Types.ObjectId, required: true, ref: "item" },
+    itemID: { type: mongoose_1.Types.ObjectId, required: true, ref: "items" },
     quantity: { type: Number, required: true },
     price: { type: Number, required: true },
     discount: { type: Number, required: true },

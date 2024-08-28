@@ -121,6 +121,13 @@ class GoodReceiptModelModel {
             .populate("supplierID", "name")
             .populate("items.itemID", "reference description");
     }
+    static deleteByID(id, userID) {
+        return conn.model("good-receipt").findByIdAndUpdate(id, {
+            isDelete: true,
+            deletedBy: userID,
+            deletedAt: new Date(),
+        });
+    }
 }
 exports.GoodReceiptModelModel = GoodReceiptModelModel;
 //# sourceMappingURL=good-receipt.model.js.map

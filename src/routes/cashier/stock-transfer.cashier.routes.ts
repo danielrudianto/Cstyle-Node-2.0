@@ -30,6 +30,17 @@ router.get(
 );
 
 router.get(
+  "/created",
+  AuthInterceptor.anyIntercept,
+  (req: Request, res: Response, next: NextFunction) => {
+    req.body.requestFrom = req.body.storeID;
+    req.body.page = !req.query.page ? 1 : parseInt(req.query.page as string);
+    next();
+  },
+  StockRequestController.fetchCreatedRequests
+);
+
+router.get(
   "/:id",
   param("id").isMongoId().withMessage(ErrorList["ID_INVALID"]),
   ErrorInterceptor.intercept,

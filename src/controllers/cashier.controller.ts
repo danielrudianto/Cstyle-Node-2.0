@@ -314,8 +314,8 @@ class CashierController {
                   id: x._id,
                   reference: x.reference,
                   description: x.description,
-                  brand: x.itemBrandID.name,
-                  type: x.itemTypeID.name,
+                  brand: x.itemBrandID == null ? "" : x.itemBrandID.name,
+                  type: x.itemTypeID == null ? "" : x.itemTypeID.name,
                   stock:
                     stockArray.map((z) => {
                       return {
@@ -328,13 +328,47 @@ class CashierController {
               count: count,
             });
           })
-          .catch((error) => {});
+          .catch((error) => {
+            new LoggerHelper({
+              message: `Error on fetching stock ${error}`,
+              type: LoggerType.error,
+              tag: "Cashier",
+            }).log();
+
+            return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+          });
       })
       .catch((error) => {
         new LoggerHelper({
           message: `Error on fetching items ${error}`,
           tag: "Cashier",
           type: LoggerType.error,
+        }).log();
+
+        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+      });
+  };
+
+  static fetchBill = (req: Request, res: Response) => {
+    const storeID = req.body.storeID as string;
+    const page =
+      req.query.page == undefined ? 1 : Number(req.query.page as string);
+
+    BillModelModel.fetchStore({
+      storeID: storeID,
+      page: page,
+    })
+      .then(([result, count]) => {
+        return res.status(200).send({
+          data: result,
+          count: count,
+        });
+      })
+      .catch((error) => {
+        new LoggerHelper({
+          message: `Error on fetching bill ${error}`,
+          type: LoggerType.error,
+          tag: "Cashier",
         }).log();
 
         return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);

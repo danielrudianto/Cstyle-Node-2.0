@@ -97,6 +97,28 @@ class StockRequestController {
       });
   };
 
+  static fetchCreatedRequests = (req: Request, res: Response) => {
+    const storeID = req.body.storeID as string;
+    const page = req.body.page;
+
+    StockRequestModelModel.fetchCreated(page, storeID)
+      .then(([result, count]) => {
+        return res.status(200).send({
+          data: result,
+          count: count,
+        });
+      })
+      .catch((error) => {
+        new LoggerHelper({
+          message: `Error on fetching created request ${error}`,
+          tag: "Stock request",
+          type: LoggerType.error,
+        }).log();
+
+        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+      });
+  };
+
   static fetchByID = (req: Request, res: Response) => {
     const id = req.params.id;
     StockRequestModelModel.fetchByID(id)

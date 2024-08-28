@@ -283,8 +283,8 @@ CashierController.checkStock = (req, res) => {
                         id: x._id,
                         reference: x.reference,
                         description: x.description,
-                        brand: x.itemBrandID.name,
-                        type: x.itemTypeID.name,
+                        brand: x.itemBrandID == null ? "" : x.itemBrandID.name,
+                        type: x.itemTypeID == null ? "" : x.itemTypeID.name,
                         stock: (_b = stockArray.map((z) => {
                             return {
                                 storeID: z._id.storeID,
@@ -296,13 +296,42 @@ CashierController.checkStock = (req, res) => {
                 count: count,
             });
         })
-            .catch((error) => { });
+            .catch((error) => {
+            new logger_utils_1.default({
+                message: `Error on fetching stock ${error}`,
+                type: logger_interface_1.LoggerType.error,
+                tag: "Cashier",
+            }).log();
+            return res.status(500).send(error_list_1.ErrorList["INTERNAL_SERVER_ERROR"]);
+        });
     })
         .catch((error) => {
         new logger_utils_1.default({
             message: `Error on fetching items ${error}`,
             tag: "Cashier",
             type: logger_interface_1.LoggerType.error,
+        }).log();
+        return res.status(500).send(error_list_1.ErrorList["INTERNAL_SERVER_ERROR"]);
+    });
+};
+CashierController.fetchBill = (req, res) => {
+    const storeID = req.body.storeID;
+    const page = req.query.page == undefined ? 1 : Number(req.query.page);
+    bill_model_1.default.fetchStore({
+        storeID: storeID,
+        page: page,
+    })
+        .then(([result, count]) => {
+        return res.status(200).send({
+            data: result,
+            count: count,
+        });
+    })
+        .catch((error) => {
+        new logger_utils_1.default({
+            message: `Error on fetching bill ${error}`,
+            type: logger_interface_1.LoggerType.error,
+            tag: "Cashier",
         }).log();
         return res.status(500).send(error_list_1.ErrorList["INTERNAL_SERVER_ERROR"]);
     });

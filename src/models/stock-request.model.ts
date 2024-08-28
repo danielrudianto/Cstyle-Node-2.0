@@ -146,6 +146,48 @@ class StockRequestModelModel {
     ]);
   }
 
+  static fetchCreated(page: number, storeID: string) {
+    return Promise.all([
+      conn
+        .model("stock-requests")
+        .find({
+          isDelete: false,
+          isSending: false,
+          isConfirm: false,
+          isReject: false,
+          $or: [
+            {
+              requestFrom: storeID,
+            },
+            {
+              requestTo: storeID,
+            },
+          ],
+        })
+        .populate("requestFrom", "name address")
+        .populate("requestTo", "name address")
+        .populate("createdBy", "name")
+        .select("name createdAt requestFrom requestTo createdBy")
+        .limit(10)
+        .skip((page - 1) * 10)
+        .sort({ createdAt: -1 }),
+      conn.model("stock-requests").countDocuments({
+        isDelete: false,
+        isSending: false,
+        isConfirm: false,
+        isReject: false,
+        $or: [
+          {
+            requestFrom: storeID,
+          },
+          {
+            requestTo: storeID,
+          },
+        ],
+      }),
+    ]);
+  }
+
   static fetchByID(id: string) {
     return conn
       .model("stock-requests")
