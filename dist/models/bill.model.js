@@ -109,7 +109,12 @@ class BillModelModel {
         ]);
     }
     static fetchByID(id) {
-        return conn.model("bills").findById(id);
+        return conn
+            .model("bills")
+            .findById(id)
+            .populate("memberID", "code name")
+            .populate("createdBy", "name")
+            .populate("items.itemID", "reference description");
     }
     static fetchStatus() {
         const todayDate = new Date();

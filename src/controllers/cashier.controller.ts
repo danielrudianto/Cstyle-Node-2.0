@@ -374,6 +374,29 @@ class CashierController {
         return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
       });
   };
+
+  static fetchBillByID = (req: Request, res: Response) => {
+    const id = req.params.id;
+    const storeID = req.body.storeID;
+
+    BillModelModel.fetchByID(id)
+      .then((result) => {
+        if (result.storeID.toString() != req.body.storeID.toString()) {
+          return res.status(403).send(ErrorList["ACCESS_DENIED"]);
+        } else {
+          return res.status(200).send(result);
+        }
+      })
+      .catch((error) => {
+        new LoggerHelper({
+          message: `Error on fetching bill by ID ${error}`,
+          type: LoggerType.error,
+          tag: "Cashier",
+        }).log();
+
+        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+      });
+  };
 }
 
 export default CashierController;

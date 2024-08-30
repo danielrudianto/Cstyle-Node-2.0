@@ -6,6 +6,7 @@ import storeRoutes from "./cashier/stores.cashier.routes";
 import stockTransferRoutes from "./cashier/stock-transfer.cashier.routes";
 import productCashierRoutes from "./cashier/product.cashier.routes";
 import membershipCashierRoutes from "./cashier/membership.cashier.routes";
+import billCashierRoutes from "./cashier/bill.cashier.routes";
 
 const router = Router();
 
@@ -13,7 +14,7 @@ router.use("/stores", storeRoutes);
 router.use("/stock-transfer", stockTransferRoutes);
 router.use("/products", productCashierRoutes);
 router.use("/membership", membershipCashierRoutes);
-router.get("/bills", AuthInterceptor.anyIntercept, CashierController.fetchBill);
+router.use("/bills", billCashierRoutes);
 
 router.get("/stats", AuthInterceptor.anyIntercept, CashierController.stats);
 router.get(

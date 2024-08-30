@@ -9809,3 +9809,141 @@ Use mongoose.model(name, schema)
 [2024-08-27 20:28:49] [INFO] MongoDB: Connected with MongoDB Database Engine
 [2024-08-27 20:28:49] [INFO] Redis: Connected with Redis Database Engine
 [2024-08-27 20:28:49] [INFO] Sync: Synced 38 users
+[2024-08-28 13:06:39] [INFO] Server: Server started on port 5000
+[2024-08-28 13:06:39] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-28 13:06:39] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-28 13:06:40] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-28 13:06:40] [INFO] Sync: Synced 38 users
+[2024-08-28 13:06:40] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-28 13:06:40] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-28 13:06:40] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-28 13:06:40] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-28 13:06:40] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-28 13:06:41] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-28 21:27:04] [INFO] Server: Server started on port 5000
+[2024-08-28 21:27:04] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-28 21:27:04] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-28 21:27:04] [INFO] Sync: Synced 38 users
+[2024-08-28 21:50:03] [INFO] Server: Server started on port 5000
+[2024-08-28 21:50:03] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-28 21:50:03] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-28 21:50:04] [INFO] Sync: Synced 38 users
+[2024-08-28 21:50:38] [INFO] Server: Server started on port 5000
+[2024-08-28 21:50:38] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-28 21:50:38] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-28 21:50:38] [INFO] Sync: Synced 38 users
+[2024-08-28 21:50:57] [INFO] Server: Server started on port 5000
+[2024-08-28 21:50:57] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-28 21:50:58] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-28 21:50:58] [INFO] Sync: Synced 38 users
+[2024-08-28 21:51:04] [INFO] Server: Server started on port 5000
+[2024-08-28 21:51:04] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-28 21:51:04] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-28 21:51:04] [INFO] Sync: Synced 38 users
+[2024-08-28 21:51:11] [INFO] Server: Server started on port 5000
+[2024-08-28 21:51:11] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-28 21:51:11] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-28 21:51:11] [INFO] Sync: Synced 38 users
+[2024-08-28 21:54:36] [INFO] Server: Server started on port 5000
+[2024-08-28 21:54:36] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-28 21:54:37] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-28 21:54:37] [INFO] Sync: Synced 38 users
+[2024-08-28 21:55:22] [INFO] Server: Server started on port 5000
+[2024-08-28 21:55:22] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-28 21:55:22] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-28 21:55:22] [INFO] Sync: Synced 38 users
+[2024-08-28 21:55:32] [INFO] Server: Server started on port 5000
+[2024-08-28 21:55:32] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-28 21:55:32] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-28 21:55:32] [INFO] Sync: Synced 38 users
+[2024-08-28 21:58:44] [INFO] Server: Server started on port 5000
+[2024-08-28 21:58:44] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-28 21:58:44] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-28 21:58:44] [INFO] Sync: Synced 38 users
+[2024-08-28 22:00:18] [INFO] Server: Server started on port 5000
+[2024-08-28 22:00:18] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-28 22:00:18] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-28 22:00:18] [INFO] Sync: Synced 38 users
+[2024-08-28 22:00:31] [INFO] Server: Server started on port 5000
+[2024-08-28 22:00:31] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-28 22:00:32] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-28 22:00:32] [INFO] Sync: Synced 38 users
+[2024-08-28 22:00:56] [INFO] Server: Server started on port 5000
+[2024-08-28 22:00:56] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-28 22:00:57] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-28 22:00:57] [INFO] Sync: Synced 38 users
+[2024-08-29 17:11:57] [INFO] Server: Server started on port 5000
+[2024-08-29 17:11:57] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-29 17:11:57] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-29 17:11:57] [INFO] Sync: Synced 38 users
+[2024-08-30 10:09:47] [INFO] Server: Server started on port 5000
+[2024-08-30 10:09:47] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-30 10:09:47] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-30 10:09:47] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-30 10:09:47] [INFO] Sync: Synced 38 users
+[2024-08-30 10:09:48] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-30 10:09:48] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-30 10:09:48] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-30 10:09:48] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-30 10:09:48] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-30 10:09:49] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-30 10:09:49] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-30 10:09:49] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-30 10:09:50] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-30 10:09:50] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-30 10:09:51] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-30 10:09:51] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-30 10:09:52] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-30 10:09:52] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-30 10:09:53] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-30 10:09:53] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-30 10:09:54] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-30 10:09:54] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-30 10:09:55] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-30 10:09:55] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-30 10:09:56] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-30 20:56:36] [INFO] Server: Server started on port 5000
+[2024-08-30 20:56:36] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-30 20:56:37] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-30 20:56:37] [INFO] Sync: Synced 38 users
+[2024-08-30 21:01:18] [INFO] Server: Server started on port 5000
+[2024-08-30 21:01:18] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-30 21:01:18] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-30 21:01:18] [INFO] Sync: Synced 38 users
+[2024-08-30 21:01:25] [INFO] Master worker: Job 1835 [createBill] completed at Fri Aug 30 2024 21:01:25 GMT+0700 (Western Indonesia Time)
+[2024-08-30 21:01:25] [ERROR] Master worker: Job 1836 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
+[2024-08-30 21:03:04] [INFO] Master worker: Job 1837 [insertStockIn] completed at Fri Aug 30 2024 21:03:04 GMT+0700 (Western Indonesia Time)
+[2024-08-30 21:03:04] [INFO] Master worker: Job 1838 [insertStockIn] completed at Fri Aug 30 2024 21:03:04 GMT+0700 (Western Indonesia Time)
+[2024-08-30 21:03:04] [INFO] Master worker: Job 1839 [insertStockIn] completed at Fri Aug 30 2024 21:03:04 GMT+0700 (Western Indonesia Time)
+[2024-08-30 21:04:31] [INFO] Master worker: Job 1840 [insertStockIn] completed at Fri Aug 30 2024 21:04:31 GMT+0700 (Western Indonesia Time)
+[2024-08-30 21:04:31] [INFO] Master worker: Job 1841 [insertStockIn] completed at Fri Aug 30 2024 21:04:31 GMT+0700 (Western Indonesia Time)
+[2024-08-30 21:04:31] [INFO] Master worker: Job 1842 [insertStockIn] completed at Fri Aug 30 2024 21:04:31 GMT+0700 (Western Indonesia Time)
+[2024-08-30 21:06:37] [INFO] Server: Server started on port 5000
+[2024-08-30 21:06:37] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-30 21:06:37] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-30 21:06:37] [INFO] Sync: Synced 38 users
+[2024-08-30 21:06:48] [ERROR] Good receipt: Error on fetching good receipt Error: Maximum execution time is exceeded 651d274a72d3c82697513024:
+[2024-08-30 21:06:48] [INFO] Master worker: Job 1843 [removeStockIn] completed at Fri Aug 30 2024 21:06:48 GMT+0700 (Western Indonesia Time)
+[2024-08-30 21:06:48] [INFO] Master worker: Job 1844 [removeStockIn] completed at Fri Aug 30 2024 21:06:48 GMT+0700 (Western Indonesia Time)
+[2024-08-30 21:06:48] [INFO] Master worker: Job 1845 [removeStockIn] completed at Fri Aug 30 2024 21:06:48 GMT+0700 (Western Indonesia Time)
+[2024-08-30 21:06:48] [INFO] Master worker: Job 1846 [checkOverflow] completed at Fri Aug 30 2024 21:06:48 GMT+0700 (Western Indonesia Time)
+[2024-08-30 21:06:48] [INFO] Master worker: Job 1847 [checkOverflow] completed at Fri Aug 30 2024 21:06:48 GMT+0700 (Western Indonesia Time)
+[2024-08-30 21:06:48] [INFO] Master worker: Job 1848 [checkOverflow] completed at Fri Aug 30 2024 21:06:48 GMT+0700 (Western Indonesia Time)
+[2024-08-30 21:07:22] [INFO] Server: Server started on port 5000
+[2024-08-30 21:07:22] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-30 21:07:22] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-30 21:07:23] [INFO] Sync: Synced 38 users
+[2024-08-30 21:07:53] [INFO] Master worker: Job 1849 [insertStockIn] completed at Fri Aug 30 2024 21:07:53 GMT+0700 (Western Indonesia Time)
+[2024-08-30 21:07:53] [INFO] Master worker: Job 1850 [insertStockIn] completed at Fri Aug 30 2024 21:07:53 GMT+0700 (Western Indonesia Time)
+[2024-08-30 21:07:53] [INFO] Master worker: Job 1851 [insertStockIn] completed at Fri Aug 30 2024 21:07:53 GMT+0700 (Western Indonesia Time)
+[2024-08-30 21:08:02] [ERROR] Good receipt: Error on fetching good receipt Error: Maximum execution time is exceeded 651d274a72d3c82697513024:
+[2024-08-30 21:08:02] [INFO] Master worker: Job 1852 [removeStockIn] completed at Fri Aug 30 2024 21:08:02 GMT+0700 (Western Indonesia Time)
+[2024-08-30 21:08:02] [INFO] Master worker: Job 1853 [removeStockIn] completed at Fri Aug 30 2024 21:08:02 GMT+0700 (Western Indonesia Time)
+[2024-08-30 21:08:02] [INFO] Master worker: Job 1854 [removeStockIn] completed at Fri Aug 30 2024 21:08:02 GMT+0700 (Western Indonesia Time)
+[2024-08-30 21:08:02] [INFO] Master worker: Job 1855 [checkOverflow] completed at Fri Aug 30 2024 21:08:02 GMT+0700 (Western Indonesia Time)
+[2024-08-30 21:08:02] [INFO] Master worker: Job 1856 [checkOverflow] completed at Fri Aug 30 2024 21:08:02 GMT+0700 (Western Indonesia Time)
+[2024-08-30 21:08:02] [INFO] Master worker: Job 1857 [checkOverflow] completed at Fri Aug 30 2024 21:08:02 GMT+0700 (Western Indonesia Time)
+[2024-08-30 21:09:11] [INFO] Server: Server started on port 5000
+[2024-08-30 21:09:11] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-08-30 21:09:11] [INFO] Redis: Connected with Redis Database Engine
+[2024-08-30 21:09:11] [INFO] Sync: Synced 38 users

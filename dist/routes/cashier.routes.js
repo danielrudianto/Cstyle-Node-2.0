@@ -10,12 +10,13 @@ const stores_cashier_routes_1 = __importDefault(require("./cashier/stores.cashie
 const stock_transfer_cashier_routes_1 = __importDefault(require("./cashier/stock-transfer.cashier.routes"));
 const product_cashier_routes_1 = __importDefault(require("./cashier/product.cashier.routes"));
 const membership_cashier_routes_1 = __importDefault(require("./cashier/membership.cashier.routes"));
+const bill_cashier_routes_1 = __importDefault(require("./cashier/bill.cashier.routes"));
 const router = (0, express_1.Router)();
 router.use("/stores", stores_cashier_routes_1.default);
 router.use("/stock-transfer", stock_transfer_cashier_routes_1.default);
 router.use("/products", product_cashier_routes_1.default);
 router.use("/membership", membership_cashier_routes_1.default);
-router.get("/bills", auth_interceptor_1.default.anyIntercept, cashier_controller_1.default.fetchBill);
+router.use("/bills", bill_cashier_routes_1.default);
 router.get("/stats", auth_interceptor_1.default.anyIntercept, cashier_controller_1.default.stats);
 router.get("/report", auth_interceptor_1.default.anyIntercept, cashier_controller_1.default.fetchReport);
 router.post("/sync", auth_interceptor_1.default.anyIntercept, cashier_controller_1.default.sync);

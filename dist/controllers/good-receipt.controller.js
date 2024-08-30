@@ -260,7 +260,9 @@ GoodReceiptController.deleteByID = (req, res) => {
             return `${x.itemID._id.toString()}:`;
         }), (done) => {
             stock_model_1.default.checkStockByItemIDs(goodReceipt.items.map((x) => {
-                return x.itemID._id;
+                return {
+                    itemID: x.itemID._id,
+                };
             }), null).then((stocks) => {
                 let validation = true;
                 for (let i = 0; i < goodReceipt.items.length; i++) {
@@ -296,9 +298,9 @@ GoodReceiptController.deleteByID = (req, res) => {
                                 storeID: null,
                             };
                             yield queue_utils_1.queue.add("removeStockIn", data);
-                            done();
-                            return res.status(200).send(result);
                         }));
+                        done();
+                        return res.status(200).send(result);
                     }
                     else {
                         return res

@@ -59,8 +59,6 @@ class InvoiceController {
               result.packingListID._id
             );
 
-            console.log(packingList);
-
             result.packingListID = packingList;
             return res.status(200).send(result);
           } else {

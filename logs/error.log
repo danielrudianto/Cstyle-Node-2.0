@@ -1334,3 +1334,35 @@ Use mongoose.model(name, schema)
 [2024-08-25 20:06:26] [ERROR] Cashier: Error on fetching stock TypeError: Cannot read properties of null (reading 'name')
 [2024-08-25 22:36:47] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-0776384796" }
 [2024-08-25 23:39:52] [ERROR] Item: Error on fetching item stock TypeError: Cannot read properties of null (reading 'name')
+[2024-08-28 13:06:39] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-28 13:06:40] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-28 13:06:40] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-28 13:06:40] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-28 13:06:40] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-28 13:06:40] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-28 13:06:40] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-30 10:09:47] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-30 10:09:47] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-30 10:09:48] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-30 10:09:48] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-30 10:09:48] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-30 10:09:48] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-30 10:09:48] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-30 10:09:49] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-30 10:09:49] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-30 10:09:49] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-30 10:09:50] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-30 10:09:50] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-30 10:09:51] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-30 10:09:51] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-30 10:09:52] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-30 10:09:52] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-30 10:09:53] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-30 10:09:53] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-30 10:09:54] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-30 10:09:54] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-30 10:09:55] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-30 10:09:55] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-08-30 21:01:25] [ERROR] Master worker: Job 1836 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
+[2024-08-30 21:06:48] [ERROR] Good receipt: Error on fetching good receipt Error: Maximum execution time is exceeded 651d274a72d3c82697513024:
+[2024-08-30 21:08:02] [ERROR] Good receipt: Error on fetching good receipt Error: Maximum execution time is exceeded 651d274a72d3c82697513024:

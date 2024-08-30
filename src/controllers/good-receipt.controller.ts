@@ -295,7 +295,9 @@ class GoodReceiptController {
           (done) => {
             StockModelModel.checkStockByItemIDs(
               goodReceipt.items.map((x: any) => {
-                return x.itemID._id;
+                return {
+                  itemID: x.itemID._id,
+                };
               }),
               null
             ).then((stocks) => {
@@ -342,10 +344,10 @@ class GoodReceiptController {
                         storeID: null,
                       };
                       await queue.add("removeStockIn", data);
-
-                      done();
-                      return res.status(200).send(result);
                     });
+
+                    done();
+                    return res.status(200).send(result);
                   } else {
                     return res
                       .status(404)
@@ -354,7 +356,7 @@ class GoodReceiptController {
                 })
                 .catch((error) => {
                   done();
-                  
+
                   new LoggerHelper({
                     message: `Error on deleting good receipt ${error}`,
                     tag: "Good receipt",
