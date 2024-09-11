@@ -356,8 +356,8 @@ class ItemModelModel {
                             description: x.description,
                             createdAt: x.createdAt,
                             price: x.price,
-                            brand: x.itemBrandID.name,
-                            type: x.itemTypeID.name,
+                            brand: x.itemBrandID == null ? "" : x.itemBrandID.name,
+                            type: x.itemTypeID == null ? "" : x.itemTypeID.name,
                         },
                         quantity: stockIndex === -1 ? 0 : stocks[stockIndex].quantity,
                     };

@@ -32,7 +32,7 @@ export function connectionFactory() {
     autoCreate: true,
   });
 
-  conn.model("migration", MigrationSchema);
+  conn.model("migrations", MigrationSchema);
   conn.model("adjustment-event", AdjustmentEventSchema);
   conn.model("bills", BillSchema);
   conn.model("delivery-slips", DeliverySlipSchema);

@@ -37,10 +37,12 @@ MigrationController.sync = (req, res) => {
               '${x.description.replace("'", "''")}',
               ${x.price},
               '${x.barcode}',
-              '${x.itemBrandID.name.replace("'", "''")}',
-              '${x.itemTypeID.name.replace("'", "''")}',
-              '${x.itemBrandID._id}',
-              '${x.itemTypeID._id}',
+              '${x.itemBrandID == null
+                    ? ""
+                    : x.itemBrandID.name.replace("'", "''")}',
+              '${x.itemTypeID == null ? "" : x.itemTypeID.name.replace("'", "''")}',
+              '${x.itemBrandID == null ? "" : x.itemBrandID._id}',
+              '${x.itemTypeID == null ? "" : x.itemTypeID._id}',
               '${x._id}'
           );`);
                 x.images.forEach((image) => {
@@ -48,7 +50,9 @@ MigrationController.sync = (req, res) => {
                 });
             });
             return res.status(200).send({
-                migrationVersion: migration_version == null ? -1 : migration_version,
+                migrationVersion: migration_version == null
+                    ? -1
+                    : migration_version.migration_version,
                 commands: [
                     ...commands,
                     ...user.map((x) => {

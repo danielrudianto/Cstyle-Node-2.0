@@ -12,24 +12,31 @@ const conn = connectionFactory();
 
 class MigrationModelModel {
   static fetchLatestVersion() {
-    return conn.model("migration").findOne({
-      order: [["migration_version", "DESC"]],
-    });
+    return conn.model("migrations").findOne().sort({ migration_version: -1 });
   }
 
   static fetchMigrationSince(version: number) {
-    return conn.model("migration").find({
-      where: {
-        migration_version: {
-          $gt: version,
-        },
+    return conn.model("migrations").find({
+      migration_version: {
+        $gt: version,
       },
-      orderBy: [["migration_version", "DESC"]],
     });
+    // return conn
+    //   .model("migrations")
+    //   .find({
+    //     where: {
+    //       migration_version: {
+    //         $gt: version,
+    //       },
+    //     },
+    //   })
+    //   .sort({
+    //     migration_version: 1,
+    //   });
   }
 
   static deleteProduct(productID: string) {
-    return conn.model("migration").create({
+    return conn.model("migrations").create({
       // Autoincrement from previous
       migration_version: new Date().getTime(),
       command: `DELETE FROM product WHERE mongoID = '${productID}';`,
@@ -37,7 +44,7 @@ class MigrationModelModel {
   }
 
   static deleteProductImage(path: string, productID: string) {
-    return conn.model("migration").create({
+    return conn.model("migrations").create({
       // Autoincrement from previous
       migration_version: new Date().getTime(),
       command: `DELETE FROM product_image WHERE productID = '${productID}' AND imageUrl = '${path}';`,
@@ -46,7 +53,7 @@ class MigrationModelModel {
 
   static createProduct(data: ProductMigrationInterface) {
     return Promise.all([
-      conn.model("migration").create({
+      conn.model("migrations").create({
         // Autoincrement from previous
         migration_version: new Date().getTime(),
         command: `INSERT INTO product (reference, description, brand, type, brandID, typeID, price, barcode, mongoID, isActive) VALUES ('${
@@ -58,7 +65,7 @@ class MigrationModelModel {
         });`,
       }),
       ...data.images.map((x) => {
-        return conn.model("migration").create({
+        return conn.model("migrations").create({
           // Autoincrement from previous
           migration_version: new Date().getTime(),
           command: `INSERT INTO product_image (productID, imageUrl) VALUES ('${data.id}', '${x}');`,
@@ -68,18 +75,22 @@ class MigrationModelModel {
   }
 
   static updateProduct(data: ProductMigrationInterface) {
-    return conn.model("migration").create({
+    return conn.model("migrations").create({
       migration_version: new Date().getTime(),
       command: `UPDATE product SET reference = '${
         data.reference
       }', description = '${data.description}', isActive = ${
         data.isActive ? 1 : 0
-      } WHERE mongoID = '${data.id}';`,
+      }, barcode = '${data.barcode}', brandID = '${data.brandID}', typeID = '${
+        data.typeID
+      }', type = '${data.type}', brand = '${data.brand}' WHERE mongoID = '${
+        data.id
+      }';`,
     });
   }
 
   static updateProductBrand(data: ProductBrandMigrationInterface) {
-    return conn.model("migration").create({
+    return conn.model("migrations").create({
       // Autoincrement from previous
       migration_version: new Date().getTime(),
       command: `UPDATE product SET brand = '${data.name}' WHERE brandID = '${data.id}';`,
@@ -87,7 +98,7 @@ class MigrationModelModel {
   }
 
   static updateProductType(data: ProductTypeMigrationInterface) {
-    return conn.model("migration").create({
+    return conn.model("migrations").create({
       // Autoincrement from previous
       migration_version: new Date().getTime(),
       command: `UPDATE product SET type = '${data.name}' WHERE typeID = '${data.id}';`,
@@ -95,14 +106,14 @@ class MigrationModelModel {
   }
 
   static createUser(data: UserMigrationInterface) {
-    return conn.model("migration").create({
+    return conn.model("migrations").create({
       migration_version: new Date().getTime(),
       command: `INSERT INTO user (name, code, userID) VALUES ('${data.name}', '${data.code}', '${data.userID}');`,
     });
   }
 
   static updateUser(data: UserMigrationInterface) {
-    return conn.model("migration").create({
+    return conn.model("migrations").create({
       // Autoincrement from previous
       migration_version: new Date().getTime(),
       command: `UPDATE user SET code = '${data.code}', name = '${data.name} WHERE userID = '${data.userID}';`,
@@ -110,7 +121,7 @@ class MigrationModelModel {
   }
 
   static deleteUser(userID: string) {
-    return conn.model("migration").create({
+    return conn.model("migrations").create({
       // Autoincrement from previous
       migration_version: new Date().getTime(),
       command: `DELETE FROM user WHERE userID = '${userID}';`,
@@ -118,7 +129,7 @@ class MigrationModelModel {
   }
 
   static updateProductImages(data: ProductImageMigrationInterface) {
-    return conn.model("migration").insertMany(
+    return conn.model("migrations").insertMany(
       data.images.map((x, index) => {
         return {
           migration_version: new Date().getTime() + index,

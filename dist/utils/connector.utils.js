@@ -36,7 +36,7 @@ function connectionFactory() {
         dbName: "Cstyle",
         autoCreate: true,
     });
-    conn.model("migration", impl_migration_model_1.default);
+    conn.model("migrations", impl_migration_model_1.default);
     conn.model("adjustment-event", ins_adjustment_event_model_1.default);
     conn.model("bills", ins_bill_model_1.default);
     conn.model("delivery-slips", ins_delivery_slip_model_1.default);

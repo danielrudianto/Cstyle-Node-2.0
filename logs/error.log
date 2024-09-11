@@ -1366,3 +1366,42 @@ Use mongoose.model(name, schema)
 [2024-08-30 21:01:25] [ERROR] Master worker: Job 1836 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
 [2024-08-30 21:06:48] [ERROR] Good receipt: Error on fetching good receipt Error: Maximum execution time is exceeded 651d274a72d3c82697513024:
 [2024-08-30 21:08:02] [ERROR] Good receipt: Error on fetching good receipt Error: Maximum execution time is exceeded 651d274a72d3c82697513024:
+[2024-09-01 17:05:09] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-01 17:05:09] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-01 17:05:09] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-01 17:05:09] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-08 14:07:35] [ERROR] Item: Error on fetching item TypeError: Cannot read properties of null (reading 'name')
+[2024-09-08 14:07:41] [ERROR] Item: Error on fetching item TypeError: Cannot read properties of null (reading 'name')
+[2024-09-08 14:07:43] [ERROR] Item: Error on fetching item TypeError: Cannot read properties of null (reading 'name')
+[2024-09-08 14:07:44] [ERROR] Item: Error on fetching item TypeError: Cannot read properties of null (reading 'name')
+[2024-09-08 14:09:22] [ERROR] Item: Error on fetching item TypeError: Cannot read properties of null (reading 'name')
+[2024-09-10 22:28:32] [ERROR] Migration: Error on fetching initial data TypeError: Cannot read properties of null (reading 'name')
+[2024-09-10 22:28:33] [ERROR] Migration: Error on fetching initial data TypeError: Cannot read properties of null (reading 'name')
+[2024-09-11 11:19:01] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-11 11:19:01] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-11 11:19:01] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-11 11:19:01] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-11 11:19:01] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-11 11:19:01] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-11 11:19:02] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-11 11:19:02] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-11 11:19:02] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-11 11:19:03] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-11 11:19:03] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-11 11:19:04] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-11 11:19:04] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-11 11:19:05] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-11 11:19:05] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-11 11:19:06] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-11 11:19:06] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-11 11:19:07] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-11 11:19:07] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-11 11:19:08] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-11 11:19:08] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-11 11:19:09] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-11 11:19:09] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-11 11:19:10] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-11 23:41:34] [ERROR] Master worker: Job 1874 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
+[2024-09-11 23:41:34] [ERROR] Master worker: Job 1875 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
+[2024-09-12 00:43:33] [ERROR] Item: Error on fetching item CastError: Cast to ObjectId failed for value "" (type string) at path "storeID" for model "stocks"
+[2024-09-12 00:43:46] [ERROR] Item: Error on fetching item CastError: Cast to ObjectId failed for value "" (type string) at path "storeID" for model "stocks"

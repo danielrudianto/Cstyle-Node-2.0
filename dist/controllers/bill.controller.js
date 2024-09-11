@@ -54,5 +54,20 @@ BillController.fetch = (req, res) => {
         return res.status(500).send(error_list_1.ErrorList["INTERNAL_SERVER_ERROR"]);
     });
 };
+BillController.fetchByID = (req, res) => {
+    const id = req.params.id;
+    bill_model_1.default.fetchByID(id)
+        .then((result) => {
+        return res.status(200).send(result);
+    })
+        .catch((error) => {
+        new logger_utils_1.default({
+            message: `Error on fetching bill by ID ${error}`,
+            type: logger_interface_1.LoggerType.error,
+            tag: "Bill",
+        }).log();
+        return res.status(500).send(error_list_1.ErrorList["INTERNAL_SERVER_ERROR"]);
+    });
+};
 exports.default = BillController;
 //# sourceMappingURL=bill.controller.js.map
