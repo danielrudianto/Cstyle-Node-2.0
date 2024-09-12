@@ -10191,3 +10191,12 @@ Use mongoose.model(name, schema)
 [2024-09-12 00:43:09] [INFO] Master worker: Job 1877 [insertStockIn] completed at Thu Sep 12 2024 00:43:09 GMT+0800 (Central Indonesia Time)
 [2024-09-12 00:43:33] [ERROR] Item: Error on fetching item CastError: Cast to ObjectId failed for value "" (type string) at path "storeID" for model "stocks"
 [2024-09-12 00:43:46] [ERROR] Item: Error on fetching item CastError: Cast to ObjectId failed for value "" (type string) at path "storeID" for model "stocks"
+[2024-09-12 01:04:15] [INFO] Server: Server started on port 5000
+[2024-09-12 01:04:15] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-09-12 01:04:15] [INFO] Redis: Connected with Redis Database Engine
+[2024-09-12 01:04:16] [INFO] Sync: Synced 38 users
+[2024-09-12 01:06:06] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-09-85900231" }
+[2024-09-12 01:06:06] [INFO] Master worker: Job 1878 [createBill] completed at Thu Sep 12 2024 01:06:06 GMT+0800 (Central Indonesia Time)
+[2024-09-12 01:06:06] [ERROR] Master worker: Job 1879 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
+[2024-09-12 01:06:06] [ERROR] Master worker: Job 1880 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
+[2024-09-12 01:06:06] [ERROR] Master worker: Job 1881 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.

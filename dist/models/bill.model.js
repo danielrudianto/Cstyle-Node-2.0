@@ -94,6 +94,9 @@ class BillModelModel {
                 .find({
                 storeID: storeID,
                 isDelete: false,
+                date: {
+                    $gte: new Date(new Date().setHours(0, 0, 0, 0)),
+                },
             })
                 .sort({
                 date: -1,

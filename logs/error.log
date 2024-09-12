@@ -1405,3 +1405,7 @@ Use mongoose.model(name, schema)
 [2024-09-11 23:41:34] [ERROR] Master worker: Job 1875 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
 [2024-09-12 00:43:33] [ERROR] Item: Error on fetching item CastError: Cast to ObjectId failed for value "" (type string) at path "storeID" for model "stocks"
 [2024-09-12 00:43:46] [ERROR] Item: Error on fetching item CastError: Cast to ObjectId failed for value "" (type string) at path "storeID" for model "stocks"
+[2024-09-12 01:06:06] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-09-85900231" }
+[2024-09-12 01:06:06] [ERROR] Master worker: Job 1879 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
+[2024-09-12 01:06:06] [ERROR] Master worker: Job 1880 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
+[2024-09-12 01:06:06] [ERROR] Master worker: Job 1881 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
