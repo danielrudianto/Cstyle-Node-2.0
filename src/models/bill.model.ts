@@ -116,7 +116,7 @@ class BillModelModel {
           storeID: storeID,
           isDelete: false,
           // date is today
-          date: {
+          createdAt: {
             $gte: new Date(new Date().setHours(0, 0, 0, 0)),
           },
         })
