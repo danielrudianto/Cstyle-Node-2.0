@@ -86,52 +86,49 @@ CashierController.sync = (req, res) => __awaiter(void 0, void 0, void 0, functio
     }, {});
     yield lock_utils_1.default.acquire(Object.entries(groupedData).map(([_, value]) => {
         return `${value.itemID}:${storeID}`;
-    }), () => __awaiter(void 0, void 0, void 0, function* () {
+    }), (done) => __awaiter(void 0, void 0, void 0, function* () {
         stock_model_1.default.checkStockByItemIDs(Object.entries(groupedData).map(([_, value]) => {
             return { itemID: value.itemID, quantity: value.quantity };
         }), storeID)
             .then((result) => __awaiter(void 0, void 0, void 0, function* () {
-            yield lock_utils_1.default.acquire(Object.entries(groupedData).map(([_, value]) => {
-                return value.itemID;
-            }), (done) => __awaiter(void 0, void 0, void 0, function* () {
-                const comparisonResults = result.map((item) => {
-                    const groupedItem = groupedData[item.itemID];
-                    return groupedItem.quantity <= item.quantity;
-                });
-                if (comparisonResults.includes(false)) {
-                    return res.status(400).send(error_list_1.ErrorList["INSUFFICIENT_STOCK"]);
-                }
-                else {
-                    bill_model_1.default.insertMany(modifiedBills)
-                        .then((result) => {
-                        result.forEach((x) => __awaiter(void 0, void 0, void 0, function* () {
-                            x.items.forEach((y) => __awaiter(void 0, void 0, void 0, function* () {
-                                yield new stock_model_1.default({
-                                    itemID: y.itemID,
-                                    quantity: y.quantity * -1,
-                                    storeID: x.storeID,
-                                }).update();
-                            }));
-                            yield queue_utils_1.queue.add("createBill", {
-                                id: x._id,
-                            });
+            const comparisonResults = result.map((item) => {
+                const groupedItem = groupedData[item.itemID];
+                return groupedItem.quantity <= item.quantity;
+            });
+            if (comparisonResults.includes(false)) {
+                done();
+                return res.status(400).send(error_list_1.ErrorList["INSUFFICIENT_STOCK"]);
+            }
+            else {
+                bill_model_1.default.insertMany(modifiedBills)
+                    .then((result) => {
+                    result.forEach((x) => __awaiter(void 0, void 0, void 0, function* () {
+                        x.items.forEach((y) => __awaiter(void 0, void 0, void 0, function* () {
+                            yield new stock_model_1.default({
+                                itemID: y.itemID,
+                                quantity: y.quantity * -1,
+                                storeID: x.storeID,
+                            }).update();
                         }));
-                        done();
-                        return res.status(200).send(result);
-                    })
-                        .catch((error) => {
-                        new logger_utils_1.default({
-                            message: `Error on creating bill ${error}`,
-                            type: logger_interface_1.LoggerType.error,
-                            tag: "Cashier",
-                        }).log();
-                        done();
-                        return res
-                            .status(500)
-                            .send(error_list_1.ErrorList["INTERNAL_SERVER_ERROR"]);
-                    });
-                }
-            }));
+                        yield queue_utils_1.queue.add("createBill", {
+                            id: x._id,
+                        });
+                    }));
+                    done();
+                    return res.status(200).send(result);
+                })
+                    .catch((error) => {
+                    new logger_utils_1.default({
+                        message: `Error on creating bill ${error}`,
+                        type: logger_interface_1.LoggerType.error,
+                        tag: "Cashier",
+                    }).log();
+                    done();
+                    return res
+                        .status(500)
+                        .send(error_list_1.ErrorList["INTERNAL_SERVER_ERROR"]);
+                });
+            }
         }))
             .catch((error) => {
             new logger_utils_1.default({

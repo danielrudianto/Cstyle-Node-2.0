@@ -26,6 +26,7 @@ import StockOutModelModel from "../models/stock-out.model";
 import {
   UpdateProductImageDataInterface,
   CommonWorkerInterface,
+  CommonUpdateWorkerInterface,
 } from "../interfaces/worker.interface";
 import AdjustmentModelModel from "../models/adjustment.model";
 import { DeleteStockInInterface } from "../interfaces/stock.interface";
@@ -143,6 +144,56 @@ class WorkerController {
       });
   }
 
+  static updateProductType(data: CommonUpdateWorkerInterface): any {
+    const id = data.id;
+    const name = data.name;
+
+    MigrationModelModel.updateProductType({
+      id: id,
+      name: name,
+    })
+      .then(() => {
+        new LoggerHelper({
+          type: LoggerType.info,
+          message: `Product type updated for product ${id}`,
+          tag: "Worker",
+        }).log();
+      })
+      .catch((error) => {
+        new LoggerHelper({
+          type: LoggerType.error,
+          message: `Error on updating product type ${error}`,
+          tag: "Worker",
+        }).log();
+        throw new Error(error);
+      });
+  }
+
+  static updateProductBrand(data: CommonUpdateWorkerInterface): any {
+    const id = data.id;
+    const name = data.name;
+
+    MigrationModelModel.updateProductBrand({
+      id: id,
+      name: name,
+    })
+      .then(() => {
+        new LoggerHelper({
+          type: LoggerType.info,
+          message: `Product brand updated for product ${id}`,
+          tag: "Worker",
+        }).log();
+      })
+      .catch((error) => {
+        new LoggerHelper({
+          type: LoggerType.error,
+          message: `Error on updating product brand ${error}`,
+          tag: "Worker",
+        }).log();
+        throw new Error(error);
+      });
+  }
+
   static updateProductImages(data: UpdateProductImageDataInterface): any {
     const id = data.id;
     const images = data.images as string[];
@@ -150,7 +201,22 @@ class WorkerController {
     MigrationModelModel.updateProductImages({
       id,
       images: images,
-    });
+    })
+      .then(() => {
+        new LoggerHelper({
+          type: LoggerType.info,
+          message: `Product images updated for product ${id}`,
+          tag: "Worker",
+        }).log();
+      })
+      .catch((error) => {
+        new LoggerHelper({
+          type: LoggerType.error,
+          message: `Error on updating product images ${error}`,
+          tag: "Worker",
+        }).log();
+        throw new Error(error);
+      });
   }
 
   static async deleteProduct(data: CommonWorkerInterface): Promise<any> {

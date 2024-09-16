@@ -1409,3 +1409,32 @@ Use mongoose.model(name, schema)
 [2024-09-12 01:06:06] [ERROR] Master worker: Job 1879 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
 [2024-09-12 01:06:06] [ERROR] Master worker: Job 1880 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
 [2024-09-12 01:06:06] [ERROR] Master worker: Job 1881 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
+[2024-09-16 21:26:36] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-16 21:26:37] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-16 21:26:37] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-16 21:26:37] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-16 21:26:37] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-16 21:26:37] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-16 21:26:37] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-16 21:26:38] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-16 21:26:38] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-16 21:26:39] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-16 21:26:39] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-16 21:26:40] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-16 21:26:40] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-16 21:26:41] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-16 21:26:41] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-16 21:26:42] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-16 21:26:42] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-16 21:26:43] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-16 22:09:56] [ERROR] Master worker: Job 1884 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
+[2024-09-16 22:33:33] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-09-47915138" }
+[2024-09-16 22:33:33] [ERROR] Master worker: Job 1886 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
+[2024-09-16 22:33:33] [ERROR] Master worker: Job 1887 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
+[2024-09-16 22:36:33] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-09-94329527" }
+[2024-09-16 22:36:33] [ERROR] Master worker: Job 1889 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
+[2024-09-16 22:43:35] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-09-27728292" }
+[2024-09-16 22:43:35] [ERROR] Master worker: Job 1891 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
+[2024-09-16 22:45:44] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-09-92269131" }
+[2024-09-16 22:45:44] [ERROR] Master worker: Job 1893 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
+[2024-09-16 22:47:44] [ERROR] Master worker: Job 1895 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.

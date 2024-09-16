@@ -366,6 +366,7 @@ class StockRequestController {
           }
 
           if (!validation) {
+            done();
             return res.status(405).send(ErrorList["INSUFFICIENT_STOCK"]);
           } else {
             StockRequestModelModel.send({

@@ -225,6 +225,7 @@ StockRequestController.send = (req, res) => __awaiter(void 0, void 0, void 0, fu
                 }
             }
             if (!validation) {
+                done();
                 return res.status(405).send(error_list_1.ErrorList["INSUFFICIENT_STOCK"]);
             }
             else {

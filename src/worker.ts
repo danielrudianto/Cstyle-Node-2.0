@@ -4,6 +4,7 @@ import LoggerHelper from "./utils/logger.utils";
 import { LoggerType } from "./interfaces/logger.interface";
 import WorkerController from "./controllers/worker.controller";
 import {
+  CommonUpdateWorkerInterface,
   CommonWorkerInterface,
   UpdateProductImageDataInterface,
 } from "./interfaces/worker.interface";
@@ -45,6 +46,8 @@ interface JobDataMap {
   removeStockIn: RemoveStockInInterface;
   removeStockOut: RemoveStockOutInterface;
   deleteAdjustment: CommonWorkerInterface;
+  updateProductType: CommonUpdateWorkerInterface;
+  updateProductBrand: CommonUpdateWorkerInterface;
 }
 
 type JobName = keyof JobDataMap;
@@ -70,6 +73,16 @@ const workerHandler = async <T extends JobName>(job: Job<T>) => {
       break;
     case "deleteProduct":
       WorkerController.deleteProduct(job.data as CommonWorkerInterface);
+      break;
+    case "updateProductType":
+      WorkerController.updateProductType(
+        job.data as CommonUpdateWorkerInterface
+      );
+      break;
+    case "updateProductBrand":
+      WorkerController.updateProductBrand(
+        job.data as CommonUpdateWorkerInterface
+      );
       break;
     case "createUser":
       WorkerController.createUser(job.data as CommonWorkerInterface);

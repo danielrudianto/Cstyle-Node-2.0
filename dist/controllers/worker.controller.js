@@ -132,12 +132,73 @@ class WorkerController {
             throw new Error(error);
         });
     }
+    static updateProductType(data) {
+        const id = data.id;
+        const name = data.name;
+        migration_model_1.default.updateProductType({
+            id: id,
+            name: name,
+        })
+            .then(() => {
+            new logger_utils_1.default({
+                type: logger_interface_1.LoggerType.info,
+                message: `Product type updated for product ${id}`,
+                tag: "Worker",
+            }).log();
+        })
+            .catch((error) => {
+            new logger_utils_1.default({
+                type: logger_interface_1.LoggerType.error,
+                message: `Error on updating product type ${error}`,
+                tag: "Worker",
+            }).log();
+            throw new Error(error);
+        });
+    }
+    static updateProductBrand(data) {
+        const id = data.id;
+        const name = data.name;
+        migration_model_1.default.updateProductBrand({
+            id: id,
+            name: name,
+        })
+            .then(() => {
+            new logger_utils_1.default({
+                type: logger_interface_1.LoggerType.info,
+                message: `Product brand updated for product ${id}`,
+                tag: "Worker",
+            }).log();
+        })
+            .catch((error) => {
+            new logger_utils_1.default({
+                type: logger_interface_1.LoggerType.error,
+                message: `Error on updating product brand ${error}`,
+                tag: "Worker",
+            }).log();
+            throw new Error(error);
+        });
+    }
     static updateProductImages(data) {
         const id = data.id;
         const images = data.images;
         migration_model_1.default.updateProductImages({
             id,
             images: images,
+        })
+            .then(() => {
+            new logger_utils_1.default({
+                type: logger_interface_1.LoggerType.info,
+                message: `Product images updated for product ${id}`,
+                tag: "Worker",
+            }).log();
+        })
+            .catch((error) => {
+            new logger_utils_1.default({
+                type: logger_interface_1.LoggerType.error,
+                message: `Error on updating product images ${error}`,
+                tag: "Worker",
+            }).log();
+            throw new Error(error);
         });
     }
     static deleteProduct(data) {

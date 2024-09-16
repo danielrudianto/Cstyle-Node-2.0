@@ -220,6 +220,7 @@ class AdjustmentEventController {
                   });
 
                 if (!validation) {
+                  done();
                   return res.status(400).send(ErrorList["INSUFFICIENT_STOCK"]);
                 } else {
                   AdjustmentModelModel.deleteByID(id, userID).then(

@@ -3,6 +3,7 @@ import { ErrorList } from "../data/error-list";
 import { LoggerType } from "../interfaces/logger.interface";
 import ItemTypeModelModel from "../models/item-type.model";
 import LoggerHelper from "../utils/logger.utils";
+import { queue } from "../utils/queue.utils";
 
 class ItemTypeController {
   static create = (req: Request, res: Response) => {
@@ -67,7 +68,12 @@ class ItemTypeController {
             id: id,
           })
             .update()
-            .then((result) => {
+            .then(async (result) => {
+              await queue.add("update-item-type", {
+                name: name,
+                id: id,
+              });
+
               return res.status(201).send({
                 ...result,
                 name: name,

@@ -25,7 +25,6 @@ class AuthController {
               if (!validation) {
                 return res.status(404).send(ErrorList["LOGIN_ERROR"]);
               } else {
-                await queue.add("login", user._id);
                 const token = this.generateAccessToken(user._id!, user.name);
                 const refreshToken = this.generateRefreshToken(user._id!);
                 return res.status(200).send({

@@ -10200,3 +10200,123 @@ Use mongoose.model(name, schema)
 [2024-09-12 01:06:06] [ERROR] Master worker: Job 1879 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
 [2024-09-12 01:06:06] [ERROR] Master worker: Job 1880 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
 [2024-09-12 01:06:06] [ERROR] Master worker: Job 1881 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
+[2024-09-16 21:26:36] [INFO] Server: Server started on port 5000
+[2024-09-16 21:26:36] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-09-16 21:26:36] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-16 21:26:37] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-16 21:26:37] [INFO] Sync: Synced 38 users
+[2024-09-16 21:26:37] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-16 21:26:37] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-16 21:26:37] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-16 21:26:37] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-16 21:26:37] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-16 21:26:38] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-16 21:26:38] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-16 21:26:39] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-16 21:26:39] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-16 21:26:40] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-16 21:26:40] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-16 21:26:41] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-16 21:26:41] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-16 21:26:42] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-16 21:26:42] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-16 21:26:43] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-16 21:26:43] [INFO] Redis: Connected with Redis Database Engine
+[2024-09-16 21:26:55] [INFO] Master worker: Job 1882 [login] completed at Mon Sep 16 2024 21:26:55 GMT+0800 (Central Indonesia Time)
+[2024-09-16 21:48:22] [INFO] Server: Server started on port 5000
+[2024-09-16 21:48:22] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-09-16 21:48:22] [INFO] Redis: Connected with Redis Database Engine
+[2024-09-16 21:48:22] [INFO] Sync: Synced 38 users
+[2024-09-16 21:49:48] [INFO] Server: Server started on port 5000
+[2024-09-16 21:49:48] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-09-16 21:49:48] [INFO] Redis: Connected with Redis Database Engine
+[2024-09-16 21:49:48] [INFO] Sync: Synced 38 users
+[2024-09-16 21:50:50] [INFO] Server: Server started on port 5000
+[2024-09-16 21:50:50] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-09-16 21:50:51] [INFO] Redis: Connected with Redis Database Engine
+[2024-09-16 21:50:51] [INFO] Sync: Synced 38 users
+[2024-09-16 21:52:00] [INFO] Server: Server started on port 5000
+[2024-09-16 21:52:00] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-09-16 21:52:00] [INFO] Redis: Connected with Redis Database Engine
+[2024-09-16 21:52:00] [INFO] Sync: Synced 38 users
+[2024-09-16 22:09:43] [INFO] Master worker: Job 1883 [insertStockIn] completed at Mon Sep 16 2024 22:09:43 GMT+0800 (Central Indonesia Time)
+[2024-09-16 22:09:56] [ERROR] Master worker: Job 1884 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
+[2024-09-16 22:33:33] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-09-47915138" }
+[2024-09-16 22:33:33] [INFO] Master worker: Job 1885 [createBill] completed at Mon Sep 16 2024 22:33:33 GMT+0800 (Central Indonesia Time)
+[2024-09-16 22:33:33] [ERROR] Master worker: Job 1886 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
+[2024-09-16 22:33:33] [ERROR] Master worker: Job 1887 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
+[2024-09-16 22:36:33] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-09-94329527" }
+[2024-09-16 22:36:33] [INFO] Master worker: Job 1888 [createBill] completed at Mon Sep 16 2024 22:36:33 GMT+0800 (Central Indonesia Time)
+[2024-09-16 22:36:33] [ERROR] Master worker: Job 1889 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
+[2024-09-16 22:43:35] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-09-27728292" }
+[2024-09-16 22:43:35] [INFO] Master worker: Job 1890 [createBill] completed at Mon Sep 16 2024 22:43:35 GMT+0800 (Central Indonesia Time)
+[2024-09-16 22:43:35] [ERROR] Master worker: Job 1891 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
+[2024-09-16 22:45:44] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-09-92269131" }
+[2024-09-16 22:45:44] [INFO] Master worker: Job 1892 [createBill] completed at Mon Sep 16 2024 22:45:44 GMT+0800 (Central Indonesia Time)
+[2024-09-16 22:45:44] [ERROR] Master worker: Job 1893 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
+[2024-09-16 22:46:17] [INFO] Server: Server started on port 5000
+[2024-09-16 22:46:17] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-09-16 22:46:17] [INFO] Redis: Connected with Redis Database Engine
+[2024-09-16 22:46:17] [INFO] Sync: Synced 38 users
+[2024-09-16 22:47:44] [INFO] Master worker: Job 1894 [createBill] completed at Mon Sep 16 2024 22:47:44 GMT+0800 (Central Indonesia Time)
+[2024-09-16 22:47:44] [ERROR] Master worker: Job 1895 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
+[2024-09-16 22:49:49] [INFO] Server: Server started on port 5000
+[2024-09-16 22:49:49] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-09-16 22:49:49] [INFO] Redis: Connected with Redis Database Engine
+[2024-09-16 22:49:49] [INFO] Sync: Synced 38 users
+[2024-09-16 22:50:09] [INFO] Server: Server started on port 5000
+[2024-09-16 22:50:09] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-09-16 22:50:09] [INFO] Redis: Connected with Redis Database Engine
+[2024-09-16 22:50:09] [INFO] Sync: Synced 38 users
+[2024-09-16 22:50:28] [INFO] Server: Server started on port 5000
+[2024-09-16 22:50:28] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-09-16 22:50:28] [INFO] Redis: Connected with Redis Database Engine
+[2024-09-16 22:50:28] [INFO] Sync: Synced 38 users
+[2024-09-16 22:50:42] [INFO] Server: Server started on port 5000
+[2024-09-16 22:50:42] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-09-16 22:50:42] [INFO] Redis: Connected with Redis Database Engine
+[2024-09-16 22:50:43] [INFO] Sync: Synced 38 users
+[2024-09-16 22:50:59] [INFO] Server: Server started on port 5000
+[2024-09-16 22:50:59] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-09-16 22:50:59] [INFO] Redis: Connected with Redis Database Engine
+[2024-09-16 22:50:59] [INFO] Sync: Synced 38 users
+[2024-09-16 22:51:21] [INFO] Server: Server started on port 5000
+[2024-09-16 22:51:21] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-09-16 22:51:21] [INFO] Redis: Connected with Redis Database Engine
+[2024-09-16 22:51:21] [INFO] Sync: Synced 38 users
+[2024-09-16 22:51:30] [INFO] Server: Server started on port 5000
+[2024-09-16 22:51:30] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-09-16 22:51:30] [INFO] Redis: Connected with Redis Database Engine
+[2024-09-16 22:51:30] [INFO] Sync: Synced 38 users
+[2024-09-16 22:51:41] [INFO] Server: Server started on port 5000
+[2024-09-16 22:51:41] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-09-16 22:51:41] [INFO] Redis: Connected with Redis Database Engine
+[2024-09-16 22:51:41] [INFO] Sync: Synced 38 users
+[2024-09-16 22:51:49] [INFO] Server: Server started on port 5000
+[2024-09-16 22:51:49] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-09-16 22:51:49] [INFO] Redis: Connected with Redis Database Engine
+[2024-09-16 22:51:49] [INFO] Sync: Synced 38 users
+[2024-09-16 22:52:31] [INFO] Server: Server started on port 5000
+[2024-09-16 22:52:31] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-09-16 22:52:31] [INFO] Redis: Connected with Redis Database Engine
+[2024-09-16 22:52:31] [INFO] Sync: Synced 38 users
+[2024-09-16 22:52:48] [INFO] Server: Server started on port 5000
+[2024-09-16 22:52:48] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-09-16 22:52:48] [INFO] Redis: Connected with Redis Database Engine
+[2024-09-16 22:52:48] [INFO] Sync: Synced 38 users
+[2024-09-16 22:53:02] [INFO] Server: Server started on port 5000
+[2024-09-16 22:53:02] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-09-16 22:53:02] [INFO] Redis: Connected with Redis Database Engine
+[2024-09-16 22:53:02] [INFO] Sync: Synced 38 users
+[2024-09-16 22:53:10] [INFO] Server: Server started on port 5000
+[2024-09-16 22:53:10] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-09-16 22:53:10] [INFO] Redis: Connected with Redis Database Engine
+[2024-09-16 22:53:10] [INFO] Sync: Synced 38 users
+[2024-09-16 22:53:25] [INFO] Server: Server started on port 5000
+[2024-09-16 22:53:25] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-09-16 22:53:25] [INFO] Redis: Connected with Redis Database Engine
+[2024-09-16 22:53:25] [INFO] Sync: Synced 38 users
+[2024-09-16 22:53:49] [INFO] Server: Server started on port 5000
+[2024-09-16 22:53:49] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-09-16 22:53:50] [INFO] Redis: Connected with Redis Database Engine
+[2024-09-16 22:53:50] [INFO] Sync: Synced 38 users

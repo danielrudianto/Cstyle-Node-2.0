@@ -203,6 +203,7 @@ AdjustmentEventController.deleteByID = (req, res) => {
                     }
                 });
                 if (!validation) {
+                    done();
                     return res.status(400).send(error_list_1.ErrorList["INSUFFICIENT_STOCK"]);
                 }
                 else {

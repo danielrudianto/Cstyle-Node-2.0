@@ -38,6 +38,12 @@ const workerHandler = (job) => __awaiter(void 0, void 0, void 0, function* () {
         case "deleteProduct":
             worker_controller_1.default.deleteProduct(job.data);
             break;
+        case "updateProductType":
+            worker_controller_1.default.updateProductType(job.data);
+            break;
+        case "updateProductBrand":
+            worker_controller_1.default.updateProductBrand(job.data);
+            break;
         case "createUser":
             worker_controller_1.default.createUser(job.data);
             break;

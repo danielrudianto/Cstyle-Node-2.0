@@ -89,7 +89,7 @@ class CashierController {
       Object.entries(groupedData).map(([_, value]) => {
         return `${value.itemID}:${storeID}`;
       }),
-      async () => {
+      async (done) => {
         StockModelModel.checkStockByItemIDs(
           Object.entries(groupedData).map(([_, value]) => {
             return { itemID: value.itemID, quantity: value.quantity };
@@ -97,54 +97,48 @@ class CashierController {
           storeID
         )
           .then(async (result) => {
-            await lock.acquire(
-              Object.entries(groupedData).map(([_, value]) => {
-                return value.itemID;
-              }),
-              async (done) => {
-                const comparisonResults = result.map((item) => {
-                  const groupedItem = groupedData[item.itemID];
-                  return groupedItem.quantity <= item.quantity;
-                });
+            const comparisonResults = result.map((item) => {
+              const groupedItem = groupedData[item.itemID];
+              return groupedItem.quantity <= item.quantity;
+            });
 
-                if (comparisonResults.includes(false)) {
-                  return res.status(400).send(ErrorList["INSUFFICIENT_STOCK"]);
-                } else {
-                  BillModelModel.insertMany(modifiedBills)
-                    .then((result) => {
-                      result.forEach(async (x) => {
-                        x.items.forEach(async (y: any) => {
-                          await new StockModelModel({
-                            itemID: y.itemID,
-                            quantity: y.quantity * -1,
-                            storeID: x.storeID,
-                          }).update();
-                        });
-
-                        await queue.add("createBill", {
-                          id: x._id,
-                        });
-                      });
-
-                      done();
-                      return res.status(200).send(result);
-                    })
-                    .catch((error) => {
-                      new LoggerHelper({
-                        message: `Error on creating bill ${error}`,
-                        type: LoggerType.error,
-                        tag: "Cashier",
-                      }).log();
-
-                      done();
-
-                      return res
-                        .status(500)
-                        .send(ErrorList["INTERNAL_SERVER_ERROR"]);
+            if (comparisonResults.includes(false)) {
+              done();
+              return res.status(400).send(ErrorList["INSUFFICIENT_STOCK"]);
+            } else {
+              BillModelModel.insertMany(modifiedBills)
+                .then((result) => {
+                  result.forEach(async (x) => {
+                    x.items.forEach(async (y: any) => {
+                      await new StockModelModel({
+                        itemID: y.itemID,
+                        quantity: y.quantity * -1,
+                        storeID: x.storeID,
+                      }).update();
                     });
-                }
-              }
-            );
+
+                    await queue.add("createBill", {
+                      id: x._id,
+                    });
+                  });
+
+                  done();
+                  return res.status(200).send(result);
+                })
+                .catch((error) => {
+                  new LoggerHelper({
+                    message: `Error on creating bill ${error}`,
+                    type: LoggerType.error,
+                    tag: "Cashier",
+                  }).log();
+
+                  done();
+
+                  return res
+                    .status(500)
+                    .send(ErrorList["INTERNAL_SERVER_ERROR"]);
+                });
+            }
           })
           .catch((error) => {
             new LoggerHelper({

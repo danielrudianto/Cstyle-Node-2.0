@@ -20,7 +20,6 @@ const connector_utils_1 = require("../utils/connector.utils");
 const user_model_1 = __importDefault(require("../models/user.model"));
 const logger_utils_1 = __importDefault(require("../utils/logger.utils"));
 const logger_interface_1 = require("../interfaces/logger.interface");
-const queue_utils_1 = require("../utils/queue.utils");
 const conn = (0, connector_utils_1.connectionFactory)();
 class AuthController {
     static generateAccessToken(userID, name) {
@@ -54,7 +53,6 @@ AuthController.login = (req, res) => {
                     return res.status(404).send(error_list_1.ErrorList["LOGIN_ERROR"]);
                 }
                 else {
-                    yield queue_utils_1.queue.add("login", user._id);
                     const token = _a.generateAccessToken(user._id, user.name);
                     const refreshToken = _a.generateRefreshToken(user._id);
                     return res.status(200).send({
