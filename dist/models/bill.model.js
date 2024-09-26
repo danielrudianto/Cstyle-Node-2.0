@@ -283,10 +283,22 @@ class BillModelModel {
     static fetchStoreReport(storeID) {
         const date = new Date();
         date.setHours(0, 0, 0, 0);
+        console.log(storeID);
         return conn.model("bills").find({
             storeID: storeID,
             isDelete: false,
-            date: date,
+            $and: [
+                {
+                    date: {
+                        $gte: date,
+                    },
+                },
+                {
+                    date: {
+                        $lte: new Date(),
+                    },
+                },
+            ],
         });
     }
     static fetchProductReport(storeID, month, year, shownOnly = true) {

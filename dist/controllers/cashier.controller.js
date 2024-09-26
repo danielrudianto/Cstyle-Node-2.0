@@ -238,7 +238,7 @@ CashierController.fetchReport = (req, res) => {
         });
         bills.forEach((bill) => {
             bill.payment.forEach((payment) => {
-                const index = payments.findIndex((x) => x.type === payment.type);
+                const index = payments.findIndex((x) => x.type.toLowerCase() === payment.type.toLowerCase());
                 payments[index].value += payment.amount;
             });
         });

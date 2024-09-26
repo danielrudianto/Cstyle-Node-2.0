@@ -261,7 +261,9 @@ class CashierController {
 
         bills.forEach((bill) => {
           bill.payment.forEach((payment: any) => {
-            const index = payments.findIndex((x) => x.type === payment.type);
+            const index = payments.findIndex(
+              (x) => x.type.toLowerCase() === payment.type.toLowerCase()
+            );
             payments[index].value += payment.amount;
           });
         });

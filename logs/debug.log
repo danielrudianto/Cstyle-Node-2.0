@@ -10320,3 +10320,65 @@ Use mongoose.model(name, schema)
 [2024-09-16 22:53:49] [INFO] MongoDB: Connected with MongoDB Database Engine
 [2024-09-16 22:53:50] [INFO] Redis: Connected with Redis Database Engine
 [2024-09-16 22:53:50] [INFO] Sync: Synced 38 users
+[2024-09-17 13:55:53] [INFO] Server: Server started on port 5000
+[2024-09-17 13:55:53] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-09-17 13:55:53] [INFO] Redis: Connected with Redis Database Engine
+[2024-09-17 13:55:53] [INFO] Sync: Synced 38 users
+[2024-09-17 13:58:06] [INFO] Master worker: Job 1896 [insertStockIn] completed at Tue Sep 17 2024 13:58:06 GMT+0800 (Central Indonesia Time)
+[2024-09-19 10:36:07] [INFO] Server: Server started on port 5000
+[2024-09-19 10:36:07] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-09-19 10:36:07] [INFO] Redis: Connected with Redis Database Engine
+[2024-09-19 10:36:07] [INFO] Sync: Synced 38 users
+[2024-09-26 12:09:46] [INFO] Server: Server started on port 5000
+[2024-09-26 12:09:46] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-09-26 12:09:46] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-26 12:09:47] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-26 12:09:47] [INFO] Sync: Synced 38 users
+[2024-09-26 12:09:47] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-26 12:09:47] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-26 12:09:47] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-26 12:09:47] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-26 12:09:47] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-26 12:09:48] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-26 12:09:48] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-09-26 12:09:49] [INFO] Redis: Connected with Redis Database Engine
+[2024-09-26 12:12:12] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-09-48572367" }
+[2024-09-26 12:13:12] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-09-82590076" }
+[2024-09-26 12:13:55] [INFO] Server: Server started on port 5000
+[2024-09-26 12:13:55] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-09-26 12:13:55] [INFO] Redis: Connected with Redis Database Engine
+[2024-09-26 12:13:55] [INFO] Sync: Synced 38 users
+[2024-09-26 12:14:17] [INFO] Server: Server started on port 5000
+[2024-09-26 12:14:17] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-09-26 12:14:17] [INFO] Redis: Connected with Redis Database Engine
+[2024-09-26 12:14:17] [INFO] Sync: Synced 38 users
+[2024-09-26 12:14:39] [INFO] Server: Server started on port 5000
+[2024-09-26 12:14:39] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-09-26 12:14:39] [INFO] Redis: Connected with Redis Database Engine
+[2024-09-26 12:14:39] [INFO] Sync: Synced 38 users
+[2024-09-26 12:14:56] [INFO] Server: Server started on port 5000
+[2024-09-26 12:14:56] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-09-26 12:14:56] [INFO] Redis: Connected with Redis Database Engine
+[2024-09-26 12:14:56] [INFO] Sync: Synced 38 users
+[2024-09-26 12:15:43] [INFO] Server: Server started on port 5000
+[2024-09-26 12:15:43] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-09-26 12:15:43] [INFO] Redis: Connected with Redis Database Engine
+[2024-09-26 12:15:43] [INFO] Sync: Synced 38 users
+[2024-09-26 12:17:04] [INFO] Server: Server started on port 5000
+[2024-09-26 12:17:04] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-09-26 12:17:04] [INFO] Redis: Connected with Redis Database Engine
+[2024-09-26 12:17:04] [INFO] Sync: Synced 38 users
+[2024-09-26 12:17:20] [INFO] Server: Server started on port 5000
+[2024-09-26 12:17:20] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-09-26 12:17:20] [INFO] Redis: Connected with Redis Database Engine
+[2024-09-26 12:17:20] [INFO] Sync: Synced 38 users
+[2024-09-26 12:17:20] [ERROR] Cashier: Error on fetching report TypeError: Cannot read properties of undefined (reading 'forEach')
+[2024-09-26 12:17:38] [INFO] Server: Server started on port 5000
+[2024-09-26 12:17:38] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-09-26 12:17:38] [INFO] Redis: Connected with Redis Database Engine
+[2024-09-26 12:17:38] [INFO] Sync: Synced 38 users
+[2024-09-26 12:17:39] [ERROR] Cashier: Error on fetching report TypeError: Cannot read properties of undefined (reading 'value')
+[2024-09-26 12:18:19] [INFO] Server: Server started on port 5000
+[2024-09-26 12:18:19] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-09-26 12:18:19] [INFO] Redis: Connected with Redis Database Engine
+[2024-09-26 12:18:19] [INFO] Sync: Synced 38 users
