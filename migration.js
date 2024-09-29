@@ -198,6 +198,19 @@ Promise.all([
     }
   }
 
+  bills.forEach(async (x) => {
+    // update the items
+    x.items.forEach((y) => {
+      y.price = y.price;
+      y.cogs = undefined;
+      y.discount = y.discount;
+      y.percentage = (discount * 100) / price;
+    });
+
+    // update the bill
+    await x.save();
+  });
+
   // Insert the stock ins
   await StockIn.insertMany(stockInToBeInserted)
     .then(async () => {
