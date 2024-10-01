@@ -395,6 +395,13 @@ class BillModelModel {
             isHidden: item.isHidden,
         })));
     }
+    static deleteByID(data) {
+        return conn.model("bills").findByIdAndUpdate(data.id, {
+            isDelete: true,
+            deletedBy: data.userID,
+            deletedAt: new Date(),
+        });
+    }
 }
 exports.default = BillModelModel;
 //# sourceMappingURL=bill.model.js.map

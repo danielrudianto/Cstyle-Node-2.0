@@ -64,6 +64,11 @@ class InvoiceModelModel {
                 isPaid: false,
             });
         }
+        console.log(data.keyword);
+        console.log(data.month);
+        console.log(data.year);
+        console.log(paymentFilters);
+        console.log(filters);
         return Promise.all([
             conn
                 .model("invoices")
@@ -89,8 +94,8 @@ class InvoiceModelModel {
                 .sort({
                 date: 1,
             })
-                .limit(10)
-                .skip(10 * (data.page - 1)),
+                .limit(20)
+                .skip(20 * (data.page - 1)),
             conn.model("invoices").countDocuments({
                 $and: [
                     {

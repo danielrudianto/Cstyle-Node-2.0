@@ -230,7 +230,9 @@ class ReportController {
                     const stockOut = stockouts.filter((stockout) => {
                       return (
                         stockout.itemID.toString() === itemID._id.toString() &&
-                        stockout.invoiceID.toString() === invoiceID
+                        (stockout.invoiceID == null
+                          ? null
+                          : stockout.invoiceID.toString()) === invoiceID
                       );
                     });
 

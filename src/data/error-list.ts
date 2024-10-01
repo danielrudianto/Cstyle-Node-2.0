@@ -168,6 +168,7 @@ export enum ErrorList {
   STATUS_REQUIRED = "Status is required",
   STORE_ID_REQUIRED = "Store id is required",
   BILL_NOT_FOUND = "Bill not found",
+  BILL_DELETED = "Bill already deleted",
   DUPLICATE_MEMBER_CODE = "Duplicate member code",
   NATIONALITY_REQUIRED = "Nationality is required",
   BIRTHDAY_REQUIRED = "Birthday is required",

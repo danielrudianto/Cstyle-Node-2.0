@@ -43,3 +43,8 @@ export interface StoreBillFetchInterface {
   page: number;
   storeID: string;
 }
+
+export interface BillDeleteInterface {
+  id: string;
+  userID: string;
+}

@@ -155,6 +155,7 @@ var ErrorList;
     ErrorList["STATUS_REQUIRED"] = "Status is required";
     ErrorList["STORE_ID_REQUIRED"] = "Store id is required";
     ErrorList["BILL_NOT_FOUND"] = "Bill not found";
+    ErrorList["BILL_DELETED"] = "Bill already deleted";
     ErrorList["DUPLICATE_MEMBER_CODE"] = "Duplicate member code";
     ErrorList["NATIONALITY_REQUIRED"] = "Nationality is required";
     ErrorList["BIRTHDAY_REQUIRED"] = "Birthday is required";

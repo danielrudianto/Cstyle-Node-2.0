@@ -1,6 +1,7 @@
 import { Types } from "mongoose";
 import { connectionFactory } from "../utils/connector.utils";
 import {
+  BillDeleteInterface,
   BillFetchInterface,
   BillInterface,
   BillItemInterface,
@@ -449,6 +450,14 @@ class BillModelModel {
         })
       )
     );
+  }
+
+  static deleteByID(data: BillDeleteInterface) {
+    return conn.model("bills").findByIdAndUpdate(data.id, {
+      isDelete: true,
+      deletedBy: data.userID,
+      deletedAt: new Date(),
+    });
   }
 }
 export default BillModelModel;

@@ -5544,3 +5544,16 @@ Use mongoose.model(name, schema)
 [2024-10-01 14:05:35] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
 [2024-10-01 14:05:36] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
 [2024-10-01 14:05:36] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-01 23:46:08] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading 'toString')
+[2024-10-01 23:47:49] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading '_id')
+[2024-10-02 00:08:39] [ERROR] Master worker: Job 1902 [createBill] has failed with The client is closed
+[2024-10-02 00:08:39] [ERROR] Master worker: Job 1903 [removeStockOut] has failed with Argument passed in does not match the accepted types
+[2024-10-02 00:08:39] [ERROR] Master worker: Job 1904 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
+[2024-10-02 00:08:39] [ERROR] Master worker: Job 1905 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
+[2024-10-02 00:08:39] [ERROR] Master worker: Job 1906 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
+[2024-10-02 00:08:49] [ERROR] Master worker: Job 1907 [removeStockOut] has failed with Argument passed in does not match the accepted types
+[2024-10-02 00:10:16] [ERROR] Bill: Error on deleting bill Error: Maximum execution time is exceeded {
+  _id: new ObjectId('651d274a72d3c82697513024'),
+  reference: ' ALEXA-0002 \r',
+  description: 'Alexa RDA OG 22mm by Inhale \r'
+}:64c90b3989850debbced337b

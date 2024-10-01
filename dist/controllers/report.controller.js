@@ -174,7 +174,9 @@ ReportController.fetchSalesProductReport = (req, res) => {
                             const itemID = invoice.packingListID.items[i].itemID;
                             const stockOut = stockouts.filter((stockout) => {
                                 return (stockout.itemID.toString() === itemID._id.toString() &&
-                                    stockout.invoiceID.toString() === invoiceID);
+                                    (stockout.invoiceID == null
+                                        ? null
+                                        : stockout.invoiceID.toString()) === invoiceID);
                             });
                             const stockOutPrice = stockOut.reduce((acc, stockout) => acc + stockout.stockIn.price * stockout.quantity, 0);
                             const averagePrice = stockOutPrice / invoice.packingListID.items[i].quantity;

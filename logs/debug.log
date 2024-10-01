@@ -14518,3 +14518,122 @@ Use mongoose.model(name, schema)
 [2024-10-01 23:33:07] [INFO] MongoDB: Connected with MongoDB Database Engine
 [2024-10-01 23:33:07] [INFO] Redis: Connected with Redis Database Engine
 [2024-10-01 23:33:07] [INFO] Sync: Synced 38 users
+[2024-10-01 23:45:38] [INFO] Server: Server started on port 5000
+[2024-10-01 23:45:38] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-10-01 23:45:38] [INFO] Redis: Connected with Redis Database Engine
+[2024-10-01 23:45:38] [INFO] Sync: Synced 38 users
+[2024-10-01 23:46:08] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading 'toString')
+[2024-10-01 23:46:45] [INFO] Server: Server started on port 5000
+[2024-10-01 23:46:45] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-10-01 23:46:46] [INFO] Redis: Connected with Redis Database Engine
+[2024-10-01 23:46:46] [INFO] Sync: Synced 38 users
+[2024-10-01 23:47:34] [INFO] Server: Server started on port 5000
+[2024-10-01 23:47:34] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-10-01 23:47:35] [INFO] Redis: Connected with Redis Database Engine
+[2024-10-01 23:47:35] [INFO] Sync: Synced 38 users
+[2024-10-01 23:47:49] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading '_id')
+[2024-10-01 23:51:54] [INFO] Server: Server started on port 5000
+[2024-10-01 23:51:54] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-10-01 23:51:54] [INFO] Redis: Connected with Redis Database Engine
+[2024-10-01 23:51:54] [INFO] Sync: Synced 38 users
+[2024-10-01 23:52:56] [INFO] Server: Server started on port 5000
+[2024-10-01 23:52:56] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-10-01 23:52:57] [INFO] Redis: Connected with Redis Database Engine
+[2024-10-01 23:52:57] [INFO] Sync: Synced 38 users
+[2024-10-01 23:53:36] [INFO] Server: Server started on port 5000
+[2024-10-01 23:53:36] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-10-01 23:53:36] [INFO] Redis: Connected with Redis Database Engine
+[2024-10-01 23:53:36] [INFO] Sync: Synced 38 users
+[2024-10-01 23:54:43] [INFO] Server: Server started on port 5000
+[2024-10-01 23:54:43] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-10-01 23:54:43] [INFO] Redis: Connected with Redis Database Engine
+[2024-10-01 23:54:43] [INFO] Sync: Synced 38 users
+[2024-10-01 23:54:52] [INFO] Server: Server started on port 5000
+[2024-10-01 23:54:52] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-10-01 23:54:52] [INFO] Redis: Connected with Redis Database Engine
+[2024-10-01 23:54:52] [INFO] Sync: Synced 38 users
+[2024-10-01 23:59:58] [INFO] Server: Server started on port 5000
+[2024-10-01 23:59:58] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-10-01 23:59:58] [INFO] Redis: Connected with Redis Database Engine
+[2024-10-01 23:59:58] [INFO] Sync: Synced 38 users
+[2024-10-02 00:00:48] [INFO] Server: Server started on port 5000
+[2024-10-02 00:00:48] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-10-02 00:00:48] [INFO] Redis: Connected with Redis Database Engine
+[2024-10-02 00:00:48] [INFO] Sync: Synced 38 users
+[2024-10-02 00:01:25] [INFO] Server: Server started on port 5000
+[2024-10-02 00:01:25] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-10-02 00:01:25] [INFO] Redis: Connected with Redis Database Engine
+[2024-10-02 00:01:25] [INFO] Sync: Synced 38 users
+[2024-10-02 00:01:54] [INFO] Server: Server started on port 5000
+[2024-10-02 00:01:54] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-10-02 00:01:54] [INFO] Redis: Connected with Redis Database Engine
+[2024-10-02 00:01:54] [INFO] Sync: Synced 38 users
+[2024-10-02 00:02:06] [INFO] Server: Server started on port 5000
+[2024-10-02 00:02:06] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-10-02 00:02:06] [INFO] Redis: Connected with Redis Database Engine
+[2024-10-02 00:02:06] [INFO] Sync: Synced 38 users
+[2024-10-02 00:03:48] [INFO] Server: Server started on port 5000
+[2024-10-02 00:03:48] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-10-02 00:03:48] [INFO] Redis: Connected with Redis Database Engine
+[2024-10-02 00:03:48] [INFO] Sync: Synced 38 users
+[2024-10-02 00:03:58] [INFO] Server: Server started on port 5000
+[2024-10-02 00:03:58] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-10-02 00:03:58] [INFO] Redis: Connected with Redis Database Engine
+[2024-10-02 00:03:58] [INFO] Sync: Synced 38 users
+[2024-10-02 00:04:06] [INFO] Server: Server started on port 5000
+[2024-10-02 00:04:06] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-10-02 00:04:06] [INFO] Redis: Connected with Redis Database Engine
+[2024-10-02 00:04:06] [INFO] Sync: Synced 38 users
+[2024-10-02 00:04:36] [INFO] Server: Server started on port 5000
+[2024-10-02 00:04:36] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-10-02 00:04:36] [INFO] Redis: Connected with Redis Database Engine
+[2024-10-02 00:04:36] [INFO] Sync: Synced 38 users
+[2024-10-02 00:04:45] [INFO] Server: Server started on port 5000
+[2024-10-02 00:04:45] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-10-02 00:04:45] [INFO] Redis: Connected with Redis Database Engine
+[2024-10-02 00:04:45] [INFO] Sync: Synced 38 users
+[2024-10-02 00:05:29] [INFO] Server: Server started on port 5000
+[2024-10-02 00:05:29] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-10-02 00:05:29] [INFO] Redis: Connected with Redis Database Engine
+[2024-10-02 00:05:29] [INFO] Sync: Synced 38 users
+[2024-10-02 00:05:39] [INFO] Server: Server started on port 5000
+[2024-10-02 00:05:39] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-10-02 00:05:39] [INFO] Redis: Connected with Redis Database Engine
+[2024-10-02 00:05:39] [INFO] Sync: Synced 38 users
+[2024-10-02 00:07:56] [INFO] Server: Server started on port 5000
+[2024-10-02 00:07:56] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-10-02 00:07:56] [INFO] Redis: Connected with Redis Database Engine
+[2024-10-02 00:07:56] [INFO] Sync: Synced 38 users
+[2024-10-02 00:08:38] [INFO] Master worker: Job 1897 [check-all-overflow] completed at Wed Oct 02 2024 00:08:38 GMT+0800 (Central Indonesia Time)
+[2024-10-02 00:08:38] [INFO] Master worker: Job 1898 [check-all-overflow] completed at Wed Oct 02 2024 00:08:38 GMT+0800 (Central Indonesia Time)
+[2024-10-02 00:08:39] [INFO] Master worker: Job 1899 [createBill] completed at Wed Oct 02 2024 00:08:39 GMT+0800 (Central Indonesia Time)
+[2024-10-02 00:08:39] [INFO] Master worker: Job 1900 [createBill] completed at Wed Oct 02 2024 00:08:39 GMT+0800 (Central Indonesia Time)
+[2024-10-02 00:08:39] [INFO] Master worker: Job 1901 [createBill] completed at Wed Oct 02 2024 00:08:39 GMT+0800 (Central Indonesia Time)
+[2024-10-02 00:08:39] [ERROR] Master worker: Job 1902 [createBill] has failed with The client is closed
+[2024-10-02 00:08:39] [ERROR] Master worker: Job 1903 [removeStockOut] has failed with Argument passed in does not match the accepted types
+[2024-10-02 00:08:39] [ERROR] Master worker: Job 1904 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
+[2024-10-02 00:08:39] [ERROR] Master worker: Job 1905 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
+[2024-10-02 00:08:39] [ERROR] Master worker: Job 1906 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
+[2024-10-02 00:08:49] [ERROR] Master worker: Job 1907 [removeStockOut] has failed with Argument passed in does not match the accepted types
+[2024-10-02 00:09:20] [INFO] Server: Server started on port 5000
+[2024-10-02 00:09:20] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-10-02 00:09:20] [INFO] Redis: Connected with Redis Database Engine
+[2024-10-02 00:09:20] [INFO] Sync: Synced 38 users
+[2024-10-02 00:09:57] [INFO] Server: Server started on port 5000
+[2024-10-02 00:09:57] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-10-02 00:09:57] [INFO] Redis: Connected with Redis Database Engine
+[2024-10-02 00:09:57] [INFO] Sync: Synced 38 users
+[2024-10-02 00:10:16] [ERROR] Bill: Error on deleting bill Error: Maximum execution time is exceeded {
+  _id: new ObjectId('651d274a72d3c82697513024'),
+  reference: ' ALEXA-0002 \r',
+  description: 'Alexa RDA OG 22mm by Inhale \r'
+}:64c90b3989850debbced337b
+[2024-10-02 00:10:16] [INFO] Master worker: Job 1908 [removeStockOut] completed at Wed Oct 02 2024 00:10:16 GMT+0800 (Central Indonesia Time)
+[2024-10-02 00:10:16] [INFO] Master worker: Job 1909 [removeStockOut] completed at Wed Oct 02 2024 00:10:16 GMT+0800 (Central Indonesia Time)
+[2024-10-02 00:10:17] [INFO] Master worker: Job 1910 [removeStockOut] completed at Wed Oct 02 2024 00:10:17 GMT+0800 (Central Indonesia Time)
+[2024-10-02 00:10:51] [INFO] Server: Server started on port 5000
+[2024-10-02 00:10:51] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-10-02 00:10:51] [INFO] Redis: Connected with Redis Database Engine
+[2024-10-02 00:10:51] [INFO] Sync: Synced 38 users
+[2024-10-02 00:11:05] [INFO] Master worker: Job 1911 [removeStockOut] completed at Wed Oct 02 2024 00:11:05 GMT+0800 (Central Indonesia Time)
+[2024-10-02 00:11:12] [INFO] Master worker: Job 1912 [removeStockOut] completed at Wed Oct 02 2024 00:11:12 GMT+0800 (Central Indonesia Time)
