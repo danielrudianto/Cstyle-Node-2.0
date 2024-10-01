@@ -4,7 +4,6 @@ import AccessInterceptor from "../interceptors/access.interceptor";
 import { body } from "express-validator";
 import { ErrorList } from "../data/error-list";
 import ErrorInterceptor from "../interceptors/error.interceptor";
-import bodyParser from "body-parser";
 
 const router = Router();
 

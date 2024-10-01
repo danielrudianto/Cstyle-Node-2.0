@@ -97,7 +97,10 @@ class ReportController {
                     Time: moment(x.createdAt).format("HH:mm:ss"),
                     Value: x.items.reduce(
                       (acc: any, item: any) =>
-                        acc + (item.price - item.discount) * item.quantity,
+                        acc +
+                        Math.floor((item.price - item.discount) / 1000) *
+                          1000 *
+                          item.quantity,
                       0
                     ),
                     Cash: CashPayment,
@@ -120,7 +123,10 @@ class ReportController {
                     Time: moment(x.createdAt).format("HH:mm:ss"),
                     Value: x.packingListID.items.reduce(
                       (acc: any, item: any) =>
-                        acc + (item.price - item.discount) * item.quantity,
+                        acc +
+                        Math.floor((item.price - item.discount) / 1000) *
+                          1000 *
+                          item.quantity,
                       0
                     ),
                     Customer: x.customerID == null ? "?NO" : x.customerID.name,
@@ -187,7 +193,9 @@ class ReportController {
                   const itemID = bill.items[i].itemID;
                   const stockOut = stockouts.filter((stockout) => {
                     return (
-                      stockout.billID.toString() === billID &&
+                      (stockout.billID == null
+                        ? null
+                        : stockout.billID.toString()) === billID &&
                       stockout.itemID.toString() === itemID._id.toString()
                     );
                   });

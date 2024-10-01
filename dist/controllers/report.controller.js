@@ -68,7 +68,10 @@ ReportController.fetchSalesReport = (req, res) => {
                             "Bill number": x.name,
                             Date: (0, moment_1.default)(x.date, "YYYY-MM-DD").format("DD/MM/YYYY"),
                             Time: (0, moment_1.default)(x.createdAt).format("HH:mm:ss"),
-                            Value: x.items.reduce((acc, item) => acc + (item.price - item.discount) * item.quantity, 0),
+                            Value: x.items.reduce((acc, item) => acc +
+                                Math.floor((item.price - item.discount) / 1000) *
+                                    1000 *
+                                    item.quantity, 0),
                             Cash: CashPayment,
                             Card: CardPayment,
                             "Bank Transfer": BankTransferPayment,
@@ -87,7 +90,10 @@ ReportController.fetchSalesReport = (req, res) => {
                             "Invoice number": x.name,
                             Date: (0, moment_1.default)(x.date, "YYYY-MM-DD").format("DD/MM/YYYY"),
                             Time: (0, moment_1.default)(x.createdAt).format("HH:mm:ss"),
-                            Value: x.packingListID.items.reduce((acc, item) => acc + (item.price - item.discount) * item.quantity, 0),
+                            Value: x.packingListID.items.reduce((acc, item) => acc +
+                                Math.floor((item.price - item.discount) / 1000) *
+                                    1000 *
+                                    item.quantity, 0),
                             Customer: x.customerID == null ? "?NO" : x.customerID.name,
                             "Created by": x.createdBy.name,
                             Remarks: x.isHidden ? "H" : "",
@@ -142,7 +148,9 @@ ReportController.fetchSalesProductReport = (req, res) => {
                     for (let i = 0; i < bill.items.length; i++) {
                         const itemID = bill.items[i].itemID;
                         const stockOut = stockouts.filter((stockout) => {
-                            return (stockout.billID.toString() === billID &&
+                            return ((stockout.billID == null
+                                ? null
+                                : stockout.billID.toString()) === billID &&
                                 stockout.itemID.toString() === itemID._id.toString());
                         });
                         const stockOutPrice = stockOut.reduce((acc, stockout) => acc + stockout.stockIn.price * stockout.quantity, 0);
