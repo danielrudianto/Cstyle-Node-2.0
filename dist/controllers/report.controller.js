@@ -41,7 +41,8 @@ ReportController.fetchSalesReport = (req, res) => {
                         const CashPaymentIndex = x.payment.findIndex((a) => a.type.toLowerCase() === "cash");
                         const PayPalPaymentIndex = x.payment.findIndex((a) => a.type.toLowerCase() === "paypal");
                         const VoucherPaymentIndex = x.payment.findIndex((a) => a.type.toLowerCase() === "voucher");
-                        const BankTransferPaymentIndex = x.payment.findIndex((a) => a.type.toLowerCase() === "bank transfer");
+                        const BankTransferPaymentIndex = x.payment.findIndex((a) => a.type.toLowerCase() === "bank transfer" ||
+                            a.type.toLowerCase() === "transfer");
                         const CardPaymentIndex = x.payment.findIndex((a) => a.type.toLowerCase() === "card");
                         const QRISPayment = QRISPaymentIndex !== -1
                             ? x.payment[QRISPaymentIndex].amount

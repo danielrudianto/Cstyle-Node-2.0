@@ -51,7 +51,9 @@ class ReportController {
                   );
 
                   const BankTransferPaymentIndex = x.payment.findIndex(
-                    (a: any) => a.type.toLowerCase() === "bank transfer"
+                    (a: any) =>
+                      a.type.toLowerCase() === "bank transfer" ||
+                      a.type.toLowerCase() === "transfer"
                   );
 
                   const CardPaymentIndex = x.payment.findIndex(
