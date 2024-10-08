@@ -19,71 +19,154 @@ class BillModelModel {
     }
     static fetch(data) {
         if (data.isOwner) {
-            return Promise.all([
-                conn
-                    .model("bills")
-                    .find({
-                    isHidden: false,
-                    name: RegExp(data.keyword, "i"),
-                    $expr: {
-                        $and: [
-                            { $eq: [{ $month: "$date" }, data.month + 1] },
-                            { $eq: [{ $year: "$date" }, data.year] },
-                        ],
-                    },
-                })
-                    .sort({
-                    date: 1,
-                })
-                    .populate("createdBy", "name")
-                    .populate("memberID", "code name")
-                    .populate("storeID", "name")
-                    .sort({ date: -1 })
-                    .limit(20)
-                    .skip((data.page - 1) * 20),
-                conn.model("bills").countDocuments({
-                    isHidden: false,
-                    name: RegExp(data.keyword, "i"),
-                    $expr: {
-                        $and: [
-                            { $eq: [{ $month: "$date" }, data.month + 1] },
-                            { $eq: [{ $year: "$date" }, data.year] },
-                        ],
-                    },
-                }),
-            ]);
+            if (data.storeID.length == 0) {
+                return Promise.all([
+                    conn
+                        .model("bills")
+                        .find({
+                        isHidden: false,
+                        name: RegExp(data.keyword, "i"),
+                        $expr: {
+                            $and: [
+                                { $eq: [{ $month: "$date" }, data.month + 1] },
+                                { $eq: [{ $year: "$date" }, data.year] },
+                            ],
+                        },
+                    })
+                        .sort({
+                        date: 1,
+                    })
+                        .populate("createdBy", "name")
+                        .populate("memberID", "code name")
+                        .populate("storeID", "name")
+                        .sort({ date: -1 })
+                        .limit(20)
+                        .skip((data.page - 1) * 20),
+                    conn.model("bills").countDocuments({
+                        isHidden: false,
+                        name: RegExp(data.keyword, "i"),
+                        $expr: {
+                            $and: [
+                                { $eq: [{ $month: "$date" }, data.month + 1] },
+                                { $eq: [{ $year: "$date" }, data.year] },
+                            ],
+                        },
+                    }),
+                ]);
+            }
+            else {
+                return Promise.all([
+                    conn
+                        .model("bills")
+                        .find({
+                        isHidden: false,
+                        name: RegExp(data.keyword, "i"),
+                        $expr: {
+                            $and: [
+                                { $eq: [{ $month: "$date" }, data.month + 1] },
+                                { $eq: [{ $year: "$date" }, data.year] },
+                            ],
+                        },
+                        storeID: {
+                            $in: data.storeID,
+                        },
+                    })
+                        .sort({
+                        date: 1,
+                    })
+                        .populate("createdBy", "name")
+                        .populate("memberID", "code name")
+                        .populate("storeID", "name")
+                        .sort({ date: -1 })
+                        .limit(20)
+                        .skip((data.page - 1) * 20),
+                    conn.model("bills").countDocuments({
+                        isHidden: false,
+                        name: RegExp(data.keyword, "i"),
+                        $expr: {
+                            $and: [
+                                { $eq: [{ $month: "$date" }, data.month + 1] },
+                                { $eq: [{ $year: "$date" }, data.year] },
+                            ],
+                        },
+                        storeID: {
+                            $in: data.storeID,
+                        },
+                    }),
+                ]);
+            }
         }
         else {
-            return Promise.all([
-                conn
-                    .model("bills")
-                    .find({
-                    name: RegExp(data.keyword, "i"),
-                    $expr: {
-                        $and: [
-                            { $eq: [{ $month: "$date" }, data.month + 1] },
-                            { $eq: [{ $year: "$date" }, data.year] },
-                        ],
-                    },
-                })
-                    .sort({
-                    date: 1,
-                })
-                    .populate("createdBy", "name")
-                    .populate("memberID", "code name")
-                    .populate("storeID", "name")
-                    .limit(20)
-                    .skip((data.page - 1) * 20),
-                conn.model("bills").countDocuments({
-                    name: RegExp(data.keyword, "i"),
-                    $expr: {
-                        $and: [
-                            { $eq: [{ $month: "$date" }, data.month + 1] },
-                            { $eq: [{ $year: "$date" }, data.year] },
-                        ],
-                    },
-                }),
-            ]);
+            if (data.storeID.length == 0) {
+                return Promise.all([
+                    conn
+                        .model("bills")
+                        .find({
+                        name: RegExp(data.keyword, "i"),
+                        $expr: {
+                            $and: [
+                                { $eq: [{ $month: "$date" }, data.month + 1] },
+                                { $eq: [{ $year: "$date" }, data.year] },
+                            ],
+                        },
+                    })
+                        .sort({
+                        date: 1,
+                    })
+                        .populate("createdBy", "name")
+                        .populate("memberID", "code name")
+                        .populate("storeID", "name")
+                        .limit(20)
+                        .skip((data.page - 1) * 20),
+                    conn.model("bills").countDocuments({
+                        name: RegExp(data.keyword, "i"),
+                        $expr: {
+                            $and: [
+                                { $eq: [{ $month: "$date" }, data.month + 1] },
+                                { $eq: [{ $year: "$date" }, data.year] },
+                            ],
+                        },
+                    }),
+                ]);
+            }
+            else {
+                return Promise.all([
+                    conn
+                        .model("bills")
+                        .find({
+                        name: RegExp(data.keyword, "i"),
+                        $expr: {
+                            $and: [
+                                { $eq: [{ $month: "$date" }, data.month + 1] },
+                                { $eq: [{ $year: "$date" }, data.year] },
+                            ],
+                        },
+                        storeID: {
+                            $in: data.storeID,
+                        },
+                    })
+                        .sort({
+                        date: 1,
+                    })
+                        .populate("createdBy", "name")
+                        .populate("memberID", "code name")
+                        .populate("storeID", "name")
+                        .limit(20)
+                        .skip((data.page - 1) * 20),
+                    conn.model("bills").countDocuments({
+                        name: RegExp(data.keyword, "i"),
+                        $expr: {
+                            $and: [
+                                { $eq: [{ $month: "$date" }, data.month + 1] },
+                                { $eq: [{ $year: "$date" }, data.year] },
+                            ],
+                        },
+                        storeID: {
+                            $in: data.storeID,
+                        },
+                    }),
+                ]);
+            }
         }
     }
     static fetchStore(data) {
