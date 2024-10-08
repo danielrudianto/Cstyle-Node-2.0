@@ -93,8 +93,7 @@ class ReportController {
                   return {
                     No: index + 1,
                     ID: x._id,
-                    Store: x.storeID == null ? "" : x.storeID.name,
-                    "Bill number": x.name,
+                    "Bill Number": x.name,
                     Date: moment(x.date, "YYYY-MM-DD").format("DD/MM/YYYY"),
                     Time: moment(x.createdAt).format("HH:mm:ss"),
                     Value: x.items.reduce(
@@ -112,7 +111,7 @@ class ReportController {
                     QRIS: QRISPayment,
                     Voucher: VoucherPayment,
                     "Created by": x.createdBy.name,
-                    Member: x.memberID == null ? "NO" : x.memberID,
+                    Member: x.memberID == null ? "NO" : x.memberID.code,
                     Remarks: x.isHidden ? "H" : "",
                   };
                 }),
@@ -120,7 +119,7 @@ class ReportController {
                   return {
                     No: index + 1,
                     ID: x._id,
-                    "Invoice number": x.name,
+                    "Invoice Number": x.name,
                     Date: moment(x.date, "YYYY-MM-DD").format("DD/MM/YYYY"),
                     Time: moment(x.createdAt).format("HH:mm:ss"),
                     Value: x.packingListID.items.reduce(
@@ -208,16 +207,21 @@ class ReportController {
                     0
                   );
 
-                  const averagePrice = stockOutPrice / bill.items[i].quantity;
+                  const averagePrice = stockOutPrice;
 
                   billsResult.push({
-                    ID: bill._id,
-                    "Bill Number": bill.name,
-                    Reference: bill.items[i].itemID.reference,
-                    Description: bill.items[i].itemID.description,
+                    Bill: bill.name,
+                    Date: moment(bill.date, "YYYY-MM-DD").format("DD/MM/YYYY"),
+                    Time: moment(bill.createdAt).format("HH:mm:ss"),
+                    Article: bill.items[i].itemID.reference,
+                    Reference: bill.items[i].itemID.description,
                     Quantity: bill.items[i].quantity,
-                    Price: bill.items[i].price - bill.items[i].discount,
-                    COGS: averagePrice,
+                    Price:
+                      Math.floor(
+                        (bill.items[i].price - bill.items[i].discount) / 1000
+                      ) * 1000,
+                    Cost: averagePrice,
+                    Staff: bill.createdBy.name,
                   });
                 }
               });
@@ -244,21 +248,23 @@ class ReportController {
                       0
                     );
 
-                    const averagePrice =
-                      stockOutPrice / invoice.packingListID.items[i].quantity;
+                    const averagePrice = stockOutPrice;
 
                     invoicesResult.push({
-                      ID: invoice._id,
-                      "Invoice Number": invoice.name,
+                      Invoice: invoice.name,
+                      Date: moment(invoice.date, "YYYY-MM-DD").format(
+                        "DD/MM/YYYY"
+                      ),
+                      Time: moment(invoice.createdAt).format("HH:mm:ss"),
+                      Article: invoice.packingListID.items[i].itemID.reference,
                       Reference:
-                        invoice.packingListID.items[i].itemID.reference,
-                      Description:
                         invoice.packingListID.items[i].itemID.description,
                       Quantity: invoice.packingListID.items[i].quantity,
                       Price:
                         invoice.packingListID.items[i].price -
                         invoice.packingListID.items[i].discount,
-                      COGS: averagePrice,
+                      Cost: averagePrice,
+                      Staff: invoice.createdBy.name,
                     });
                   }
                 } else if (invoice.deliverySlipID != null) {

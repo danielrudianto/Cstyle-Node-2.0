@@ -24,6 +24,14 @@ router.post(
 
 router.get("/autocomplete", StoreController.fetchAutocomplete);
 router.get(
+  "/all",
+  (req, res, next) => {
+    req.body.storeID = null;
+    next();
+  },
+  StoreController.fetchOthers
+);
+router.get(
   "/:id",
   param("id").isMongoId().withMessage(ErrorList["ID_INVALID"]),
   ErrorInterceptor.intercept,

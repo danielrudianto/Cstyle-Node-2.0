@@ -65,8 +65,7 @@ ReportController.fetchSalesReport = (req, res) => {
                         return {
                             No: index + 1,
                             ID: x._id,
-                            Store: x.storeID == null ? "" : x.storeID.name,
-                            "Bill number": x.name,
+                            "Bill Number": x.name,
                             Date: (0, moment_1.default)(x.date, "YYYY-MM-DD").format("DD/MM/YYYY"),
                             Time: (0, moment_1.default)(x.createdAt).format("HH:mm:ss"),
                             Value: x.items.reduce((acc, item) => acc +
@@ -80,7 +79,7 @@ ReportController.fetchSalesReport = (req, res) => {
                             QRIS: QRISPayment,
                             Voucher: VoucherPayment,
                             "Created by": x.createdBy.name,
-                            Member: x.memberID == null ? "NO" : x.memberID,
+                            Member: x.memberID == null ? "NO" : x.memberID.code,
                             Remarks: x.isHidden ? "H" : "",
                         };
                     }),
@@ -88,7 +87,7 @@ ReportController.fetchSalesReport = (req, res) => {
                         return {
                             No: index + 1,
                             ID: x._id,
-                            "Invoice number": x.name,
+                            "Invoice Number": x.name,
                             Date: (0, moment_1.default)(x.date, "YYYY-MM-DD").format("DD/MM/YYYY"),
                             Time: (0, moment_1.default)(x.createdAt).format("HH:mm:ss"),
                             Value: x.packingListID.items.reduce((acc, item) => acc +
@@ -155,15 +154,17 @@ ReportController.fetchSalesProductReport = (req, res) => {
                                 stockout.itemID.toString() === itemID._id.toString());
                         });
                         const stockOutPrice = stockOut.reduce((acc, stockout) => acc + stockout.stockIn.price * stockout.quantity, 0);
-                        const averagePrice = stockOutPrice / bill.items[i].quantity;
+                        const averagePrice = stockOutPrice;
                         billsResult.push({
-                            ID: bill._id,
-                            "Bill Number": bill.name,
-                            Reference: bill.items[i].itemID.reference,
-                            Description: bill.items[i].itemID.description,
+                            Bill: bill.name,
+                            Date: (0, moment_1.default)(bill.date, "YYYY-MM-DD").format("DD/MM/YYYY"),
+                            Time: (0, moment_1.default)(bill.createdAt).format("HH:mm:ss"),
+                            Article: bill.items[i].itemID.reference,
+                            Reference: bill.items[i].itemID.description,
                             Quantity: bill.items[i].quantity,
-                            Price: bill.items[i].price - bill.items[i].discount,
-                            COGS: averagePrice,
+                            Price: Math.floor((bill.items[i].price - bill.items[i].discount) / 1000) * 1000,
+                            Cost: averagePrice,
+                            Staff: bill.createdBy.name,
                         });
                     }
                 });
@@ -180,16 +181,18 @@ ReportController.fetchSalesProductReport = (req, res) => {
                                         : stockout.invoiceID.toString()) === invoiceID);
                             });
                             const stockOutPrice = stockOut.reduce((acc, stockout) => acc + stockout.stockIn.price * stockout.quantity, 0);
-                            const averagePrice = stockOutPrice / invoice.packingListID.items[i].quantity;
+                            const averagePrice = stockOutPrice;
                             invoicesResult.push({
-                                ID: invoice._id,
-                                "Invoice Number": invoice.name,
-                                Reference: invoice.packingListID.items[i].itemID.reference,
-                                Description: invoice.packingListID.items[i].itemID.description,
+                                Invoice: invoice.name,
+                                Date: (0, moment_1.default)(invoice.date, "YYYY-MM-DD").format("DD/MM/YYYY"),
+                                Time: (0, moment_1.default)(invoice.createdAt).format("HH:mm:ss"),
+                                Article: invoice.packingListID.items[i].itemID.reference,
+                                Reference: invoice.packingListID.items[i].itemID.description,
                                 Quantity: invoice.packingListID.items[i].quantity,
                                 Price: invoice.packingListID.items[i].price -
                                     invoice.packingListID.items[i].discount,
-                                COGS: averagePrice,
+                                Cost: averagePrice,
+                                Staff: invoice.createdBy.name,
                             });
                         }
                     }

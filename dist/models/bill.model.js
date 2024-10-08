@@ -38,6 +38,7 @@ class BillModelModel {
                     .populate("createdBy", "name")
                     .populate("memberID", "code name")
                     .populate("storeID", "name")
+                    .sort({ date: -1 })
                     .limit(20)
                     .skip((data.page - 1) * 20),
                 conn.model("bills").countDocuments({
@@ -277,7 +278,7 @@ class BillModelModel {
             .model("bills")
             .find(query)
             .populate("createdBy", "name")
-            .populate("memberID", "code")
+            .populate("memberID", "_id code name")
             .populate("storeID", "name");
     }
     static fetchStoreReport(storeID) {
