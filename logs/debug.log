@@ -14725,3 +14725,7 @@ Use mongoose.model(name, schema)
 [2024-10-08 18:04:22] [INFO] MongoDB: Connected with MongoDB Database Engine
 [2024-10-08 18:04:22] [INFO] Redis: Connected with Redis Database Engine
 [2024-10-08 18:04:22] [INFO] Sync: Synced 38 users
+[2024-10-08 18:25:40] [INFO] Server: Server started on port 5000
+[2024-10-08 18:25:40] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-10-08 18:25:40] [INFO] Redis: Connected with Redis Database Engine
+[2024-10-08 18:25:40] [INFO] Sync: Synced 38 users
