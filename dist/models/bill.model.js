@@ -201,7 +201,7 @@ class BillModelModel {
             .findById(id)
             .populate("memberID", "code name")
             .populate("createdBy", "name")
-            .populate("items.itemID", "reference description");
+            .populate("items.itemID", "_id reference description");
     }
     static fetchStatus() {
         const todayDate = new Date();

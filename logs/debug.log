@@ -14741,3 +14741,39 @@ Use mongoose.model(name, schema)
 [2024-10-10 00:05:46] [INFO] MongoDB: Connected with MongoDB Database Engine
 [2024-10-10 00:05:46] [INFO] Redis: Connected with Redis Database Engine
 [2024-10-10 00:05:46] [INFO] Sync: Synced 38 users
+[2024-10-10 13:20:55] [INFO] Server: Server started on port 5000
+[2024-10-10 13:20:55] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-10-10 13:20:55] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:20:55] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:20:55] [INFO] Sync: Synced 38 users
+[2024-10-10 13:20:55] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:20:55] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:20:56] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:20:56] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:20:56] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:20:56] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:20:57] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:20:57] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:20:58] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:20:58] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:20:59] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:20:59] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:21:00] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:21:00] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:21:01] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:21:01] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:21:02] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:21:02] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:21:03] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:21:03] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:21:04] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:21:04] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:21:05] [INFO] Redis: Connected with Redis Database Engine
+[2024-10-10 13:22:55] [INFO] Server: Server started on port 5000
+[2024-10-10 13:22:55] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-10-10 13:22:56] [INFO] Redis: Connected with Redis Database Engine
+[2024-10-10 13:22:56] [INFO] Sync: Synced 38 users
+[2024-10-11 00:05:31] [INFO] Server: Server started on port 5000
+[2024-10-11 00:05:31] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-10-11 00:05:31] [INFO] Redis: Connected with Redis Database Engine
+[2024-10-11 00:05:31] [INFO] Sync: Synced 37 users

@@ -278,7 +278,7 @@ class WorkerController {
                 result.items.forEach((x) => __awaiter(this, void 0, void 0, function* () {
                     const item = {
                         date: result.date,
-                        itemID: x.itemID,
+                        itemID: x.itemID._id,
                         quantity: x.quantity,
                         adjustmentEventID: null,
                         storeID: result.storeID,

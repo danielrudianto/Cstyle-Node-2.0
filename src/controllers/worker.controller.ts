@@ -299,7 +299,7 @@ class WorkerController {
       result.items.forEach(async (x: any) => {
         const item: StockOutInterface = {
           date: result.date,
-          itemID: x.itemID,
+          itemID: x.itemID._id,
           quantity: x.quantity,
           adjustmentEventID: null,
           storeID: result.storeID,

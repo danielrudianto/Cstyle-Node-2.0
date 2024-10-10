@@ -5557,3 +5557,27 @@ Use mongoose.model(name, schema)
   reference: ' ALEXA-0002 \r',
   description: 'Alexa RDA OG 22mm by Inhale \r'
 }:64c90b3989850debbced337b
+[2024-10-10 13:20:55] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:20:55] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:20:55] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:20:55] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:20:56] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:20:56] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:20:56] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:20:56] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:20:57] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:20:57] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:20:58] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:20:58] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:20:59] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:20:59] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:21:00] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:21:00] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:21:01] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:21:01] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:21:02] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:21:02] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:21:03] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:21:03] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:21:04] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-10 13:21:04] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379

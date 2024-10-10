@@ -198,24 +198,23 @@ Promise.all([
     }
   }
 
-  bills.forEach(async (x) => {
-    // update the items
-    x.items.forEach((y) => {
-      y.price = y.price;
-      y.cogs = undefined;
-      y.discount = y.discount;
-      y.percentage = (discount * 100) / price;
-    });
+  // bills.forEach(async (x, index) => {
+  //   // update the items
+  //   x.items.forEach((y) => {
+  //     y.price = y.price;
+  //     y.cogs = undefined;
+  //     y.discount = y.discount;
+  //     y.percentage = (discount * 100) / price;
+  //   });
 
-    // update the bill
-    await x.save();
-  });
+  //   // update the bill
+  //   await x.save();
+  //   console.log(`Completed ${index + 1} of ${bills.length} bills`);
+  // });
 
   // Insert the stock ins
   await StockIn.insertMany(stockInToBeInserted)
     .then(async () => {
-      console.log("Successfully inserted stock ins");
-
       const stockOuts = [];
       for (let i = 0; i < bills.length; i++) {
         const bill = bills[i];
@@ -322,6 +321,8 @@ Promise.all([
             await StockOut.create(stockOut);
           }
         }
+
+        console.log(`Completed ${i + 1} of ${stockOuts.length} stock outs`);
       }
     })
     .catch((error) => {
