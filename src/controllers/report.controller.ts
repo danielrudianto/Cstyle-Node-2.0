@@ -113,6 +113,7 @@ class ReportController {
                     "Created by": x.createdBy.name,
                     Member: x.memberID == null ? "NO" : x.memberID.code,
                     Remarks: x.isHidden ? "H" : "",
+                    Staff: x.createdBy.name,
                   };
                 }),
                 invoices: invoices.map((x, index) => {
@@ -131,7 +132,7 @@ class ReportController {
                       0
                     ),
                     Customer: x.customerID == null ? "?NO" : x.customerID.name,
-                    "Created by": x.createdBy.name,
+                    Staff: x.createdBy.name,
                     Remarks: x.isHidden ? "H" : "",
                   };
                 }),
