@@ -297,6 +297,7 @@ StockRequestController.fetchIncompletedRequests = (req, res) => {
 StockRequestController.fetchUnsentRequests = (req, res) => {
     const requestTo = req.body.requestTo;
     const page = req.body.page;
+    console.log(req.body);
     stock_request_model_1.default.fetchUnsent(page, requestTo)
         .then(([result, count]) => {
         return res.status(200).send({

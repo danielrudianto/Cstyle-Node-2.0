@@ -14777,3 +14777,39 @@ Use mongoose.model(name, schema)
 [2024-10-11 00:05:31] [INFO] MongoDB: Connected with MongoDB Database Engine
 [2024-10-11 00:05:31] [INFO] Redis: Connected with Redis Database Engine
 [2024-10-11 00:05:31] [INFO] Sync: Synced 37 users
+[2024-10-11 11:21:46] [INFO] Server: Server started on port 5000
+[2024-10-11 11:21:46] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-10-11 11:21:46] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-11 11:21:46] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-11 11:21:46] [INFO] Sync: Synced 37 users
+[2024-10-11 11:21:46] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-11 11:21:46] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-11 11:21:46] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-11 11:21:46] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-11 11:21:47] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-11 11:21:47] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-11 11:21:47] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-11 11:21:48] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-11 11:21:48] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-11 11:21:49] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-11 11:21:49] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-11 11:21:50] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-11 11:21:50] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-11 11:21:51] [INFO] Redis: Connected with Redis Database Engine
+[2024-10-11 14:54:31] [INFO] Server: Server started on port 5000
+[2024-10-11 14:54:31] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-10-11 14:54:31] [INFO] Redis: Connected with Redis Database Engine
+[2024-10-11 14:54:31] [INFO] Sync: Synced 37 users
+[2024-10-12 16:41:25] [INFO] Server: Server started on port 5000
+[2024-10-12 16:41:25] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-10-12 16:41:25] [INFO] Redis: Connected with Redis Database Engine
+[2024-10-12 16:41:25] [INFO] Sync: Synced 37 users
+[2024-10-12 18:35:47] [INFO] Server: Server started on port 5000
+[2024-10-12 18:35:47] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-10-12 18:35:47] [INFO] Redis: Connected with Redis Database Engine
+[2024-10-12 18:35:47] [INFO] Sync: Synced 37 users
+[2024-10-12 20:22:45] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-10-83205916" }
+[2024-10-12 20:23:47] [INFO] Server: Server started on port 5000
+[2024-10-12 20:23:47] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-10-12 20:23:48] [INFO] Redis: Connected with Redis Database Engine
+[2024-10-12 20:23:48] [INFO] Sync: Synced 37 users

@@ -213,6 +213,9 @@ class BillModelModel {
       conn.model("bills").countDocuments({
         storeID: storeID,
         isDelete: false,
+        createdAt: {
+          $gte: new Date(new Date().setHours(0, 0, 0, 0)),
+        },
       }),
     ]);
   }

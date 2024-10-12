@@ -477,6 +477,8 @@ class StockRequestController {
     const requestTo = req.body.requestTo as string | null;
     const page = req.body.page;
 
+    console.log(req.body);
+
     StockRequestModelModel.fetchUnsent(page, requestTo)
       .then(([result, count]) => {
         return res.status(200).send({

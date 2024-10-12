@@ -5581,3 +5581,19 @@ Use mongoose.model(name, schema)
 [2024-10-10 13:21:03] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
 [2024-10-10 13:21:04] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
 [2024-10-10 13:21:04] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-11 11:21:46] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-11 11:21:46] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-11 11:21:46] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-11 11:21:46] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-11 11:21:46] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-11 11:21:46] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-11 11:21:47] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-11 11:21:47] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-11 11:21:47] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-11 11:21:48] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-11 11:21:48] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-11 11:21:49] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-11 11:21:49] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-11 11:21:50] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-11 11:21:50] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-12 20:22:45] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-10-83205916" }
