@@ -87,22 +87,81 @@ const billSchema = new mongoose.Schema({
 
 const Bill = mongoose.model("bills", billSchema);
 
-const invoiceItemSchema = new mongoose.Schema({
-  itemID: mongoose.Schema.Types.ObjectId,
-  quantity: Number,
-  price: Number,
-  discount: Number,
+const PackingListItemSchema = new mongoose.Schema({
+  itemID: { type: mongoose.Types.ObjectId, required: true, ref: "items" },
+  quantity: { type: Number, required: true },
+  price: { type: Number, required: true },
+  discount: { type: Number, required: true },
 });
 
-const invoiceSchema = new mongoose.Schema({
-  _id: mongoose.Schema.Types.ObjectId,
-  name: String,
-  date: Date,
-  billID: mongoose.Schema.Types.ObjectId,
-  items: [invoiceItemSchema],
+const PackingListSchema = new mongoose.Schema({
+  name: { type: String, required: true, trim: true },
+  customerID: {
+    type: mongoose.Types.ObjectId,
+    required: true,
+    ref: "customer",
+  },
+  date: { type: Date, required: true },
+  items: [PackingListItemSchema],
+  createdBy: { type: mongoose.Types.ObjectId, required: true, ref: "users" },
+  createdAt: { type: Date, required: true, default: new Date() },
+  isDelete: { type: Boolean, required: true, default: false },
+  deletedBy: {
+    type: mongoose.Types.ObjectId,
+    required: false,
+    ref: "users",
+    default: null,
+  },
+  deletedAt: { type: Date, required: false, default: null },
+  salesID: { type: mongoose.Types.ObjectId, required: false, ref: "users" },
+  note: { type: String, required: false, default: "" },
 });
 
-const Invoice = mongoose.model("invoices", invoiceSchema);
+const PackingList = mongoose.model("packing-lists", PackingListSchema);
+
+const InvoicePaymentSchema = new mongoose.Schema({
+  amount: { type: Number, required: true },
+  paymentMethod: {
+    type: String,
+    required: true,
+    enum: ["cash", "transfer"],
+  },
+  paidAt: { type: Date, required: true },
+  paidBy: { type: mongoose.Types.ObjectId, required: true, ref: "users" },
+});
+
+const InvoiceSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  packingListID: {
+    type: mongoose.Types.ObjectId,
+    required: false,
+    ref: "packing-lists",
+  },
+  deliverySlipID: {
+    type: mongoose.Types.ObjectId,
+    required: false,
+    ref: "delivery-slips",
+  },
+  customerID: {
+    type: mongoose.Types.ObjectId,
+    required: true,
+    ref: "customer",
+  },
+  salesID: { type: mongoose.Types.ObjectId, required: false, ref: "users" },
+  date: { type: Date, required: true },
+  dueDate: { type: Date, required: true },
+  createdBy: { type: mongoose.Types.ObjectId, required: true, ref: "users" },
+  createdAt: { type: Date, required: true },
+  note: { type: String, required: false },
+  isHidden: { type: Boolean, required: true, default: false },
+  isPaid: { type: Boolean, required: true, default: false },
+  payments: { type: [InvoicePaymentSchema], required: true },
+  isDelete: { type: Boolean, required: true, default: false },
+  deletedAt: { type: Date, required: false },
+  deletedBy: { type: mongoose.Types.ObjectId, required: false, ref: "users" },
+});
+
+const Invoice = mongoose.model("invoices", InvoiceSchema);
 
 const StockOutSchema = new mongoose.Schema({
   itemID: {
@@ -141,6 +200,35 @@ const StockOutSchema = new mongoose.Schema({
 
 const StockOut = mongoose.model("stock-outs", StockOutSchema);
 
+const OverflowSchema = new mongoose.Schema({
+  quantity: {
+    type: Number,
+    required: true,
+  },
+  billID: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: false,
+    ref: "bills",
+  },
+  adjustmentEventID: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: false,
+    ref: "adjustment-events",
+  },
+  invoiceID: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: false,
+    ref: "invoices",
+  },
+  itemID: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: "items",
+  },
+});
+
+const Overflow = mongoose.model("overflows", OverflowSchema);
+
 // First we have to get all the good receipts and adjustment events, sorted by date
 Promise.all([
   GoodReceipt.find({
@@ -154,9 +242,12 @@ Promise.all([
   }).sort({ date: 1 }),
   Invoice.find({
     isDelete: false,
-  }).sort({ date: 1 }),
+  })
+    .sort({ date: 1 })
+    .populate("packingListID"),
 ]).then(async ([goodReceipts, adjustmentEvents, bills, invoices]) => {
   const stockInToBeInserted = [];
+  const stockOutTobeUpdated = [];
 
   for (let i = 0; i < goodReceipts.length; i++) {
     const goodReceipt = goodReceipts[i];
@@ -194,138 +285,145 @@ Promise.all([
         };
 
         stockInToBeInserted.push(stockIn);
+      } else {
+        const stockOut = {
+          itemID: item.itemID,
+          quantity: -item.quantity,
+          price: 0,
+          date: adjustmentEvent.date,
+          billID: null,
+          invoiceID: null,
+          adjustmentEventID: adjustmentEvent._id,
+        };
+
+        stockOutTobeUpdated.push(stockOut);
       }
     }
   }
 
-  // bills.forEach(async (x, index) => {
-  //   // update the items
-  //   x.items.forEach((y) => {
-  //     y.price = y.price;
-  //     y.cogs = undefined;
-  //     y.discount = y.discount;
-  //     y.percentage = (discount * 100) / price;
-  //   });
+  for (let i = 0; i < bills.length; i++) {
+    const bill = bills[i];
+    const items = bill.items;
+    for (let j = 0; j < items.length; j++) {
+      const item = items[j];
+      const stockOut = {
+        itemID: item.itemID,
+        quantity: item.quantity,
+        price: item.price - item.discount,
+        date: bill.date,
+        billID: bill._id,
+        invoiceID: null,
+        adjustmentEventID: null,
+      };
 
-  //   // update the bill
-  //   await x.save();
-  //   console.log(`Completed ${index + 1} of ${bills.length} bills`);
-  // });
+      stockOutTobeUpdated.push(stockOut);
+    }
+  }
 
-  // Insert the stock ins
-  await StockIn.insertMany(stockInToBeInserted)
-    .then(async () => {
-      const stockOuts = [];
-      for (let i = 0; i < bills.length; i++) {
-        const bill = bills[i];
-        const items = bill.items;
+  for (let i = 0; i < invoices.length; i++) {
+    const invoice = invoices[i];
+    const items = invoice.packingListID.items;
 
-        for (let j = 0; j < items.length; j++) {
-          const item = items[j];
-          const stockOut = {
-            itemID: item.itemID,
-            quantity: item.quantity,
-            price: item.price - item.discount,
-            date: bill.date,
-            billID: bill._id,
-            invoiceID: null,
-            adjustmentEventID: null,
-          };
+    for (let j = 0; j < items.length; j++) {
+      const item = items[j];
+      const stockOut = {
+        itemID: item.itemID,
+        quantity: item.quantity,
+        price: item.price - item.discount,
+        date: invoice.date,
+        billID: null,
+        invoiceID: invoice._id,
+        adjustmentEventID: null,
+      };
 
-          stockOuts.push(stockOut);
-        }
-      }
+      stockOutTobeUpdated.push(stockOut);
+    }
+  }
 
-      for (let i = 0; i < invoices.length; i++) {
-        const invoice = invoices[i];
-        const items = invoice.items;
+  // sort the stockOutTobeUpdated by date asc
+  stockOutTobeUpdated.sort((a, b) => a.date - b.date);
 
-        for (let j = 0; j < items.length; j++) {
-          const item = items[j];
-          const stockOut = {
-            itemID: item.itemID,
-            quantity: item.quantity,
-            price: item.price - item.discount,
-            date: invoice.date,
-            billID: null,
-            invoiceID: invoice._id,
-            adjustmentEventID: null,
-          };
+  StockIn.insertMany(stockInToBeInserted).then(async () => {
+    for (let i = 0; i < stockOutTobeUpdated.length; i++) {
+      const stockOut = stockOutTobeUpdated[i];
+      let q = stockOut.quantity ?? 0;
 
-          stockOuts.push(stockOut);
-        }
-      }
-
-      for (let i = 0; i < adjustmentEvents.length; i++) {
-        const adjustmentEvent = adjustmentEvents[i];
-        const items = adjustmentEvent.items;
-
-        for (let j = 0; j < items.length; j++) {
-          const item = items[j];
-          if (item.quantity < 0) {
-            const stockOut = {
-              itemID: item.itemID,
-              quantity: -item.quantity,
-              price: 0,
-              date: adjustmentEvent.date,
-              billID: null,
-              invoiceID: null,
-              adjustmentEventID: adjustmentEvent._id,
-            };
-
-            stockOuts.push(stockOut);
-          }
-        }
-      }
-
-      // sort the stock out by date
-      stockOuts.sort(
-        (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-      );
-
-      // Insert the stock outs
-      for (let i = 0; i < stockOuts.length; i++) {
-        // First search stock in with the same itemID and residue > 0
-        var quantity = stockOuts[i].quantity;
-
-        while (quantity > 0) {
+      try {
+        while (q > 0) {
+          // Find the stock in with residue > 0
           const stockIn = await StockIn.findOne(
             {
-              itemID: stockOuts[i].itemID,
+              itemID: stockOut.itemID,
               residue: { $gt: 0 },
             },
             null,
-            { sort: { date: 1 } }
+            {
+              sort: { date: 1 },
+            }
           );
 
-          if (!stockIn) {
-            console.error(
-              `Cannot find stock in for item ${stockOuts[i].itemID}`
-            );
-            break;
-          } else {
-            const stockOut = {
-              itemID: stockIn.itemID,
-              quantity: Math.min(quantity, stockIn.residue),
-              price: stockOuts[i].price,
-              date: stockOuts[i].date,
-              billID: stockOuts[i].billID,
-              invoiceID: stockOuts[i].invoiceID,
-              stockInID: stockIn._id,
-              itemID: stockIn.itemID,
-            };
+          if (stockIn) {
+            console.log(`Quantity value: ${q}`);
+            // Update the stock in
+            if (stockIn.residue >= q) {
+              await StockIn.updateOne(
+                { _id: stockIn._id },
+                { $inc: { residue: -q } }
+              );
 
-            quantity -= stockOut.quantity;
-            stockIn.residue -= stockOut.quantity;
-            await stockIn.save();
-            await StockOut.create(stockOut);
+              await StockOut.create({
+                itemID: stockOut.itemID,
+                quantity: 2,
+                price: stockOut.price,
+                date: stockOut.date,
+                billID: stockOut.billID,
+                invoiceID: stockOut.invoiceID,
+                adjustmentEventID: stockOut.adjustmentEventID,
+                stockInID: stockIn._id,
+              });
+              q = 0;
+            } else {
+              await StockIn.updateOne(
+                { _id: stockIn._id },
+                { $set: { residue: 0 } }
+              );
+
+              await StockOut.create({
+                itemID: stockOut.itemID,
+                quantity: stockIn.residue,
+                price: stockOut.price,
+                date: stockOut.date,
+                billID: stockOut.billID,
+                invoiceID: stockOut.invoiceID,
+                adjustmentEventID: stockOut.adjustmentEventID,
+                stockInID: stockIn._id,
+              });
+
+              q -= stockIn.residue;
+            }
+          } else {
+            // Handle the case where no stock in is found
+            console.log(`No stock in found for item ${stockOut.itemID}`);
+            await Overflow.create({
+              quantity: q,
+              billID: stockOut.billID,
+              invoiceID: stockOut.invoiceID,
+              adjustmentEventID: stockOut.adjustmentEventID,
+              itemID: stockOut.itemID,
+            });
+
+            q = 0;
           }
         }
 
-        console.log(`Completed ${i + 1} of ${stockOuts.length} stock outs`);
+        console.log(`Item ${stockOut.itemID} is done`);
+        console.log(`Progress ${i + 1}/${stockOutTobeUpdated.length}`);
+      } catch (error) {
+        console.error(`Error on item ${stockOut.itemID}`);
+        console.error(`Error on index ${i}`);
+        console.log(stockOutTobeUpdated[i]);
+        throw error;
       }
-    })
-    .catch((error) => {
-      console.error(`Error on inserting stock ins: ${error}`);
-    });
+    }
+  });
 });

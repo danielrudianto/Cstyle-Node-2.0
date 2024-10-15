@@ -34,7 +34,7 @@ class BillModelModel {
                         },
                     })
                         .sort({
-                        date: 1,
+                        date: -1,
                     })
                         .populate("createdBy", "name")
                         .populate("memberID", "code name")
@@ -72,7 +72,7 @@ class BillModelModel {
                         },
                     })
                         .sort({
-                        date: 1,
+                        date: -1,
                     })
                         .populate("createdBy", "name")
                         .populate("memberID", "code name")
@@ -111,7 +111,7 @@ class BillModelModel {
                         },
                     })
                         .sort({
-                        date: 1,
+                        date: -1,
                     })
                         .populate("createdBy", "name")
                         .populate("memberID", "code name")
@@ -146,7 +146,7 @@ class BillModelModel {
                         },
                     })
                         .sort({
-                        date: 1,
+                        date: -1,
                     })
                         .populate("createdBy", "name")
                         .populate("memberID", "code name")
