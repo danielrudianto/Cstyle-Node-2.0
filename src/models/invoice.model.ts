@@ -180,7 +180,11 @@ class InvoiceModelModel {
           populate: {
             path: "items.itemID",
             model: "items",
-            select: "reference description _id", // add _id to retrieve the entire document
+            select: "reference description _id itemTypeID", // add _id to retrieve the entire document
+            populate: {
+              path: "itemTypeID",
+              select: "name",
+            },
           },
         })
         .populate({
@@ -188,7 +192,11 @@ class InvoiceModelModel {
           populate: {
             path: "items.itemID",
             model: "items",
-            select: "reference description _id", // add _id to retrieve the entire document
+            select: "reference description _id itemTypeID", // add _id to retrieve the entire document
+            populate: {
+              path: "itemTypeID",
+              select: "name",
+            },
           },
         })
         .populate("packingListID.customerID", "name")
@@ -209,7 +217,11 @@ class InvoiceModelModel {
           populate: {
             path: "items.itemID",
             model: "items",
-            select: "reference description _id", // add _id to retrieve the entire document
+            select: "reference description _id itemTypeID", // add _id to retrieve the entire document
+            populate: {
+              path: "itemTypeID",
+              select: "name",
+            },
           },
         })
         .populate({
@@ -217,7 +229,11 @@ class InvoiceModelModel {
           populate: {
             path: "items.itemID",
             model: "items",
-            select: "reference description _id", // add _id to retrieve the entire document
+            select: "reference description _id itemTypeID", // add _id to retrieve the entire document
+            populate: {
+              path: "itemTypeID",
+              select: "name",
+            },
           },
         })
         .populate("packingListID.customerID", "name")

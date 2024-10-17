@@ -301,11 +301,13 @@ Promise.all([
     isSending: true,
     isReject: false,
     isConfirm: true,
+    isDelete: false,
   }),
   StockRequest.find({
     isSending: true,
     isReject: false,
     isConfirm: false,
+    isDelete: false,
   }),
   Bill.find({
     isDelete: false,
@@ -355,6 +357,7 @@ Promise.all([
           updates.push({
             filter: { itemID: itemID, storeID: null },
             update: { $inc: { quantity: quantity } },
+            type: "good receipt",
           });
         }
 
@@ -372,6 +375,7 @@ Promise.all([
           updates.push({
             filter: { itemID: itemID, storeID: storeID },
             update: { $inc: { quantity: quantity } },
+            type: "adjustment",
           });
         }
 
@@ -390,11 +394,13 @@ Promise.all([
           updates.push({
             filter: { itemID: itemID, storeID: requestFrom },
             update: { $inc: { quantity: quantity } },
+            type: "sent stock request",
           });
 
           updates.push({
             filter: { itemID: itemID, storeID: requestTo },
             update: { $inc: { quantity: -quantity } },
+            type: "sent stock request",
           });
         }
 
@@ -414,6 +420,7 @@ Promise.all([
           updates.push({
             filter: { itemID: itemID, storeID: requestTo },
             update: { $inc: { quantity: -quantity } },
+            type: "sending stock request",
           });
         }
 
@@ -425,7 +432,7 @@ Promise.all([
       }
 
       for (let i = 0; i < bills.length; i++) {
-        const storeID = bills[i].storeID;
+        const storeID = bills[i]._doc.storeID;
         for (let j = 0; j < bills[i].items.length; j++) {
           const itemID = bills[i].items[j].itemID;
           const quantity = bills[i].items[j].quantity;
@@ -433,6 +440,7 @@ Promise.all([
           updates.push({
             filter: { itemID: itemID, storeID: storeID },
             update: { $inc: { quantity: -quantity } },
+            type: "bill",
           });
         }
       }
@@ -445,6 +453,7 @@ Promise.all([
           updates.push({
             filter: { itemID: itemID, storeID: null },
             update: { $inc: { quantity: -quantity } },
+            type: "packing list",
           });
         }
 
@@ -457,9 +466,8 @@ Promise.all([
         try {
           const filter = updates[i].filter;
           const update = updates[i].update;
-          console.log(`Filter: ${JSON.stringify(filter)}`);
-          console.log(`Update: ${JSON.stringify(update)}`);
           const result = await Stock.updateMany(filter, update);
+
           console.log(`Result: ${JSON.stringify(result)}`);
           console.log(`Update ${i + 1} out of ${updates.length} inserted`);
         } catch (error) {

@@ -214,14 +214,19 @@ class ReportController {
                     Bill: bill.name,
                     Date: moment(bill.date, "YYYY-MM-DD").format("DD/MM/YYYY"),
                     Time: moment(bill.createdAt).format("HH:mm:ss"),
-                    Article: bill.items[i].itemID.reference,
+                    Article:
+                      bill.items[i].itemID.itemTypeID == null
+                        ? ""
+                        : bill.items[i].itemID.itemTypeID.name,
                     Reference: bill.items[i].itemID.description,
                     Quantity: bill.items[i].quantity,
                     Price:
                       Math.floor(
                         (bill.items[i].price - bill.items[i].discount) / 1000
-                      ) * 1000,
-                    Cost: averagePrice,
+                      ) *
+                      1000 *
+                      bill.items[i].quantity,
+                    Cost: averagePrice * bill.items[i].quantity,
                     Staff: bill.createdBy.name,
                   });
                 }
@@ -257,14 +262,24 @@ class ReportController {
                         "DD/MM/YYYY"
                       ),
                       Time: moment(invoice.createdAt).format("HH:mm:ss"),
-                      Article: invoice.packingListID.items[i].itemID.reference,
+                      Article:
+                        invoice.packingListID.items[i].itemID.itemTypeID == null
+                          ? ""
+                          : invoice.packingListID.items[i].itemID.itemTypeID
+                              .name,
                       Reference:
                         invoice.packingListID.items[i].itemID.description,
                       Quantity: invoice.packingListID.items[i].quantity,
                       Price:
-                        invoice.packingListID.items[i].price -
-                        invoice.packingListID.items[i].discount,
-                      Cost: averagePrice,
+                        Math.floor(
+                          (invoice.packingListID.items[i].price *
+                            (100 - invoice.packingListID.items[i].discount)) /
+                            100000
+                        ) *
+                        1000 *
+                        invoice.packingListID.items[i].quantity,
+                      Cost:
+                        averagePrice * invoice.packingListID.items[i].quantity,
                       Staff: invoice.createdBy.name,
                     });
                   }
@@ -295,17 +310,30 @@ class ReportController {
                     invoicesResult.push({
                       ID: invoice._id,
                       "Invoice Number": invoice.name,
+                      Article:
+                        invoice.deliverySlipID.items[i].itemID.itemTypeID ==
+                        null
+                          ? ""
+                          : invoice.deliverySlipID.items[i].itemID.itemTypeID
+                              .name,
                       Reference:
-                        invoice.deliverySlipID.items[i].itemID.reference,
-                      Description:
                         invoice.deliverySlipID.items[i].itemID.description,
                       Quantity:
                         invoice.deliverySlipID.items[i].quantity -
                         invoice.deliverySlipID.items[i].returned,
                       Price:
-                        invoice.deliverySlipID.items[i].price -
-                        invoice.deliverySlipID.items[i].discount,
-                      COGS: averagePrice,
+                        Math.floor(
+                          (invoice.deliverySlipID.items[i].price *
+                            (100 - invoice.deliverySlipID.items[i].discount)) /
+                            100000
+                        ) *
+                        1000 *
+                        (invoice.deliverySlipID.items[i].quantity -
+                          invoice.deliverySlipID.items[i].returned),
+                      COGS:
+                        averagePrice *
+                        (invoice.deliverySlipID.items[i].quantity -
+                          invoice.deliverySlipID.items[i].returned),
                     });
                   }
                 }

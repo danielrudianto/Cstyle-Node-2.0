@@ -152,7 +152,11 @@ class InvoiceModelModel {
                 populate: {
                     path: "items.itemID",
                     model: "items",
-                    select: "reference description _id",
+                    select: "reference description _id itemTypeID",
+                    populate: {
+                        path: "itemTypeID",
+                        select: "name",
+                    },
                 },
             })
                 .populate({
@@ -160,7 +164,11 @@ class InvoiceModelModel {
                 populate: {
                     path: "items.itemID",
                     model: "items",
-                    select: "reference description _id",
+                    select: "reference description _id itemTypeID",
+                    populate: {
+                        path: "itemTypeID",
+                        select: "name",
+                    },
                 },
             })
                 .populate("packingListID.customerID", "name")
@@ -182,7 +190,11 @@ class InvoiceModelModel {
                 populate: {
                     path: "items.itemID",
                     model: "items",
-                    select: "reference description _id",
+                    select: "reference description _id itemTypeID",
+                    populate: {
+                        path: "itemTypeID",
+                        select: "name",
+                    },
                 },
             })
                 .populate({
@@ -190,7 +202,11 @@ class InvoiceModelModel {
                 populate: {
                     path: "items.itemID",
                     model: "items",
-                    select: "reference description _id",
+                    select: "reference description _id itemTypeID",
+                    populate: {
+                        path: "itemTypeID",
+                        select: "name",
+                    },
                 },
             })
                 .populate("packingListID.customerID", "name")

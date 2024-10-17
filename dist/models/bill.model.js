@@ -406,7 +406,15 @@ class BillModelModel {
         return conn
             .model("bills")
             .find(query)
-            .populate("items.itemID", "reference description")
+            .populate({
+            path: "items.itemID",
+            model: "items",
+            select: "reference description _id itemTypeID",
+            populate: {
+                path: "itemTypeID",
+                select: "name",
+            },
+        })
             .populate("storeID", "name")
             .populate("memberID", "code");
     }
