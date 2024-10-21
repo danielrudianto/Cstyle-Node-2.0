@@ -14859,3 +14859,36 @@ Use mongoose.model(name, schema)
 [2024-10-17 13:10:41] [INFO] MongoDB: Connected with MongoDB Database Engine
 [2024-10-17 13:10:41] [INFO] Redis: Connected with Redis Database Engine
 [2024-10-17 13:10:41] [INFO] Sync: Synced 37 users
+[2024-10-18 10:46:50] [INFO] Server: Server started on port 5000
+[2024-10-18 10:46:50] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-10-18 10:46:50] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-18 10:46:50] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-18 10:46:50] [INFO] Sync: Synced 37 users
+[2024-10-18 10:46:50] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-18 10:46:50] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-18 10:46:51] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-18 10:46:51] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-18 10:46:51] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-18 10:46:51] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-18 10:46:52] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-18 10:46:52] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-18 10:46:53] [INFO] Redis: Connected with Redis Database Engine
+[2024-10-18 14:22:21] [ERROR] Redis: Error: Socket closed unexpectedly
+[2024-10-18 14:22:21] [ERROR] Redis: Error: Socket closed unexpectedly
+[2024-10-18 14:22:21] [ERROR] Redis: Error: Socket closed unexpectedly
+[2024-10-18 14:22:21] [ERROR] Redis: Error: Socket closed unexpectedly
+[2024-10-18 14:22:21] [ERROR] Redis: Error: Socket closed unexpectedly
+[2024-10-18 14:22:21] [ERROR] Redis: Error: Socket closed unexpectedly
+[2024-10-18 14:22:21] [ERROR] Redis: Error: Socket closed unexpectedly
+[2024-10-18 14:22:21] [ERROR] Redis: Error: Socket closed unexpectedly
+[2024-10-18 14:22:21] [ERROR] Redis: Error: Socket closed unexpectedly
+[2024-10-18 14:22:21] [ERROR] Redis: Error: Socket closed unexpectedly
+[2024-10-18 14:22:21] [ERROR] Redis: Error: Socket closed unexpectedly
+[2024-10-18 14:22:21] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-18 14:22:21] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-18 14:22:22] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-18 14:22:22] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-10-21 10:40:46] [INFO] Server: Server started on port 5000
+[2024-10-21 10:40:46] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-10-21 10:40:46] [INFO] Redis: Connected with Redis Database Engine
+[2024-10-21 10:40:46] [INFO] Sync: Synced 37 users

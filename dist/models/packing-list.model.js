@@ -67,7 +67,8 @@ class PackingListModelModel {
                 .populate("createdBy", "name")
                 .populate("deletedBy", "name")
                 .limit(20)
-                .skip((data.page - 1) * 20),
+                .skip((data.page - 1) * 20)
+                .sort({ date: -1 }),
             conn.model("packing-lists").countDocuments({
                 $or: filters,
                 name: { $regex: data.keyword, $options: "i" },
