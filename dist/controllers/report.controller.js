@@ -78,7 +78,6 @@ ReportController.fetchSalesReport = (req, res) => {
                             PayPal: PayPalPayment,
                             QRIS: QRISPayment,
                             Voucher: VoucherPayment,
-                            "Created by": x.createdBy.name,
                             Member: x.memberID == null ? "NO" : x.memberID.code,
                             Remarks: x.isHidden ? "H" : "",
                             Staff: x.createdBy.name,
@@ -233,9 +232,10 @@ ReportController.fetchSalesProductReport = (req, res) => {
                                     1000 *
                                     (invoice.deliverySlipID.items[i].quantity -
                                         invoice.deliverySlipID.items[i].returned),
-                                COGS: averagePrice *
+                                Cost: averagePrice *
                                     (invoice.deliverySlipID.items[i].quantity -
                                         invoice.deliverySlipID.items[i].returned),
+                                Staff: invoice.createdBy.name,
                             });
                         }
                     }

@@ -83,12 +83,6 @@ class InvoiceModelModel {
       });
     }
 
-    console.log(data.keyword);
-    console.log(data.month);
-    console.log(data.year);
-    console.log(paymentFilters);
-    console.log(filters);
-
     return Promise.all([
       conn
         .model("invoices")
@@ -108,12 +102,12 @@ class InvoiceModelModel {
             ],
           },
         })
+        .sort({
+          date: -1,
+        })
         .populate("customerID", "name")
         .populate("salesID", "name")
         .populate("createdBy", "name")
-        .sort({
-          date: 1,
-        })
         .limit(20)
         .skip(20 * (data.page - 1)),
       conn.model("invoices").countDocuments({
@@ -200,7 +194,8 @@ class InvoiceModelModel {
           },
         })
         .populate("packingListID.customerID", "name")
-        .populate("deliverySlipID.customerID", "name");
+        .populate("deliverySlipID.customerID", "name")
+        .populate("createdBy", "name");
     } else {
       return conn
         .model("invoices")
@@ -237,7 +232,8 @@ class InvoiceModelModel {
           },
         })
         .populate("packingListID.customerID", "name")
-        .populate("deliverySlipID.customerID", "name");
+        .populate("deliverySlipID.customerID", "name")
+        .populate("createdBy", "name");
     }
   }
 

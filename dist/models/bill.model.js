@@ -416,7 +416,8 @@ class BillModelModel {
             },
         })
             .populate("storeID", "name")
-            .populate("memberID", "code");
+            .populate("memberID", "code")
+            .populate("createdBy", "name");
     }
     static fetchMemberTransactions() {
         return conn.model("bills").countDocuments({

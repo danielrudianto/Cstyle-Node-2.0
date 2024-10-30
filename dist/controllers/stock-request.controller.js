@@ -217,7 +217,7 @@ StockRequestController.send = (req, res) => __awaiter(void 0, void 0, void 0, fu
             };
         }), stockRequest.requestTo).then((stocks) => {
             let validation = true;
-            for (let i = 0; i < stockRequest.items.length; i++) {
+            for (let i = 0; i < items.length; i++) {
                 const stockIndex = stocks.findIndex((x) => x.itemID.toString() == items[i].itemID);
                 const stock = stockIndex == -1 ? 0 : stocks[stockIndex].quantity;
                 if (stock < items[i].quantity) {
@@ -297,7 +297,6 @@ StockRequestController.fetchIncompletedRequests = (req, res) => {
 StockRequestController.fetchUnsentRequests = (req, res) => {
     const requestTo = req.body.requestTo;
     const page = req.body.page;
-    console.log(req.body);
     stock_request_model_1.default.fetchUnsent(page, requestTo)
         .then(([result, count]) => {
         return res.status(200).send({

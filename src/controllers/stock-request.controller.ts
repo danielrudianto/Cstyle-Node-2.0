@@ -354,7 +354,7 @@ class StockRequestController {
           stockRequest.requestTo
         ).then((stocks) => {
           let validation = true;
-          for (let i = 0; i < stockRequest.items.length; i++) {
+          for (let i = 0; i < items.length; i++) {
             const stockIndex = stocks.findIndex(
               (x: any) => x.itemID.toString() == items[i].itemID
             );
@@ -476,8 +476,6 @@ class StockRequestController {
   static fetchUnsentRequests = (req: Request, res: Response) => {
     const requestTo = req.body.requestTo as string | null;
     const page = req.body.page;
-
-    console.log(req.body);
 
     StockRequestModelModel.fetchUnsent(page, requestTo)
       .then(([result, count]) => {

@@ -98,7 +98,7 @@ class QuotationModelModel {
         return conn.model("quotations").countDocuments({
             $expr: {
                 $and: [
-                    { $eq: [{ $month: "$date" }, month + 1] },
+                    { $eq: [{ $month: "$date" }, month] },
                     { $eq: [{ $year: "$date" }, year] },
                 ],
             },
