@@ -29,7 +29,7 @@ class MigrationModelModel {
         return Promise.all([
             conn.model("migrations").create({
                 migration_version: new Date().getTime(),
-                command: `INSERT INTO product (reference, description, brand, type, brandID, typeID, price, barcode, mongoID, isActive) VALUES ('${data.reference}','${data.description}','${data.brand}','${data.type}','${data.brandID}','${data.typeID}','${data.price}','${data.barcode}','${data.id}', ${data.isActive ? 1 : 0});`,
+                command: `INSERT INTO product (reference, description, brand, type, brandID, typeID, price, barcode, mongoID, isActive) VALUES ('${data.reference}','${data.description}','${data.brand}','${data.type}','${data.brandID}','${data.typeID}',${data.price},'${data.barcode}','${data.id}', ${data.isActive ? 1 : 0});`,
             }),
             ...data.images.map((x) => {
                 return conn.model("migrations").create({

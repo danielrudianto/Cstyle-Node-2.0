@@ -60,7 +60,7 @@ class MigrationModelModel {
           data.reference
         }','${data.description}','${data.brand}','${data.type}','${
           data.brandID
-        }','${data.typeID}','${data.price}','${data.barcode}','${data.id}', ${
+        }','${data.typeID}',${data.price},'${data.barcode}','${data.id}', ${
           data.isActive ? 1 : 0
         });`,
       }),
