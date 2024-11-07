@@ -11,8 +11,12 @@ import { connectionFactory } from "../utils/connector.utils";
 const conn = connectionFactory();
 
 class MigrationModelModel {
-  static fetchLatestVersion() {
-    return conn.model("migrations").findOne().sort({ migration_version: -1 });
+  static async fetchLatestVersion() {
+    const result = await conn
+      .model("migrations")
+      .aggregate([{ $sort: { migration_version: -1 } }, { $limit: 1 }]);
+
+    return result.length > 0 ? result[0] : null;
   }
 
   static fetchMigrationSince(version: number) {

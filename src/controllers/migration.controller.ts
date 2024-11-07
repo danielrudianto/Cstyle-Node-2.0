@@ -46,7 +46,6 @@ class MigrationController {
               '${x.itemTypeID == null ? "" : x.itemTypeID._id}',
               '${x._id}'
           );`);
-
             x.images.forEach((image: string) => {
               commands.push(
                 `INSERT INTO product_image (productID, imageUrl) VALUES ('${x._id}', '${process.env.BASE_URL}${image}');`
