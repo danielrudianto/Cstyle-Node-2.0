@@ -28,7 +28,7 @@ import OverflowSchema from "../schemas/impl.overflow.model";
 export function connectionFactory() {
   const url = "mongodb://127.0.0.1:27017";
   const conn = mongoose.createConnection(url, {
-    dbName: "Cstyle",
+    dbName: "Cstyle_dev",
     autoCreate: true,
   });
 
