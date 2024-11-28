@@ -20,134 +20,146 @@ class CashierController {
     const memberCodeSet = new Set<string>();
     const bills: BillModelModel[] = [];
 
-    data.forEach((x) => {
-      if (x.memberID != null) {
-        memberCodeSet.add(x.memberID);
-      }
+    BillModelModel.fetchBillByNames(data.map((x) => x.name)).then(
+      async (existingBills) => {
+        data
+          .filter((x) => !existingBills.map((y) => y.name).includes(x.name))
+          .forEach((x) => {
+            if (x.memberID != null) {
+              memberCodeSet.add(x.memberID);
+            }
 
-      const bill = new BillModelModel({
-        name: x.name,
-        date: moment(x.date).format("YYYY-MM-DD"),
-        memberID: x.memberID,
-        storeID: storeID,
-        createdBy: x.createdBy,
-        createdAt: new Date(x.createdAt),
-        items: (x.bills as any[]).map((a) => {
-          return {
-            itemID: a.itemID,
-            quantity: a.quantity,
-            price: a.price,
-            discount: (a.discount * a.price) / 100,
-            percentage: a.discount,
-          };
-        }),
-        payment: (x.payments as any[]).map((b) => {
-          return {
-            type: b.paymentMethod,
-            amount: b.amount,
-          };
-        }),
-      });
-
-      bills.push(bill);
-    });
-
-    const memberIDs = await MembershipModelModel.fetchByIDs([...memberCodeSet]);
-    const modifiedBills: BillInterface[] = [];
-    bills.forEach((x) => {
-      const member = memberIDs.find((y) => y.code == x.memberID);
-      if (x.memberID != null && member == null) {
-        return;
-      } else {
-        modifiedBills.push({
-          ...x,
-          memberID: x.memberID == null ? null : member!._id,
-        });
-      }
-    });
-
-    const groupedData = modifiedBills.reduce(
-      (
-        acc: { [key: string]: { itemID: string; quantity: number } },
-        current
-      ) => {
-        current.items.forEach((item) => {
-          if (!acc[item.itemID.toString()]) {
-            acc[item.itemID.toString()] = {
-              itemID: item.itemID.toString(),
-              quantity: 0,
-            };
-          }
-          acc[item.itemID.toString()].quantity += item.quantity;
-        });
-        return acc;
-      },
-      {}
-    );
-
-    await lock.acquire(
-      Object.entries(groupedData).map(([_, value]) => {
-        return `${value.itemID}:${storeID}`;
-      }),
-      async (done) => {
-        StockModelModel.checkStockByItemIDs(
-          Object.entries(groupedData).map(([_, value]) => {
-            return { itemID: value.itemID, quantity: value.quantity };
-          }),
-          storeID
-        )
-          .then(async (result) => {
-            const comparisonResults = result.map((item) => {
-              const groupedItem = groupedData[item.itemID];
-              return groupedItem.quantity <= item.quantity;
+            const bill = new BillModelModel({
+              name: x.name,
+              date: moment(x.date).format("YYYY-MM-DD"),
+              memberID: x.memberID,
+              storeID: storeID,
+              createdBy: x.createdBy,
+              createdAt: new Date(x.createdAt),
+              items: (x.bills as any[]).map((a) => {
+                return {
+                  itemID: a.itemID,
+                  quantity: a.quantity,
+                  price: a.price,
+                  discount: (a.discount * a.price) / 100,
+                  percentage: a.discount,
+                };
+              }),
+              payment: (x.payments as any[]).map((b) => {
+                return {
+                  type: b.paymentMethod,
+                  amount: b.amount,
+                };
+              }),
             });
 
-            if (comparisonResults.includes(false)) {
-              done();
-              return res.status(400).send(ErrorList["INSUFFICIENT_STOCK"]);
-            } else {
-              BillModelModel.insertMany(modifiedBills)
-                .then((result) => {
-                  result.forEach(async (x) => {
-                    x.items.forEach(async (y: any) => {
-                      await new StockModelModel({
-                        itemID: y.itemID,
-                        quantity: y.quantity * -1,
-                        storeID: x.storeID,
-                      }).update();
-                    });
-
-                    await queue.add("createBill", {
-                      id: x._id,
-                    });
-                  });
-
-                  done();
-                  return res.status(200).send(result);
-                })
-                .catch((error) => {
-                  new LoggerHelper({
-                    message: `Error on creating bill ${error}`,
-                    type: LoggerType.error,
-                    tag: "Cashier",
-                  }).log();
-
-                  done();
-
-                  return res
-                    .status(500)
-                    .send(ErrorList["INTERNAL_SERVER_ERROR"]);
-                });
-            }
-          })
-          .catch((error) => {
-            new LoggerHelper({
-              message: `Error on checking stock ${error}`,
-              type: LoggerType.error,
-              tag: "Cashier",
-            }).log();
-            return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+            bills.push(bill);
           });
+
+        const memberIDs = await MembershipModelModel.fetchByIDs([
+          ...memberCodeSet,
+        ]);
+        const modifiedBills: BillInterface[] = [];
+        bills.forEach((x) => {
+          const member = memberIDs.find((y) => y.code == x.memberID);
+          if (x.memberID != null && member == null) {
+            return;
+          } else {
+            modifiedBills.push({
+              ...x,
+              memberID: x.memberID == null ? null : member!._id,
+            });
+          }
+        });
+
+        const groupedData = modifiedBills.reduce(
+          (
+            acc: { [key: string]: { itemID: string; quantity: number } },
+            current
+          ) => {
+            current.items.forEach((item) => {
+              if (!acc[item.itemID.toString()]) {
+                acc[item.itemID.toString()] = {
+                  itemID: item.itemID.toString(),
+                  quantity: 0,
+                };
+              }
+              acc[item.itemID.toString()].quantity += item.quantity;
+            });
+            return acc;
+          },
+          {}
+        );
+
+        await lock.acquire(
+          Object.entries(groupedData).map(([_, value]) => {
+            return `${value.itemID}:${storeID}`;
+          }),
+          async (done) => {
+            StockModelModel.checkStockByItemIDs(
+              Object.entries(groupedData).map(([_, value]) => {
+                return { itemID: value.itemID, quantity: value.quantity };
+              }),
+              storeID
+            )
+              .then(async (result) => {
+                const comparisonResults = result.map((item) => {
+                  const groupedItem = groupedData[item.itemID];
+                  return groupedItem.quantity <= item.quantity;
+                });
+
+                if (comparisonResults.includes(false)) {
+                  done();
+                  return res.status(400).send(ErrorList["INSUFFICIENT_STOCK"]);
+                } else {
+                  BillModelModel.insertMany(
+                    modifiedBills.filter((x) => {
+                      return !existingBills.map((y) => y.name).includes(x.name);
+                    })
+                  )
+                    .then((result) => {
+                      result.forEach(async (x) => {
+                        x.items.forEach(async (y: any) => {
+                          await new StockModelModel({
+                            itemID: y.itemID,
+                            quantity: y.quantity * -1,
+                            storeID: x.storeID,
+                          }).update();
+                        });
+
+                        await queue.add("createBill", {
+                          id: x._id,
+                        });
+                      });
+
+                      done();
+                      return res.status(200).send(result);
+                    })
+                    .catch((error) => {
+                      new LoggerHelper({
+                        message: `Error on creating bill ${error}`,
+                        type: LoggerType.error,
+                        tag: "Cashier",
+                      }).log();
+
+                      done();
+
+                      return res
+                        .status(500)
+                        .send(ErrorList["INTERNAL_SERVER_ERROR"]);
+                    });
+                }
+              })
+              .catch((error) => {
+                new LoggerHelper({
+                  message: `Error on checking stock ${error}`,
+                  type: LoggerType.error,
+                  tag: "Cashier",
+                }).log();
+                return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+              });
+          }
+        );
       }
     );
   };

@@ -32,112 +32,120 @@ CashierController.sync = (req, res) => __awaiter(void 0, void 0, void 0, functio
     const data = req.body.data;
     const memberCodeSet = new Set();
     const bills = [];
-    data.forEach((x) => {
-        if (x.memberID != null) {
-            memberCodeSet.add(x.memberID);
-        }
-        const bill = new bill_model_1.default({
-            name: x.name,
-            date: (0, moment_1.default)(x.date).format("YYYY-MM-DD"),
-            memberID: x.memberID,
-            storeID: storeID,
-            createdBy: x.createdBy,
-            createdAt: new Date(x.createdAt),
-            items: x.bills.map((a) => {
-                return {
-                    itemID: a.itemID,
-                    quantity: a.quantity,
-                    price: a.price,
-                    discount: (a.discount * a.price) / 100,
-                    percentage: a.discount,
-                };
-            }),
-            payment: x.payments.map((b) => {
-                return {
-                    type: b.paymentMethod,
-                    amount: b.amount,
-                };
-            }),
-        });
-        bills.push(bill);
-    });
-    const memberIDs = yield membership_model_1.default.fetchByIDs([...memberCodeSet]);
-    const modifiedBills = [];
-    bills.forEach((x) => {
-        const member = memberIDs.find((y) => y.code == x.memberID);
-        if (x.memberID != null && member == null) {
-            return;
-        }
-        else {
-            modifiedBills.push(Object.assign(Object.assign({}, x), { memberID: x.memberID == null ? null : member._id }));
-        }
-    });
-    const groupedData = modifiedBills.reduce((acc, current) => {
-        current.items.forEach((item) => {
-            if (!acc[item.itemID.toString()]) {
-                acc[item.itemID.toString()] = {
-                    itemID: item.itemID.toString(),
-                    quantity: 0,
-                };
+    bill_model_1.default.fetchBillByNames(data.map((x) => x.name)).then((existingBills) => __awaiter(void 0, void 0, void 0, function* () {
+        data
+            .filter((x) => !existingBills.map((y) => y.name).includes(x.name))
+            .forEach((x) => {
+            if (x.memberID != null) {
+                memberCodeSet.add(x.memberID);
             }
-            acc[item.itemID.toString()].quantity += item.quantity;
-        });
-        return acc;
-    }, {});
-    yield lock_utils_1.default.acquire(Object.entries(groupedData).map(([_, value]) => {
-        return `${value.itemID}:${storeID}`;
-    }), (done) => __awaiter(void 0, void 0, void 0, function* () {
-        stock_model_1.default.checkStockByItemIDs(Object.entries(groupedData).map(([_, value]) => {
-            return { itemID: value.itemID, quantity: value.quantity };
-        }), storeID)
-            .then((result) => __awaiter(void 0, void 0, void 0, function* () {
-            const comparisonResults = result.map((item) => {
-                const groupedItem = groupedData[item.itemID];
-                return groupedItem.quantity <= item.quantity;
+            const bill = new bill_model_1.default({
+                name: x.name,
+                date: (0, moment_1.default)(x.date).format("YYYY-MM-DD"),
+                memberID: x.memberID,
+                storeID: storeID,
+                createdBy: x.createdBy,
+                createdAt: new Date(x.createdAt),
+                items: x.bills.map((a) => {
+                    return {
+                        itemID: a.itemID,
+                        quantity: a.quantity,
+                        price: a.price,
+                        discount: (a.discount * a.price) / 100,
+                        percentage: a.discount,
+                    };
+                }),
+                payment: x.payments.map((b) => {
+                    return {
+                        type: b.paymentMethod,
+                        amount: b.amount,
+                    };
+                }),
             });
-            if (comparisonResults.includes(false)) {
-                done();
-                return res.status(400).send(error_list_1.ErrorList["INSUFFICIENT_STOCK"]);
+            bills.push(bill);
+        });
+        const memberIDs = yield membership_model_1.default.fetchByIDs([
+            ...memberCodeSet,
+        ]);
+        const modifiedBills = [];
+        bills.forEach((x) => {
+            const member = memberIDs.find((y) => y.code == x.memberID);
+            if (x.memberID != null && member == null) {
+                return;
             }
             else {
-                bill_model_1.default.insertMany(modifiedBills)
-                    .then((result) => {
-                    result.forEach((x) => __awaiter(void 0, void 0, void 0, function* () {
-                        x.items.forEach((y) => __awaiter(void 0, void 0, void 0, function* () {
-                            yield new stock_model_1.default({
-                                itemID: y.itemID,
-                                quantity: y.quantity * -1,
-                                storeID: x.storeID,
-                            }).update();
-                        }));
-                        yield queue_utils_1.queue.add("createBill", {
-                            id: x._id,
-                        });
-                    }));
-                    done();
-                    return res.status(200).send(result);
-                })
-                    .catch((error) => {
-                    new logger_utils_1.default({
-                        message: `Error on creating bill ${error}`,
-                        type: logger_interface_1.LoggerType.error,
-                        tag: "Cashier",
-                    }).log();
-                    done();
-                    return res
-                        .status(500)
-                        .send(error_list_1.ErrorList["INTERNAL_SERVER_ERROR"]);
-                });
+                modifiedBills.push(Object.assign(Object.assign({}, x), { memberID: x.memberID == null ? null : member._id }));
             }
-        }))
-            .catch((error) => {
-            new logger_utils_1.default({
-                message: `Error on checking stock ${error}`,
-                type: logger_interface_1.LoggerType.error,
-                tag: "Cashier",
-            }).log();
-            return res.status(500).send(error_list_1.ErrorList["INTERNAL_SERVER_ERROR"]);
         });
+        const groupedData = modifiedBills.reduce((acc, current) => {
+            current.items.forEach((item) => {
+                if (!acc[item.itemID.toString()]) {
+                    acc[item.itemID.toString()] = {
+                        itemID: item.itemID.toString(),
+                        quantity: 0,
+                    };
+                }
+                acc[item.itemID.toString()].quantity += item.quantity;
+            });
+            return acc;
+        }, {});
+        yield lock_utils_1.default.acquire(Object.entries(groupedData).map(([_, value]) => {
+            return `${value.itemID}:${storeID}`;
+        }), (done) => __awaiter(void 0, void 0, void 0, function* () {
+            stock_model_1.default.checkStockByItemIDs(Object.entries(groupedData).map(([_, value]) => {
+                return { itemID: value.itemID, quantity: value.quantity };
+            }), storeID)
+                .then((result) => __awaiter(void 0, void 0, void 0, function* () {
+                const comparisonResults = result.map((item) => {
+                    const groupedItem = groupedData[item.itemID];
+                    return groupedItem.quantity <= item.quantity;
+                });
+                if (comparisonResults.includes(false)) {
+                    done();
+                    return res.status(400).send(error_list_1.ErrorList["INSUFFICIENT_STOCK"]);
+                }
+                else {
+                    bill_model_1.default.insertMany(modifiedBills.filter((x) => {
+                        return !existingBills.map((y) => y.name).includes(x.name);
+                    }))
+                        .then((result) => {
+                        result.forEach((x) => __awaiter(void 0, void 0, void 0, function* () {
+                            x.items.forEach((y) => __awaiter(void 0, void 0, void 0, function* () {
+                                yield new stock_model_1.default({
+                                    itemID: y.itemID,
+                                    quantity: y.quantity * -1,
+                                    storeID: x.storeID,
+                                }).update();
+                            }));
+                            yield queue_utils_1.queue.add("createBill", {
+                                id: x._id,
+                            });
+                        }));
+                        done();
+                        return res.status(200).send(result);
+                    })
+                        .catch((error) => {
+                        new logger_utils_1.default({
+                            message: `Error on creating bill ${error}`,
+                            type: logger_interface_1.LoggerType.error,
+                            tag: "Cashier",
+                        }).log();
+                        done();
+                        return res
+                            .status(500)
+                            .send(error_list_1.ErrorList["INTERNAL_SERVER_ERROR"]);
+                    });
+                }
+            }))
+                .catch((error) => {
+                new logger_utils_1.default({
+                    message: `Error on checking stock ${error}`,
+                    type: logger_interface_1.LoggerType.error,
+                    tag: "Cashier",
+                }).log();
+                return res.status(500).send(error_list_1.ErrorList["INTERNAL_SERVER_ERROR"]);
+            });
+        }));
     }));
 });
 CashierController.stats = (req, res) => {

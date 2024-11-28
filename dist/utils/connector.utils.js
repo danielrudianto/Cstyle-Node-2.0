@@ -33,7 +33,7 @@ const impl_overflow_model_1 = __importDefault(require("../schemas/impl.overflow.
 function connectionFactory() {
     const url = "mongodb://127.0.0.1:27017";
     const conn = mongoose_1.default.createConnection(url, {
-        dbName: "Cstyle_dev",
+        dbName: "Cstyle",
         autoCreate: true,
     });
     conn.model("migrations", impl_migration_model_1.default);

@@ -188,6 +188,14 @@ class BillModelModel {
     }
   }
 
+  static fetchBillByNames(names: String[]) {
+    return conn.model("bills").find({
+      name: {
+        $in: names,
+      },
+    });
+  }
+
   static fetchStore(data: StoreBillFetchInterface) {
     const page = data.page;
     const storeID = data.storeID;
