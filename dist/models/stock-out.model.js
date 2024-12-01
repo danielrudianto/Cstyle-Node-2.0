@@ -9,6 +9,7 @@ class StockOutModelModel {
             throw new Error("StockInID not found");
         }
         this.id = data.id;
+        this.itemID = data.itemID;
         this.billID = data.billID;
         this.adjustmentEventID = data.adjustmentEventID;
         this.quantity = data.quantity;
@@ -19,6 +20,7 @@ class StockOutModelModel {
     create() {
         return conn.model("stock-outs").create({
             date: this.date,
+            itemID: this.itemID,
             billID: this.billID,
             adjustmentEventID: this.adjustmentEventID,
             invoiceID: this.invoiceID,

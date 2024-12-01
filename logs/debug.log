@@ -16007,3 +16007,80 @@ Use mongoose.model(name, schema)
 [2024-11-28 12:17:58] [INFO] MongoDB: Connected with MongoDB Database Engine
 [2024-11-28 12:17:59] [INFO] Redis: Connected with Redis Database Engine
 [2024-11-28 12:17:59] [INFO] Sync: Synced 37 users
+[2024-11-29 17:20:03] [INFO] Server: Server started on port 5000
+[2024-11-29 17:20:03] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-11-29 17:20:03] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-11-29 17:20:03] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-11-29 17:20:03] [INFO] Sync: Synced 37 users
+[2024-11-29 17:20:03] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-11-29 17:20:03] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-11-29 17:20:03] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-11-29 17:20:03] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-11-29 17:20:04] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-11-29 17:20:04] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-11-29 17:20:04] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-11-29 17:20:05] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-11-29 17:20:05] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-11-29 17:20:06] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-11-29 17:20:06] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-11-29 17:20:07] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-11-29 17:20:07] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-11-29 17:20:08] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-11-29 17:20:08] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-11-29 17:20:09] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-11-29 17:20:09] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-11-29 17:20:10] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-11-29 17:20:10] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-11-29 17:20:11] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-11-29 17:20:11] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-11-29 17:20:12] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-11-29 17:20:12] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-11-29 17:20:13] [INFO] Redis: Connected with Redis Database Engine
+[2024-11-29 17:23:45] [INFO] Server: Server started on port 5000
+[2024-11-29 17:23:45] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-11-29 17:23:45] [INFO] Redis: Connected with Redis Database Engine
+[2024-11-29 17:23:45] [INFO] Sync: Synced 37 users
+[2024-11-29 17:24:55] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-11-12876598" }
+[2024-11-29 17:25:20] [INFO] Master worker: Job 1913 [create-sales-invoice] completed at Fri Nov 29 2024 17:25:20 GMT+0800 (Central Indonesia Time)
+[2024-11-29 17:25:20] [INFO] Master worker: Job 1914 [insertStockIn] completed at Fri Nov 29 2024 17:25:20 GMT+0800 (Central Indonesia Time)
+[2024-11-29 17:25:20] [ERROR] Master worker: Job 1915 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
+[2024-11-29 17:25:20] [ERROR] Master worker: Job 1916 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
+[2024-11-29 17:25:21] [ERROR] Master worker: Job 1917 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
+[2024-11-29 17:25:21] [ERROR] Master worker: Job 1918 [createBill] has failed with Bill not found
+[2024-11-29 17:25:21] [ERROR] Master worker: Job 1919 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
+[2024-11-29 17:25:21] [INFO] Master worker: Job 1920 [createBill] completed at Fri Nov 29 2024 17:25:21 GMT+0800 (Central Indonesia Time)
+[2024-11-29 17:25:21] [INFO] Master worker: Job 1921 [createBill] completed at Fri Nov 29 2024 17:25:21 GMT+0800 (Central Indonesia Time)
+[2024-11-29 17:25:21] [INFO] Master worker: Job 1922 [createBill] completed at Fri Nov 29 2024 17:25:21 GMT+0800 (Central Indonesia Time)
+[2024-11-29 17:25:21] [INFO] Master worker: Job 1923 [createBill] completed at Fri Nov 29 2024 17:25:21 GMT+0800 (Central Indonesia Time)
+[2024-11-29 17:25:21] [INFO] Master worker: Job 1924 [createBill] completed at Fri Nov 29 2024 17:25:21 GMT+0800 (Central Indonesia Time)
+[2024-11-29 17:25:21] [INFO] Master worker: Job 1925 [createBill] completed at Fri Nov 29 2024 17:25:21 GMT+0800 (Central Indonesia Time)
+[2024-11-29 17:25:21] [ERROR] Master worker: Job 1926 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
+[2024-11-29 17:25:21] [ERROR] Master worker: Job 1927 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
+[2024-11-29 17:25:21] [ERROR] Master worker: Job 1928 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
+[2024-11-29 17:25:21] [ERROR] Master worker: Job 1929 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
+[2024-11-29 17:25:21] [ERROR] Master worker: Job 1930 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
+[2024-11-29 17:25:21] [ERROR] Master worker: Job 1931 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
+[2024-11-29 17:25:21] [ERROR] Master worker: Job 1932 [insertStockOut] has failed with stock-outs validation failed: itemID: Path `itemID` is required.
+[2024-11-29 17:27:36] [INFO] Server: Server started on port 5000
+[2024-11-29 17:27:36] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-11-29 17:27:36] [INFO] Redis: Connected with Redis Database Engine
+[2024-11-29 17:27:36] [INFO] Sync: Synced 37 users
+[2024-11-29 17:28:25] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-11-77392656" }
+[2024-11-29 17:28:25] [INFO] Master worker: Job 1933 [createBill] completed at Fri Nov 29 2024 17:28:25 GMT+0800 (Central Indonesia Time)
+[2024-11-29 17:28:25] [INFO] Master worker: Job 1934 [insertStockOut] completed at Fri Nov 29 2024 17:28:25 GMT+0800 (Central Indonesia Time)
+[2024-11-29 17:29:56] [INFO] Server: Server started on port 5000
+[2024-11-29 17:29:56] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-11-29 17:29:57] [INFO] Redis: Connected with Redis Database Engine
+[2024-11-29 17:29:57] [INFO] Sync: Synced 37 users
+[2024-11-30 12:12:20] [INFO] Server: Server started on port 5000
+[2024-11-30 12:12:20] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-11-30 12:12:20] [INFO] Redis: Connected with Redis Database Engine
+[2024-11-30 12:12:20] [INFO] Sync: Synced 37 users
+[2024-11-30 12:58:59] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-11-31464416" }
+[2024-11-30 14:50:30] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-11-89398122" }
+[2024-11-30 14:51:00] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-11-38680891" }
+[2024-11-30 17:09:44] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-11-22907246" }
+[2024-11-30 19:24:10] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-11-08079110" }
+[2024-11-30 19:26:17] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-11-30682249" }
+[2024-11-30 19:27:43] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-11-48638718" }
+[2024-11-30 19:34:51] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-11-25048814" }
