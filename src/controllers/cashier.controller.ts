@@ -110,6 +110,11 @@ class CashierController {
 
                 if (comparisonResults.includes(false)) {
                   done();
+                  new LoggerHelper({
+                    message: `Error on insufficient stock ${comparisonResults}`,
+                    type: LoggerType.error,
+                    tag: "Cashier",
+                  }).log();
                   return res.status(400).send(ErrorList["INSUFFICIENT_STOCK"]);
                 } else {
                   BillModelModel.insertMany(

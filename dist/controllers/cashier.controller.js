@@ -102,6 +102,11 @@ CashierController.sync = (req, res) => __awaiter(void 0, void 0, void 0, functio
                 });
                 if (comparisonResults.includes(false)) {
                     done();
+                    new logger_utils_1.default({
+                        message: `Error on insufficient stock ${comparisonResults}`,
+                        type: logger_interface_1.LoggerType.error,
+                        tag: "Cashier",
+                    }).log();
                     return res.status(400).send(error_list_1.ErrorList["INSUFFICIENT_STOCK"]);
                 }
                 else {
