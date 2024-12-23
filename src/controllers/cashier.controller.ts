@@ -96,74 +96,72 @@ class CashierController {
             return `${value.itemID}:${storeID}`;
           }),
           async (done) => {
-            StockModelModel.checkStockByItemIDs(
-              Object.entries(groupedData).map(([_, value]) => {
-                return { itemID: value.itemID, quantity: value.quantity };
-              }),
-              storeID
+            // StockModelModel.checkStockByItemIDs(
+            //   Object.entries(groupedData).map(([_, value]) => {
+            //     return { itemID: value.itemID, quantity: value.quantity };
+            //   }),
+            //   storeID
+            // )
+            //   .then(async (result) => {
+            //     const comparisonResults = result.map((item) => {
+            //       const groupedItem = groupedData[item.itemID];
+            //       return groupedItem.quantity <= item.quantity;
+            //     });
+
+            //     if (comparisonResults.includes(false)) {
+            //       done();
+            //       new LoggerHelper({
+            //         message: `Error on insufficient stock ${comparisonResults}`,
+            //         type: LoggerType.error,
+            //         tag: "Cashier",
+            //       }).log();
+            //       return res.status(400).send(ErrorList["INSUFFICIENT_STOCK"]);
+            //     } else {
+            BillModelModel.insertMany(
+              modifiedBills.filter((x) => {
+                return !existingBills.map((y) => y.name).includes(x.name);
+              })
             )
-              .then(async (result) => {
-                const comparisonResults = result.map((item) => {
-                  const groupedItem = groupedData[item.itemID];
-                  return groupedItem.quantity <= item.quantity;
+              .then((result) => {
+                result.forEach(async (x) => {
+                  x.items.forEach(async (y: any) => {
+                    await new StockModelModel({
+                      itemID: y.itemID,
+                      quantity: y.quantity * -1,
+                      storeID: x.storeID,
+                    }).update();
+                  });
+
+                  await queue.add("createBill", {
+                    id: x._id,
+                  });
                 });
 
-                if (comparisonResults.includes(false)) {
-                  done();
-                  new LoggerHelper({
-                    message: `Error on insufficient stock ${comparisonResults}`,
-                    type: LoggerType.error,
-                    tag: "Cashier",
-                  }).log();
-                  return res.status(400).send(ErrorList["INSUFFICIENT_STOCK"]);
-                } else {
-                  BillModelModel.insertMany(
-                    modifiedBills.filter((x) => {
-                      return !existingBills.map((y) => y.name).includes(x.name);
-                    })
-                  )
-                    .then((result) => {
-                      result.forEach(async (x) => {
-                        x.items.forEach(async (y: any) => {
-                          await new StockModelModel({
-                            itemID: y.itemID,
-                            quantity: y.quantity * -1,
-                            storeID: x.storeID,
-                          }).update();
-                        });
-
-                        await queue.add("createBill", {
-                          id: x._id,
-                        });
-                      });
-
-                      done();
-                      return res.status(200).send(result);
-                    })
-                    .catch((error) => {
-                      new LoggerHelper({
-                        message: `Error on creating bill ${error}`,
-                        type: LoggerType.error,
-                        tag: "Cashier",
-                      }).log();
-
-                      done();
-
-                      return res
-                        .status(500)
-                        .send(ErrorList["INTERNAL_SERVER_ERROR"]);
-                    });
-                }
+                done();
+                return res.status(200).send(result);
               })
               .catch((error) => {
                 new LoggerHelper({
-                  message: `Error on checking stock ${error}`,
+                  message: `Error on creating bill ${error}`,
                   type: LoggerType.error,
                   tag: "Cashier",
                 }).log();
+
+                done();
+
                 return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
               });
           }
+          // })
+          // .catch((error) => {
+          //   new LoggerHelper({
+          //     message: `Error on checking stock ${error}`,
+          //     type: LoggerType.error,
+          //     tag: "Cashier",
+          //   }).log();
+          //   return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+          // });
+          // }
         );
       }
     );
