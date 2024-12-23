@@ -32,6 +32,16 @@ CashierController.sync = (req, res) => __awaiter(void 0, void 0, void 0, functio
     const data = req.body.data;
     const memberCodeSet = new Set();
     const bills = [];
+    new logger_utils_1.default({
+        message: `Syncing data from ${storeID}`,
+        type: logger_interface_1.LoggerType.info,
+        tag: "Cashier",
+    });
+    new logger_utils_1.default({
+        message: `Found ${data.length} data to be synced`,
+        type: logger_interface_1.LoggerType.info,
+        tag: "Cashier",
+    });
     bill_model_1.default.fetchBillByNames(data.map((x) => x.name)).then((existingBills) => __awaiter(void 0, void 0, void 0, function* () {
         data
             .filter((x) => !existingBills.map((y) => y.name).includes(x.name))

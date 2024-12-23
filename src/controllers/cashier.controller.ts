@@ -20,6 +20,18 @@ class CashierController {
     const memberCodeSet = new Set<string>();
     const bills: BillModelModel[] = [];
 
+    new LoggerHelper({
+      message: `Syncing data from ${storeID}`,
+      type: LoggerType.info,
+      tag: "Cashier",
+    });
+
+    new LoggerHelper({
+      message: `Found ${data.length} data to be synced`,
+      type: LoggerType.info,
+      tag: "Cashier",
+    });
+
     BillModelModel.fetchBillByNames(data.map((x) => x.name)).then(
       async (existingBills) => {
         data
