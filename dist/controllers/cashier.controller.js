@@ -95,22 +95,27 @@ CashierController.sync = (req, res) => __awaiter(void 0, void 0, void 0, functio
             bill_model_1.default.insertMany(modifiedBills.filter((x) => {
                 return !existingBills.map((y) => y.name).includes(x.name);
             }))
-                .then((result) => {
-                result.forEach((x) => __awaiter(void 0, void 0, void 0, function* () {
-                    x.items.forEach((y) => __awaiter(void 0, void 0, void 0, function* () {
+                .then((result) => __awaiter(void 0, void 0, void 0, function* () {
+                for (let i = 0; i < result.length; i++) {
+                    for (let j = 0; j < result[i].items.length; j++) {
                         yield new stock_model_1.default({
-                            itemID: y.itemID,
-                            quantity: y.quantity * -1,
-                            storeID: x.storeID,
+                            itemID: result[i].items[j].itemID,
+                            quantity: result[i].items[j].quantity * -1,
+                            storeID: result[i].storeID,
                         }).update();
-                    }));
+                    }
                     yield queue_utils_1.queue.add("createBill", {
-                        id: x._id,
+                        id: result[i]._id,
                     });
-                }));
+                }
                 done();
+                new logger_utils_1.default({
+                    message: `Success on creating bill from ${storeID}`,
+                    type: logger_interface_1.LoggerType.info,
+                    tag: "Cashier",
+                }).log();
                 return res.status(200).send(result);
-            })
+            }))
                 .catch((error) => {
                 new logger_utils_1.default({
                     message: `Error on creating bill ${error}`,

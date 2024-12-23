@@ -122,22 +122,27 @@ class CashierController {
                 return !existingBills.map((y) => y.name).includes(x.name);
               })
             )
-              .then((result) => {
-                result.forEach(async (x) => {
-                  x.items.forEach(async (y: any) => {
+              .then(async (result) => {
+                for (let i = 0; i < result.length; i++) {
+                  for (let j = 0; j < result[i].items.length; j++) {
                     await new StockModelModel({
-                      itemID: y.itemID,
-                      quantity: y.quantity * -1,
-                      storeID: x.storeID,
+                      itemID: result[i].items[j].itemID,
+                      quantity: result[i].items[j].quantity * -1,
+                      storeID: result[i].storeID,
                     }).update();
-                  });
+                  }
 
                   await queue.add("createBill", {
-                    id: x._id,
+                    id: result[i]._id,
                   });
-                });
+                }
 
                 done();
+                new LoggerHelper({
+                  message: `Success on creating bill from ${storeID}`,
+                  type: LoggerType.info,
+                  tag: "Cashier",
+                }).log();
                 return res.status(200).send(result);
               })
               .catch((error) => {
