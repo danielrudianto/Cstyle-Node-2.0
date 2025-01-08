@@ -125,7 +125,9 @@ class ReportController {
                     Value: x.packingListID.items.reduce(
                       (acc: any, item: any) =>
                         acc +
-                        Math.floor((item.price - item.discount) / 1000) *
+                        Math.floor(
+                          (item.price * (100 - item.discount)) / 1000
+                        ) *
                           1000 *
                           item.quantity,
                       0
@@ -201,13 +203,18 @@ class ReportController {
                     );
                   });
 
+                  const quantity = stockOut.reduce(
+                    (acc, stockout) => acc + stockout.quantity,
+                    0
+                  );
+
                   const stockOutPrice = stockOut.reduce(
                     (acc, stockout) =>
                       acc + stockout.stockIn.price * stockout.quantity,
                     0
                   );
 
-                  const averagePrice = stockOutPrice;
+                  const averagePrice = stockOutPrice / quantity;
 
                   billsResult.push({
                     Bill: bill.name,
@@ -247,13 +254,18 @@ class ReportController {
                       );
                     });
 
+                    const quantity = stockOut.reduce(
+                      (acc, stockout) => acc + stockout.quantity,
+                      0
+                    );
+
                     const stockOutPrice = stockOut.reduce(
                       (acc, stockout) =>
                         acc + stockout.stockIn.price * stockout.quantity,
                       0
                     );
 
-                    const averagePrice = stockOutPrice;
+                    const averagePrice = stockOutPrice / quantity;
 
                     invoicesResult.push({
                       Invoice: invoice.name,

@@ -16172,3 +16172,169 @@ Use mongoose.model(name, schema)
 [2024-12-06 13:05:14] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
 [2024-12-06 13:05:15] [INFO] Redis: Connected with Redis Database Engine
 [2024-12-06 13:19:29] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-12-57610776" }
+[2024-12-27 00:31:14] [INFO] Server: Server started on port 5000
+[2024-12-27 00:31:14] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-12-27 00:31:14] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:14] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:14] [INFO] Sync: Synced 40 users
+[2024-12-27 00:31:14] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:14] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:15] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:15] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:15] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:15] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:16] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:16] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:17] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:17] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:18] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:18] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:19] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:19] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:20] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:20] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:21] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:21] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:22] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:22] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:23] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:23] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:24] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:24] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:25] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:25] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:26] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:26] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:27] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:27] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:28] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:28] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:29] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:29] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:30] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:30] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:31] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:31] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:32] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:32] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:33] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:33] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:34] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:34] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:35] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:35] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:36] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:36] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:37] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:37] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:38] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:38] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:39] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:39] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:40] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:40] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:41] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:41] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:42] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:42] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:43] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:43] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:44] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:44] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:45] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:45] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:46] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:46] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:47] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:47] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:48] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:48] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:49] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:50] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:50] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:51] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:51] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:52] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:52] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:31:53] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2024-12-27 00:37:27] [INFO] Server: Server started on port 5000
+[2024-12-27 00:37:27] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2024-12-27 00:37:28] [INFO] Redis: Connected with Redis Database Engine
+[2024-12-27 00:37:28] [INFO] Sync: Synced 40 users
+[2024-12-27 00:38:15] [INFO] Cashier: Success on creating bill from 64c90b1289850debbced336f
+[2024-12-27 00:39:44] [INFO] Cashier: Success on creating bill from 64c90b1289850debbced336f
+[2024-12-27 00:40:45] [INFO] Cashier: Success on creating bill from 64c90b1289850debbced336f
+[2024-12-27 00:43:25] [INFO] Cashier: Success on creating bill from 64c90b1289850debbced336f
+[2024-12-27 00:43:25] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-12-03552235" }
+[2024-12-27 00:44:26] [INFO] Cashier: Success on creating bill from 64c90b1289850debbced336f
+[2024-12-27 00:44:26] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-12-50546467" }
+[2024-12-27 00:49:16] [INFO] Cashier: Success on creating bill from 64c90b1289850debbced336f
+[2024-12-27 00:49:16] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-12-65931501" }
+[2024-12-27 00:52:16] [INFO] Cashier: Success on creating bill from 64c90b1289850debbced336f
+[2024-12-27 00:52:16] [ERROR] Cashier: Error on creating bill MongoBulkWriteError: E11000 duplicate key error collection: Cstyle.bills index: name_1 dup key: { name: "B-CS-2024-12-14187767" }
+[2025-01-07 22:05:48] [INFO] Server: Server started on port 5000
+[2025-01-07 22:05:48] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2025-01-07 22:05:48] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-01-07 22:05:48] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-01-07 22:05:48] [INFO] Sync: Synced 40 users
+[2025-01-07 22:05:48] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-01-07 22:05:49] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-01-07 22:05:49] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-01-07 22:05:49] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-01-07 22:05:49] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-01-07 22:05:50] [INFO] Redis: Connected with Redis Database Engine
+[2025-01-07 22:13:42] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading '_id')
+[2025-01-07 22:24:06] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading '_id')
+[2025-01-07 22:25:28] [INFO] Server: Server started on port 5000
+[2025-01-07 22:25:28] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2025-01-07 22:25:28] [INFO] Redis: Connected with Redis Database Engine
+[2025-01-07 22:25:28] [INFO] Sync: Synced 40 users
+[2025-01-07 22:25:59] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading '_id')
+[2025-01-07 22:26:17] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading '_id')
+[2025-01-07 22:27:07] [INFO] Server: Server started on port 5000
+[2025-01-07 22:27:07] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2025-01-07 22:27:07] [INFO] Redis: Connected with Redis Database Engine
+[2025-01-07 22:27:07] [INFO] Sync: Synced 40 users
+[2025-01-07 22:27:14] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading '_id')
+[2025-01-07 22:27:42] [INFO] Server: Server started on port 5000
+[2025-01-07 22:27:42] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2025-01-07 22:27:42] [INFO] Redis: Connected with Redis Database Engine
+[2025-01-07 22:27:42] [INFO] Sync: Synced 40 users
+[2025-01-07 22:28:46] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading '_id')
+[2025-01-07 22:29:07] [INFO] Server: Server started on port 5000
+[2025-01-07 22:29:07] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2025-01-07 22:29:07] [INFO] Redis: Connected with Redis Database Engine
+[2025-01-07 22:29:07] [INFO] Sync: Synced 40 users
+[2025-01-07 22:29:19] [INFO] Server: Server started on port 5000
+[2025-01-07 22:29:19] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2025-01-07 22:29:19] [INFO] Redis: Connected with Redis Database Engine
+[2025-01-07 22:29:19] [INFO] Sync: Synced 40 users
+[2025-01-07 22:29:26] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading '_id')
+[2025-01-07 22:29:35] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading '_id')
+[2025-01-07 22:30:06] [INFO] Server: Server started on port 5000
+[2025-01-07 22:30:06] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2025-01-07 22:30:07] [INFO] Redis: Connected with Redis Database Engine
+[2025-01-07 22:30:07] [INFO] Sync: Synced 40 users
+[2025-01-07 22:30:09] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading '_id')
+[2025-01-07 22:30:18] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading '_id')
+[2025-01-07 22:31:27] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading '_id')
+[2025-01-07 22:36:08] [INFO] Server: Server started on port 5000
+[2025-01-07 22:36:08] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2025-01-07 22:36:09] [INFO] Redis: Connected with Redis Database Engine
+[2025-01-07 22:36:14] [INFO] Sync: Synced 40 users
+[2025-01-07 22:47:18] [INFO] Server: Server started on port 5000
+[2025-01-07 22:47:18] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2025-01-07 22:47:18] [INFO] Redis: Connected with Redis Database Engine
+[2025-01-07 22:47:18] [INFO] Sync: Synced 40 users
+[2025-01-07 22:58:50] [INFO] Server: Server started on port 5000
+[2025-01-07 22:58:50] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2025-01-07 22:58:50] [INFO] Redis: Connected with Redis Database Engine
+[2025-01-07 22:58:50] [INFO] Sync: Synced 40 users
+[2025-01-07 22:59:12] [INFO] Server: Server started on port 5000
+[2025-01-07 22:59:12] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2025-01-07 22:59:12] [INFO] Redis: Connected with Redis Database Engine
+[2025-01-07 22:59:12] [INFO] Sync: Synced 40 users
+[2025-01-08 09:41:21] [INFO] Server: Server started on port 5000
+[2025-01-08 09:41:21] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2025-01-08 09:41:21] [INFO] Redis: Connected with Redis Database Engine
+[2025-01-08 09:41:21] [INFO] Sync: Synced 40 users

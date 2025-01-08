@@ -60,7 +60,7 @@ class MigrationModelModel {
       conn.model("migrations").create({
         // Autoincrement from previous
         migration_version: new Date().getTime(),
-        command: `INSERT INTO product (reference, description, brand, type, brandID, typeID, price, barcode, mongoID, isActive) VALUES ('${
+        command: `INSERT OR IGNORE INTO product (reference, description, brand, type, brandID, typeID, price, barcode, mongoID, isActive) VALUES ('${
           data.reference
         }','${data.description}','${data.brand}','${data.type}','${
           data.brandID
@@ -72,7 +72,7 @@ class MigrationModelModel {
         return conn.model("migrations").create({
           // Autoincrement from previous
           migration_version: new Date().getTime(),
-          command: `INSERT INTO product_image (productID, imageUrl) VALUES ('${data.id}', '${x}');`,
+          command: `INSERT OR IGNORE INTO product_image (productID, imageUrl) VALUES ('${data.id}', '${x}');`,
         });
       }),
     ]);
@@ -112,7 +112,7 @@ class MigrationModelModel {
   static createUser(data: UserMigrationInterface) {
     return conn.model("migrations").create({
       migration_version: new Date().getTime(),
-      command: `INSERT INTO user (name, code, userID) VALUES ('${data.name}', '${data.code}', '${data.userID}');`,
+      command: `INSERT OR IGNORE INTO user (name, code, userID) VALUES ('${data.name}', '${data.code}', '${data.userID}');`,
     });
   }
 

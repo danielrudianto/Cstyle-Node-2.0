@@ -91,7 +91,7 @@ ReportController.fetchSalesReport = (req, res) => {
                             Date: (0, moment_1.default)(x.date, "YYYY-MM-DD").format("DD/MM/YYYY"),
                             Time: (0, moment_1.default)(x.createdAt).format("HH:mm:ss"),
                             Value: x.packingListID.items.reduce((acc, item) => acc +
-                                Math.floor((item.price - item.discount) / 1000) *
+                                Math.floor((item.price * (100 - item.discount)) / 1000) *
                                     1000 *
                                     item.quantity, 0),
                             Customer: x.customerID == null ? "?NO" : x.customerID.name,
@@ -153,8 +153,9 @@ ReportController.fetchSalesProductReport = (req, res) => {
                                 : stockout.billID.toString()) === billID &&
                                 stockout.itemID.toString() === itemID._id.toString());
                         });
+                        const quantity = stockOut.reduce((acc, stockout) => acc + stockout.quantity, 0);
                         const stockOutPrice = stockOut.reduce((acc, stockout) => acc + stockout.stockIn.price * stockout.quantity, 0);
-                        const averagePrice = stockOutPrice;
+                        const averagePrice = stockOutPrice / quantity;
                         billsResult.push({
                             Bill: bill.name,
                             Date: (0, moment_1.default)(bill.date, "YYYY-MM-DD").format("DD/MM/YYYY"),
@@ -184,8 +185,9 @@ ReportController.fetchSalesProductReport = (req, res) => {
                                         ? null
                                         : stockout.invoiceID.toString()) === invoiceID);
                             });
+                            const quantity = stockOut.reduce((acc, stockout) => acc + stockout.quantity, 0);
                             const stockOutPrice = stockOut.reduce((acc, stockout) => acc + stockout.stockIn.price * stockout.quantity, 0);
-                            const averagePrice = stockOutPrice;
+                            const averagePrice = stockOutPrice / quantity;
                             invoicesResult.push({
                                 Invoice: invoice.name,
                                 Date: (0, moment_1.default)(invoice.date, "YYYY-MM-DD").format("DD/MM/YYYY"),

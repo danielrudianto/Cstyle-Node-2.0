@@ -43,12 +43,12 @@ class MigrationModelModel {
         return Promise.all([
             conn.model("migrations").create({
                 migration_version: new Date().getTime(),
-                command: `INSERT INTO product (reference, description, brand, type, brandID, typeID, price, barcode, mongoID, isActive) VALUES ('${data.reference}','${data.description}','${data.brand}','${data.type}','${data.brandID}','${data.typeID}',${data.price},'${data.barcode}','${data.id}', ${data.isActive ? 1 : 0});`,
+                command: `INSERT OR IGNORE INTO product (reference, description, brand, type, brandID, typeID, price, barcode, mongoID, isActive) VALUES ('${data.reference}','${data.description}','${data.brand}','${data.type}','${data.brandID}','${data.typeID}',${data.price},'${data.barcode}','${data.id}', ${data.isActive ? 1 : 0});`,
             }),
             ...data.images.map((x) => {
                 return conn.model("migrations").create({
                     migration_version: new Date().getTime(),
-                    command: `INSERT INTO product_image (productID, imageUrl) VALUES ('${data.id}', '${x}');`,
+                    command: `INSERT OR IGNORE INTO product_image (productID, imageUrl) VALUES ('${data.id}', '${x}');`,
                 });
             }),
         ]);
@@ -74,7 +74,7 @@ class MigrationModelModel {
     static createUser(data) {
         return conn.model("migrations").create({
             migration_version: new Date().getTime(),
-            command: `INSERT INTO user (name, code, userID) VALUES ('${data.name}', '${data.code}', '${data.userID}');`,
+            command: `INSERT OR IGNORE INTO user (name, code, userID) VALUES ('${data.name}', '${data.code}', '${data.userID}');`,
         });
     }
     static updateUser(data) {
