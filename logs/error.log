@@ -6806,3 +6806,6 @@ Use mongoose.model(name, schema)
 [2025-01-07 22:30:09] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading '_id')
 [2025-01-07 22:30:18] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading '_id')
 [2025-01-07 22:31:27] [ERROR] Sales report: Error on fetching sales product report data TypeError: Cannot read properties of null (reading '_id')
+[2025-01-09 10:10:57] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-01-09 10:10:57] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-01-09 10:10:57] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379

@@ -48,6 +48,9 @@ AuthController.login = (req, res) => {
             return res.status(404).send(error_list_1.ErrorList["LOGIN_ERROR"]);
         }
         else {
+            (0, bcrypt_1.hash)(password, 12).then((hashedPassword) => {
+                console.log(hashedPassword);
+            });
             (0, bcrypt_1.compare)(password, user.password).then((validation) => __awaiter(void 0, void 0, void 0, function* () {
                 if (!validation) {
                     return res.status(404).send(error_list_1.ErrorList["LOGIN_ERROR"]);

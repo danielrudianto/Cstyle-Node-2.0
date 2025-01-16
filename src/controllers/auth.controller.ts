@@ -20,6 +20,9 @@ class AuthController {
         if (user == null || !user.isActive) {
           return res.status(404).send(ErrorList["LOGIN_ERROR"]);
         } else {
+          hash(password, 12).then((hashedPassword) => {
+            console.log(hashedPassword);
+          });
           compare(password, user.password as string).then(
             async (validation) => {
               if (!validation) {

@@ -56,7 +56,7 @@ class MigrationModelModel {
     static updateProduct(data) {
         return conn.model("migrations").create({
             migration_version: new Date().getTime(),
-            command: `UPDATE product SET reference = '${data.reference}', description = '${data.description}', isActive = ${data.isActive ? 1 : 0}, barcode = '${data.barcode}', brandID = '${data.brandID}', typeID = '${data.typeID}', type = '${data.type}', brand = '${data.brand}' WHERE mongoID = '${data.id}';`,
+            command: `UPDATE product SET reference = '${data.reference}', description = '${data.description}', isActive = ${data.isActive ? 1 : 0}, barcode = '${data.barcode}', brandID = '${data.brandID}', typeID = '${data.typeID}', price=${data.price}, type = '${data.type}', brand = '${data.brand}' WHERE mongoID = '${data.id}';`,
         });
     }
     static updateProductBrand(data) {

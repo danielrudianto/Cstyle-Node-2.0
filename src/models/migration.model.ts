@@ -87,7 +87,7 @@ class MigrationModelModel {
         data.isActive ? 1 : 0
       }, barcode = '${data.barcode}', brandID = '${data.brandID}', typeID = '${
         data.typeID
-      }', type = '${data.type}', brand = '${data.brand}' WHERE mongoID = '${
+      }', price=${data.price}, type = '${data.type}', brand = '${data.brand}' WHERE mongoID = '${
         data.id
       }';`,
     });

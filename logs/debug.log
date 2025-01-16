@@ -16338,3 +16338,22 @@ Use mongoose.model(name, schema)
 [2025-01-08 09:41:21] [INFO] MongoDB: Connected with MongoDB Database Engine
 [2025-01-08 09:41:21] [INFO] Redis: Connected with Redis Database Engine
 [2025-01-08 09:41:21] [INFO] Sync: Synced 40 users
+[2025-01-09 10:10:57] [INFO] Server: Server started on port 5000
+[2025-01-09 10:10:57] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2025-01-09 10:10:57] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-01-09 10:10:57] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-01-09 10:10:57] [INFO] Sync: Synced 40 users
+[2025-01-09 10:10:57] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-01-09 10:10:58] [INFO] Redis: Connected with Redis Database Engine
+[2025-01-09 10:14:27] [INFO] Server: Server started on port 5000
+[2025-01-09 10:14:27] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2025-01-09 10:14:27] [INFO] Redis: Connected with Redis Database Engine
+[2025-01-09 10:14:27] [INFO] Sync: Synced 40 users
+[2025-01-09 10:14:52] [INFO] Server: Server started on port 5000
+[2025-01-09 10:14:52] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2025-01-09 10:14:52] [INFO] Redis: Connected with Redis Database Engine
+[2025-01-09 10:14:52] [INFO] Sync: Synced 40 users
+[2025-01-10 09:27:22] [INFO] Server: Server started on port 5000
+[2025-01-10 09:27:22] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2025-01-10 09:27:23] [INFO] Redis: Connected with Redis Database Engine
+[2025-01-10 09:27:23] [INFO] Sync: Synced 40 users
