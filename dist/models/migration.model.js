@@ -80,7 +80,7 @@ class MigrationModelModel {
     static updateUser(data) {
         return conn.model("migrations").create({
             migration_version: new Date().getTime(),
-            command: `UPDATE user SET code = '${data.code}', name = '${data.name} WHERE userID = '${data.userID}';`,
+            command: `UPDATE user SET code = '${data.code}', name = '${data.name}' WHERE userID = '${data.userID}';`,
         });
     }
     static deleteUser(userID) {

@@ -6,5 +6,5 @@ var QuotationStatus;
     QuotationStatus["Active"] = "active";
     QuotationStatus["Expired"] = "expired";
     QuotationStatus["Canceled"] = "canceled";
-})(QuotationStatus || (exports.QuotationStatus = QuotationStatus = {}));
+})(QuotationStatus = exports.QuotationStatus || (exports.QuotationStatus = {}));
 //# sourceMappingURL=quotation.interface.js.map

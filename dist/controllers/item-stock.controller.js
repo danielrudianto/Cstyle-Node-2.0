@@ -84,7 +84,7 @@ ItemStockController.fetchStockByStoreID = (req, res) => {
         branch: storeID,
         onlyActive: false,
     })
-        .then((_b) => __awaiter(void 0, [_b], void 0, function* ([items, count]) {
+        .then(([items, count]) => __awaiter(void 0, void 0, void 0, function* () {
         return res.status(200).send({
             data: items,
             count: count,

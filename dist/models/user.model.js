@@ -73,8 +73,8 @@ class UserModelModel {
         ]);
     }
     static fetchByID(id) {
+        var _a;
         return __awaiter(this, void 0, void 0, function* () {
-            var _a;
             try {
                 const result = yield conn.model("users").findById(id);
                 if (!result)
@@ -87,8 +87,8 @@ class UserModelModel {
         });
     }
     static fetchByUsername(username) {
+        var _a;
         return __awaiter(this, void 0, void 0, function* () {
-            var _a;
             try {
                 const result = yield conn.model("users").findOne({ username });
                 return result ? new UserModelModel(result) : null;
@@ -99,8 +99,8 @@ class UserModelModel {
         });
     }
     static fetchSync() {
+        var _a;
         return __awaiter(this, void 0, void 0, function* () {
-            var _a;
             try {
                 const result = yield conn.model("users").find({
                     isActive: true,

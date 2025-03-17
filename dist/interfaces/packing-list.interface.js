@@ -5,5 +5,5 @@ var PackingListStatus;
 (function (PackingListStatus) {
     PackingListStatus["Active"] = "active";
     PackingListStatus["Deleted"] = "deleted";
-})(PackingListStatus || (exports.PackingListStatus = PackingListStatus = {}));
+})(PackingListStatus = exports.PackingListStatus || (exports.PackingListStatus = {}));
 //# sourceMappingURL=packing-list.interface.js.map

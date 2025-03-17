@@ -6,5 +6,5 @@ var DeliverySlipFetchStatus;
     DeliverySlipFetchStatus["active"] = "active";
     DeliverySlipFetchStatus["returned"] = "returned";
     DeliverySlipFetchStatus["canceled"] = "canceled";
-})(DeliverySlipFetchStatus || (exports.DeliverySlipFetchStatus = DeliverySlipFetchStatus = {}));
+})(DeliverySlipFetchStatus = exports.DeliverySlipFetchStatus || (exports.DeliverySlipFetchStatus = {}));
 //# sourceMappingURL=delivery-slip.interface.js.map

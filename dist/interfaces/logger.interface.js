@@ -8,5 +8,5 @@ var LoggerType;
     LoggerType[LoggerType["warning"] = 2] = "warning";
     LoggerType[LoggerType["error"] = 3] = "error";
     LoggerType[LoggerType["sponsor"] = 4] = "sponsor";
-})(LoggerType || (exports.LoggerType = LoggerType = {}));
+})(LoggerType = exports.LoggerType || (exports.LoggerType = {}));
 //# sourceMappingURL=logger.interface.js.map

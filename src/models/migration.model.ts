@@ -120,7 +120,7 @@ class MigrationModelModel {
     return conn.model("migrations").create({
       // Autoincrement from previous
       migration_version: new Date().getTime(),
-      command: `UPDATE user SET code = '${data.code}', name = '${data.name} WHERE userID = '${data.userID}';`,
+      command: `UPDATE user SET code = '${data.code}', name = '${data.name}' WHERE userID = '${data.userID}';`,
     });
   }
 

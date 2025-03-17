@@ -196,5 +196,5 @@ var ErrorList;
     ErrorList["INVOICE_ID_REQUIRED"] = "Invoice id is required";
     ErrorList["BILL_REQUIRED"] = "Bill is required";
     ErrorList["BILL_ID_REQUIRED"] = "Bill id is required";
-})(ErrorList || (exports.ErrorList = ErrorList = {}));
+})(ErrorList = exports.ErrorList || (exports.ErrorList = {}));
 //# sourceMappingURL=error-list.js.map
