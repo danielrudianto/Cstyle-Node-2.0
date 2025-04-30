@@ -1,1 +1,1 @@
-{"version":3,"file":"good-receipt.interface.js","sourceRoot":"","sources":["../../src/interfaces/good-receipt.interface.ts"],"names":[],"mappings":";;;AA+BA,IAAY,iBAGX;AAHD,WAAY,iBAAiB;IAC3B,sCAAmB,CAAA;IACnB,wCAAqB,CAAA;AACvB,CAAC,EAHW,iBAAiB,GAAjB,yBAAiB,KAAjB,yBAAiB,QAG5B"}
+{"version":3,"file":"good-receipt.interface.js","sourceRoot":"","sources":["../../src/interfaces/good-receipt.interface.ts"],"names":[],"mappings":";;;AA+BA,IAAY,iBAGX;AAHD,WAAY,iBAAiB;IAC3B,sCAAmB,CAAA;IACnB,wCAAqB,CAAA;AACvB,CAAC,EAHW,iBAAiB,iCAAjB,iBAAiB,QAG5B"}

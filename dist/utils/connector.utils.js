@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.connectionFactory = void 0;
+exports.connectionFactory = connectionFactory;
 const mongoose_1 = __importDefault(require("mongoose"));
 const impl_migration_model_1 = __importDefault(require("../schemas/impl.migration.model"));
 const impl_stock_in_model_1 = __importDefault(require("../schemas/impl.stock-in.model"));
@@ -63,5 +63,4 @@ function connectionFactory() {
     conn.model("overflows", impl_overflow_model_1.default);
     return conn;
 }
-exports.connectionFactory = connectionFactory;
 //# sourceMappingURL=connector.utils.js.map

@@ -402,8 +402,8 @@ class ItemModelModel {
         });
     }
     static deleteImage(imageURL, itemID) {
-        var _a;
         return __awaiter(this, void 0, void 0, function* () {
+            var _a;
             const item = yield conn.model("items").findById(itemID);
             if (!item) {
                 throw new Error("Item not found");

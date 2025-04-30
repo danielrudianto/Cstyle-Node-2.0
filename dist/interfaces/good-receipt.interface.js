@@ -5,5 +5,5 @@ var GoodReceiptStatus;
 (function (GoodReceiptStatus) {
     GoodReceiptStatus["Active"] = "active";
     GoodReceiptStatus["Deleted"] = "deleted";
-})(GoodReceiptStatus = exports.GoodReceiptStatus || (exports.GoodReceiptStatus = {}));
+})(GoodReceiptStatus || (exports.GoodReceiptStatus = GoodReceiptStatus = {}));
 //# sourceMappingURL=good-receipt.interface.js.map

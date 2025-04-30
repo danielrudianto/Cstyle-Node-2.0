@@ -91,7 +91,7 @@ ReportController.fetchSalesReport = (req, res) => {
                             Date: (0, moment_1.default)(x.date, "YYYY-MM-DD").format("DD/MM/YYYY"),
                             Time: (0, moment_1.default)(x.createdAt).format("HH:mm:ss"),
                             Value: x.packingListID.items.reduce((acc, item) => acc +
-                                Math.floor((item.price * (100 - item.discount)) / 1000) *
+                                Math.floor((item.price * (100 - item.discount)) / 100000) *
                                     1000 *
                                     item.quantity, 0),
                             Customer: x.customerID == null ? "?NO" : x.customerID.name,

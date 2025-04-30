@@ -126,7 +126,7 @@ class ReportController {
                       (acc: any, item: any) =>
                         acc +
                         Math.floor(
-                          (item.price * (100 - item.discount)) / 1000
+                          (item.price * (100 - item.discount)) / 100000
                         ) *
                           1000 *
                           item.quantity,
