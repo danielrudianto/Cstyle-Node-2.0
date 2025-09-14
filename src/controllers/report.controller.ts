@@ -125,11 +125,14 @@ class ReportController {
                     Value: x.packingListID.items.reduce(
                       (acc: any, item: any) =>
                         acc +
-                        Math.floor(
-                          (item.price * (100 - item.discount)) / 100000
-                        ) *
-                          1000 *
-                          item.quantity,
+                        (item.discount == 0
+                          ? item.price * item.quantity
+                          : Math.floor(
+                              (item.price *
+                                (100 - item.discount) *
+                                item.quantity) /
+                                100000
+                            ) * 1000),
                       0
                     ),
                     Customer: x.customerID == null ? "?NO" : x.customerID.name,
@@ -282,13 +285,16 @@ class ReportController {
                         invoice.packingListID.items[i].itemID.description,
                       Quantity: invoice.packingListID.items[i].quantity,
                       Price:
-                        Math.floor(
-                          (invoice.packingListID.items[i].price *
-                            (100 - invoice.packingListID.items[i].discount)) /
-                            100000
-                        ) *
-                        1000 *
-                        invoice.packingListID.items[i].quantity,
+                        invoice.packingListID.items[i].discount == 0
+                          ? invoice.packingListID.items[i].quantity *
+                            invoice.packingListID.items[i].price
+                          : Math.floor(
+                              (invoice.packingListID.items[i].quantity *
+                                (invoice.packingListID.items[i].price *
+                                  (100 -
+                                    invoice.packingListID.items[i].discount))) /
+                                100000
+                            ) * 1000,
                       Cost:
                         averagePrice * invoice.packingListID.items[i].quantity,
                       Staff: invoice.createdBy.name,
@@ -333,14 +339,18 @@ class ReportController {
                         invoice.deliverySlipID.items[i].quantity -
                         invoice.deliverySlipID.items[i].returned,
                       Price:
-                        Math.floor(
-                          (invoice.deliverySlipID.items[i].price *
-                            (100 - invoice.deliverySlipID.items[i].discount)) /
-                            100000
-                        ) *
-                        1000 *
-                        (invoice.deliverySlipID.items[i].quantity -
-                          invoice.deliverySlipID.items[i].returned),
+                        invoice.deliverySlipID.items[i].discount == 0
+                          ? invoice.deliverySlipID.items[i].price *
+                            (invoice.deliverySlipID.items[i].quantity -
+                              invoice.deliverySlipID.items[i].returned)
+                          : Math.floor(
+                              (invoice.deliverySlipID.items[i].price *
+                                (100 -
+                                  invoice.deliverySlipID.items[i].discount) *
+                                (invoice.deliverySlipID.items[i].quantity -
+                                  invoice.deliverySlipID.items[i].returned)) /
+                                100000
+                            ) * 1000,
                       Cost:
                         averagePrice *
                         (invoice.deliverySlipID.items[i].quantity -

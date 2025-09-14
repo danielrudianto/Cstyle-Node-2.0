@@ -16357,3 +16357,290 @@ Use mongoose.model(name, schema)
 [2025-01-10 09:27:22] [INFO] MongoDB: Connected with MongoDB Database Engine
 [2025-01-10 09:27:23] [INFO] Redis: Connected with Redis Database Engine
 [2025-01-10 09:27:23] [INFO] Sync: Synced 40 users
+[2025-06-10 21:40:42] [INFO] Server: Server started on port 5000
+[2025-06-10 21:40:42] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2025-06-10 21:40:42] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-06-10 21:40:42] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-06-10 21:40:42] [INFO] Sync: Synced 40 users
+[2025-06-10 21:40:42] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-06-10 21:40:42] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-06-10 21:40:43] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-06-10 21:40:43] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-06-10 21:40:43] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-06-10 21:40:43] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-06-10 21:40:44] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-06-10 21:40:44] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-06-10 21:40:45] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-06-10 21:40:45] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-06-10 21:40:46] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-06-10 21:40:46] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-06-10 21:40:47] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-06-10 21:40:47] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-06-10 21:40:48] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-06-10 21:40:48] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-06-10 21:40:49] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-06-10 21:40:49] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-06-10 21:40:50] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-06-10 21:40:50] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-06-10 21:40:51] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-06-10 21:40:51] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-06-10 21:40:52] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-06-10 21:40:52] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-06-10 21:44:21] [INFO] Server: Server started on port 5000
+[2025-06-10 21:44:21] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2025-06-10 21:44:21] [INFO] Redis: Connected with Redis Database Engine
+[2025-06-10 21:44:21] [INFO] Sync: Synced 40 users
+[2025-06-10 21:52:48] [INFO] Server: Server started on port 5000
+[2025-06-10 21:52:48] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2025-06-10 21:52:48] [INFO] Redis: Connected with Redis Database Engine
+[2025-06-10 21:52:48] [INFO] Sync: Synced 40 users
+[2025-06-10 21:53:39] [INFO] Server: Server started on port 5000
+[2025-06-10 21:53:39] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2025-06-10 21:53:39] [INFO] Redis: Connected with Redis Database Engine
+[2025-06-10 21:53:39] [INFO] Sync: Synced 40 users
+[2025-09-12 14:19:24] [INFO] Server: Server started on port 5000
+[2025-09-12 14:19:24] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2025-09-12 14:19:24] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:24] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:24] [INFO] Sync: Synced 40 users
+[2025-09-12 14:19:24] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:24] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:24] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:25] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:25] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:25] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:26] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:26] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:26] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:27] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:27] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:28] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:29] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:29] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:30] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:30] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:31] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:31] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:32] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:32] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:33] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:33] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:34] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:34] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:35] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:35] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:36] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:36] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:37] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:37] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:38] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:38] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:39] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:39] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:40] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:40] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:41] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:41] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:42] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:42] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:43] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:43] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:44] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:44] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:45] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:45] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:46] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:46] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:47] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:47] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:48] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:48] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:49] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:50] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:50] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:51] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:51] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:52] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:52] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:53] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:53] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:54] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:54] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:55] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:55] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:56] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:56] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:57] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:57] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:58] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:58] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:59] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:19:59] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:00] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:00] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:01] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:01] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:02] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:02] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:03] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:03] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:04] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:04] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:05] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:05] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:06] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:06] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:07] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:07] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:08] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:08] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:09] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:09] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:10] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:10] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:11] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:11] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:12] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:12] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:13] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:14] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:14] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:15] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:15] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:16] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:16] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:17] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:17] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:18] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:18] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:19] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:19] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:20] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:20] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:21] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:21] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:22] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:22] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:23] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:23] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:24] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:24] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:25] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:25] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:26] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:26] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:27] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:27] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:28] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:28] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:29] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:29] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:30] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:30] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:31] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:31] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:32] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:32] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:33] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:33] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:34] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:35] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:35] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:36] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:36] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:37] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:37] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:38] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:38] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:39] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:39] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:40] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:40] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:41] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:41] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:42] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:42] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:43] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:43] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:44] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:44] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:45] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:45] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:46] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:46] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:47] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:47] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:48] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:48] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:49] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:49] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:50] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:50] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:51] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:51] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:52] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:52] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:53] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:53] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:54] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:54] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:55] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:56] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:56] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:57] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:57] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:58] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:58] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:59] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:20:59] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:21:00] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:21:00] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:21:01] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:21:01] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:21:02] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:21:02] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:21:03] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:21:03] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:21:04] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:21:04] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:21:05] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:21:05] [ERROR] Redis: Error: connect ECONNREFUSED ::1:6379
+[2025-09-12 14:21:25] [INFO] Server: Server started on port 5000
+[2025-09-12 14:21:25] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2025-09-12 14:21:26] [INFO] Redis: Connected with Redis Database Engine
+[2025-09-12 14:21:26] [INFO] Sync: Synced 40 users
+[2025-09-14 13:14:29] [INFO] Server: Server started on port 5000
+[2025-09-14 13:14:29] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2025-09-14 13:14:29] [INFO] Redis: Connected with Redis Database Engine
+[2025-09-14 13:14:29] [INFO] Sync: Synced 40 users
+[2025-09-14 13:50:37] [INFO] Server: Server started on port 5000
+[2025-09-14 13:50:37] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2025-09-14 13:50:37] [INFO] Redis: Connected with Redis Database Engine
+[2025-09-14 13:50:37] [INFO] Sync: Synced 40 users
+[2025-09-14 14:01:50] [INFO] Server: Server started on port 5000
+[2025-09-14 14:01:50] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2025-09-14 14:01:50] [INFO] Redis: Connected with Redis Database Engine
+[2025-09-14 14:01:50] [INFO] Sync: Synced 40 users
+[2025-09-14 14:02:40] [INFO] Server: Server started on port 5000
+[2025-09-14 14:02:40] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2025-09-14 14:02:40] [INFO] Redis: Connected with Redis Database Engine
+[2025-09-14 14:02:40] [INFO] Sync: Synced 40 users
+[2025-09-14 14:02:50] [INFO] Server: Server started on port 5000
+[2025-09-14 14:02:50] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2025-09-14 14:02:50] [INFO] Redis: Connected with Redis Database Engine
+[2025-09-14 14:02:50] [INFO] Sync: Synced 40 users
+[2025-09-14 14:03:17] [INFO] Server: Server started on port 5000
+[2025-09-14 14:03:17] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2025-09-14 14:03:17] [INFO] Redis: Connected with Redis Database Engine
+[2025-09-14 14:03:17] [INFO] Sync: Synced 40 users
+[2025-09-14 14:04:24] [INFO] Server: Server started on port 5000
+[2025-09-14 14:04:24] [INFO] MongoDB: Connected with MongoDB Database Engine
+[2025-09-14 14:04:24] [INFO] Redis: Connected with Redis Database Engine
+[2025-09-14 14:04:24] [INFO] Sync: Synced 40 users
+[2025-09-14 14:05:45] [INFO] Master worker: Job 2027 [stock-card-inserted] completed at Sun Sep 14 2025 14:05:45 GMT+0700 (Western Indonesia Time)
+[2025-09-14 14:05:45] [INFO] Master worker: Job 2028 [insertStockOut] completed at Sun Sep 14 2025 14:05:45 GMT+0700 (Western Indonesia Time)
+[2025-09-14 14:05:45] [INFO] Master worker: Job 2029 [insertStockOut] completed at Sun Sep 14 2025 14:05:45 GMT+0700 (Western Indonesia Time)
+[2025-09-14 14:05:45] [INFO] Master worker: Job 2030 [insertStockOut] completed at Sun Sep 14 2025 14:05:45 GMT+0700 (Western Indonesia Time)
+[2025-09-14 14:05:45] [INFO] Master worker: Job 2031 [insertStockOut] completed at Sun Sep 14 2025 14:05:45 GMT+0700 (Western Indonesia Time)
+[2025-09-14 14:05:45] [INFO] Master worker: Job 2032 [createProduct] completed at Sun Sep 14 2025 14:05:45 GMT+0700 (Western Indonesia Time)
+[2025-09-14 14:05:45] [INFO] Worker: Product TESTING_1 created

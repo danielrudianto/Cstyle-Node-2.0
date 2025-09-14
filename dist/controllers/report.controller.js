@@ -91,9 +91,12 @@ ReportController.fetchSalesReport = (req, res) => {
                             Date: (0, moment_1.default)(x.date, "YYYY-MM-DD").format("DD/MM/YYYY"),
                             Time: (0, moment_1.default)(x.createdAt).format("HH:mm:ss"),
                             Value: x.packingListID.items.reduce((acc, item) => acc +
-                                Math.floor((item.price * (100 - item.discount)) / 100000) *
-                                    1000 *
-                                    item.quantity, 0),
+                                (item.discount == 0
+                                    ? item.price * item.quantity
+                                    : Math.floor((item.price *
+                                        (100 - item.discount) *
+                                        item.quantity) /
+                                        100000) * 1000), 0),
                             Customer: x.customerID == null ? "?NO" : x.customerID.name,
                             Staff: x.createdBy.name,
                             Remarks: x.isHidden ? "H" : "",
@@ -198,11 +201,14 @@ ReportController.fetchSalesProductReport = (req, res) => {
                                         .name,
                                 Reference: invoice.packingListID.items[i].itemID.description,
                                 Quantity: invoice.packingListID.items[i].quantity,
-                                Price: Math.floor((invoice.packingListID.items[i].price *
-                                    (100 - invoice.packingListID.items[i].discount)) /
-                                    100000) *
-                                    1000 *
-                                    invoice.packingListID.items[i].quantity,
+                                Price: invoice.packingListID.items[i].discount == 0
+                                    ? invoice.packingListID.items[i].quantity *
+                                        invoice.packingListID.items[i].price
+                                    : Math.floor((invoice.packingListID.items[i].quantity *
+                                        (invoice.packingListID.items[i].price *
+                                            (100 -
+                                                invoice.packingListID.items[i].discount))) /
+                                        100000) * 1000,
                                 Cost: averagePrice * invoice.packingListID.items[i].quantity,
                                 Staff: invoice.createdBy.name,
                             });
@@ -228,12 +234,16 @@ ReportController.fetchSalesProductReport = (req, res) => {
                                 Reference: invoice.deliverySlipID.items[i].itemID.description,
                                 Quantity: invoice.deliverySlipID.items[i].quantity -
                                     invoice.deliverySlipID.items[i].returned,
-                                Price: Math.floor((invoice.deliverySlipID.items[i].price *
-                                    (100 - invoice.deliverySlipID.items[i].discount)) /
-                                    100000) *
-                                    1000 *
-                                    (invoice.deliverySlipID.items[i].quantity -
-                                        invoice.deliverySlipID.items[i].returned),
+                                Price: invoice.deliverySlipID.items[i].discount == 0
+                                    ? invoice.deliverySlipID.items[i].price *
+                                        (invoice.deliverySlipID.items[i].quantity -
+                                            invoice.deliverySlipID.items[i].returned)
+                                    : Math.floor((invoice.deliverySlipID.items[i].price *
+                                        (100 -
+                                            invoice.deliverySlipID.items[i].discount) *
+                                        (invoice.deliverySlipID.items[i].quantity -
+                                            invoice.deliverySlipID.items[i].returned)) /
+                                        100000) * 1000,
                                 Cost: averagePrice *
                                     (invoice.deliverySlipID.items[i].quantity -
                                         invoice.deliverySlipID.items[i].returned),
