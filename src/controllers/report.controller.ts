@@ -50,6 +50,10 @@ class ReportController {
                     (a: any) => a.type.toLowerCase() === "voucher"
                   );
 
+                  const GrabPaymentIndex = x.payment.findIndex(
+                    (a: any) => a.type.toLowerCase() === "grab"
+                  );
+
                   const BankTransferPaymentIndex = x.payment.findIndex(
                     (a: any) =>
                       a.type.toLowerCase() === "bank transfer" ||
@@ -78,6 +82,11 @@ class ReportController {
                   const VoucherPayment =
                     VoucherPaymentIndex !== -1
                       ? x.payment[VoucherPaymentIndex].amount
+                      : 0;
+
+                  const GrabPayment =
+                    GrabPaymentIndex !== -1
+                      ? x.payment[GrabPaymentIndex].amount
                       : 0;
 
                   const BankTransferPayment =
@@ -109,6 +118,7 @@ class ReportController {
                     "Bank Transfer": BankTransferPayment,
                     PayPal: PayPalPayment,
                     QRIS: QRISPayment,
+                    Grab: GrabPayment,
                     Voucher: VoucherPayment,
                     Member: x.memberID == null ? "NO" : x.memberID.code,
                     Remarks: x.isHidden ? "H" : "",

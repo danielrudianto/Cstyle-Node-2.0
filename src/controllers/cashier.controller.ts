@@ -281,6 +281,7 @@ class CashierController {
           "qris",
           "paypal",
           "voucher",
+          "grab",
           "bank transfer",
         ];
 

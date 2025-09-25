@@ -25,7 +25,6 @@ router.post(
 );
 router.get(
   "/:id",
-
   AccessInterceptor.supervisorRequired,
   param("id").isMongoId().withMessage(ErrorList["ID_INVALID"]),
   ErrorInterceptor.intercept,

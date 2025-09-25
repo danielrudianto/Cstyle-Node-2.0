@@ -41,6 +41,7 @@ ReportController.fetchSalesReport = (req, res) => {
                         const CashPaymentIndex = x.payment.findIndex((a) => a.type.toLowerCase() === "cash");
                         const PayPalPaymentIndex = x.payment.findIndex((a) => a.type.toLowerCase() === "paypal");
                         const VoucherPaymentIndex = x.payment.findIndex((a) => a.type.toLowerCase() === "voucher");
+                        const GrabPaymentIndex = x.payment.findIndex((a) => a.type.toLowerCase() === "grab");
                         const BankTransferPaymentIndex = x.payment.findIndex((a) => a.type.toLowerCase() === "bank transfer" ||
                             a.type.toLowerCase() === "transfer");
                         const CardPaymentIndex = x.payment.findIndex((a) => a.type.toLowerCase() === "card");
@@ -55,6 +56,9 @@ ReportController.fetchSalesReport = (req, res) => {
                             : 0;
                         const VoucherPayment = VoucherPaymentIndex !== -1
                             ? x.payment[VoucherPaymentIndex].amount
+                            : 0;
+                        const GrabPayment = GrabPaymentIndex !== -1
+                            ? x.payment[GrabPaymentIndex].amount
                             : 0;
                         const BankTransferPayment = BankTransferPaymentIndex !== -1
                             ? x.payment[BankTransferPaymentIndex].amount
@@ -77,6 +81,7 @@ ReportController.fetchSalesReport = (req, res) => {
                             "Bank Transfer": BankTransferPayment,
                             PayPal: PayPalPayment,
                             QRIS: QRISPayment,
+                            Grab: GrabPayment,
                             Voucher: VoucherPayment,
                             Member: x.memberID == null ? "NO" : x.memberID.code,
                             Remarks: x.isHidden ? "H" : "",

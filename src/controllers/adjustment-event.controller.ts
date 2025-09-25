@@ -4,7 +4,6 @@ import AdjustmentModelModel from "../models/adjustment.model";
 import { queue } from "../utils/queue.utils";
 import LoggerHelper from "../utils/logger.utils";
 import { LoggerType } from "../interfaces/logger.interface";
-import moment from "moment";
 import { StockInInterface } from "../interfaces/stock-in.interface";
 import StockModelModel from "../models/stock.model";
 import { StockOutInterface } from "../interfaces/stock-out.interface";

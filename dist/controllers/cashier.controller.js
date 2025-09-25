@@ -226,6 +226,7 @@ CashierController.fetchReport = (req, res) => {
             "qris",
             "paypal",
             "voucher",
+            "grab",
             "bank transfer",
         ];
         const payments = paymentMethods.map((x) => {
