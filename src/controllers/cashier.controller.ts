@@ -279,10 +279,10 @@ class CashierController {
           "cash",
           "card",
           "qris",
-          "paypal",
+          "bank transfer",
           "voucher",
           "grab",
-          "bank transfer",
+          "paypal",
         ];
 
         const payments = paymentMethods.map((x) => {
