@@ -108,9 +108,10 @@ class ReportController {
                     Value: x.items.reduce(
                       (acc: any, item: any) =>
                         acc +
-                        Math.floor((item.price - item.discount) / 1000) *
-                          1000 *
-                          item.quantity,
+                        Math.floor(
+                          ((item.price - item.discount) * item.quantity) / 1000
+                        ) *
+                          1000,
                       0
                     ),
                     Cash: CashPayment,
@@ -241,10 +242,10 @@ class ReportController {
                     Quantity: bill.items[i].quantity,
                     Price:
                       Math.floor(
-                        (bill.items[i].price - bill.items[i].discount) / 1000
-                      ) *
-                      1000 *
-                      bill.items[i].quantity,
+                        ((bill.items[i].price - bill.items[i].discount) *
+                          bill.items[i].quantity) /
+                          1000
+                      ) * 1000,
                     Cost: averagePrice * bill.items[i].quantity,
                     Staff: bill.createdBy.name,
                   });

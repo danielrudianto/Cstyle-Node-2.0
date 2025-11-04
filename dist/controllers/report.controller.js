@@ -73,9 +73,8 @@ ReportController.fetchSalesReport = (req, res) => {
                             Date: (0, moment_1.default)(x.date, "YYYY-MM-DD").format("DD/MM/YYYY"),
                             Time: (0, moment_1.default)(x.createdAt).format("HH:mm:ss"),
                             Value: x.items.reduce((acc, item) => acc +
-                                Math.floor((item.price - item.discount) / 1000) *
-                                    1000 *
-                                    item.quantity, 0),
+                                Math.floor(((item.price - item.discount) * item.quantity) / 1000) *
+                                    1000, 0),
                             Cash: CashPayment,
                             Card: CardPayment,
                             "Bank Transfer": BankTransferPayment,
@@ -173,9 +172,9 @@ ReportController.fetchSalesProductReport = (req, res) => {
                                 : bill.items[i].itemID.itemTypeID.name,
                             Reference: bill.items[i].itemID.description,
                             Quantity: bill.items[i].quantity,
-                            Price: Math.floor((bill.items[i].price - bill.items[i].discount) / 1000) *
-                                1000 *
-                                bill.items[i].quantity,
+                            Price: Math.floor(((bill.items[i].price - bill.items[i].discount) *
+                                bill.items[i].quantity) /
+                                1000) * 1000,
                             Cost: averagePrice * bill.items[i].quantity,
                             Staff: bill.createdBy.name,
                         });
