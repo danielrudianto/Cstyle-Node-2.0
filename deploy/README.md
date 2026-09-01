@@ -97,6 +97,50 @@ Skrip itu memeriksa dulu apakah ada pasangan `{ storeID, name }` kembar, lalu
 membuat indeks baru sebelum membuang yang lama — jadi pada tiap saat selalu ada
 yang menjaga. Aman diulang, dan berhenti sendiri kalau menemukan kembaran.
 
+## Menaikkan versi Node
+
+Dua hal yang menentukan berhasil atau tidaknya, dan keduanya mudah terlewat.
+
+**Satu: pasang lewat apt NodeSource, jangan nvm atau snap.**
+
+Kedua unit systemd menjalankan `/usr/bin/node` secara harfiah:
+
+```
+ExecStart=/usr/bin/node dist/server.js
+```
+
+NodeSource memasang tepat ke jalur itu, jadi unitnya tidak perlu disentuh sama
+sekali. nvm memasang ke `~/.nvm/versions/node/...` dan systemd TIDAK membaca
+profil shell — layanan akan tetap memakai Node lama, atau gagal menyala kalau
+`/usr/bin/node` sudah tidak ada. snap juga meleset, ke `/snap/bin/node`.
+
+Kalau terpaksa memakai nvm, `ExecStart` di kedua unit harus diubah ke jalur
+absolutnya, lalu `sudo systemctl daemon-reload`.
+
+**Dua: node_modules WAJIB dipasang ulang.**
+
+Proyek ini memuat tiga modul native — `bcrypt`, `msgpackr-extract` (lewat
+BullMQ), dan `esbuild`. Ketiganya dikompilasi untuk satu ABI Node tertentu.
+
+Bentuk gagalnya yang berbahaya: sesudah Node naik versi, prosesnya **tetap
+menyala**, `systemctl status` melaporkan active, dan pemantauan terlihat
+normal. Yang gagal adalah SETIAP login — karena `bcrypt` baru disentuh saat
+permintaan masuk, bukan saat start.
+
+`deploy.sh` sekarang memeriksanya sendiri: ia mencoba memuat `bcrypt`, dan
+kalau gagal, `node_modules` dibuang lalu dipasang ulang. Jadi urutannya cukup:
+
+```bash
+sudo apt install -y nodejs        # dari repo NodeSource
+node --version                    # pastikan sudah versi baru
+sudo ./scripts/deploy.sh
+```
+
+Versi yang disarankan **Node 22**, alasannya sederhana: mesin pengembangan
+memakai v22.22.0, dan menyamakan keduanya menghilangkan satu sumber perbedaan
+yang paling sering menyulitkan penelusuran. Batas bawahnya Node 18 — itu yang
+diminta `bcrypt` di `engines`, dan `deploy.sh` menolak di bawah itu.
+
 ## Kenapa worker tidak boleh dilupakan
 
 Worker bukan pelengkap. Dialah yang menjalankan mesin FIFO: setiap nota yang

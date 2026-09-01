@@ -60,6 +60,39 @@ for kunci in AUTHORIZATION_KEY REFRESH_AUTHORIZATION_KEY PORT; do
   grep -qE "^${kunci}=" "$AKAR/.env" || gagal ".env tidak memuat ${kunci}"
 done
 
+# BASE_URL tidak menghalangi proses menyala, jadi ia hanya diperingatkan. Tanpa
+# nilai itu URL gambar barang tersusun menjadi "undefined/namaberkas" dan
+# gambarnya hilang di aplikasi office — gejala yang sama sekali tidak menunjuk
+# ke .env.
+grep -qE "^BASE_URL=" "$AKAR/.env" ||
+  kuning "    .env tidak memuat BASE_URL — URL gambar barang akan rusak"
+
+# Node 18 ke atas. bcrypt menyatakannya di engines, dan versi di bawah itu gagal
+# saat modul nativenya dikompilasi — di tengah 'npm ci', bukan saat dijalankan.
+VERSI_NODE="$(node -p 'process.versions.node.split(".")[0]' 2> /dev/null || echo 0)"
+[[ "$VERSI_NODE" -ge 18 ]] ||
+  gagal "butuh Node 18 ke atas; yang terpasang $(node --version 2> /dev/null || echo 'tidak ada')"
+
+# Unit systemd HARUS sudah terpasang sebelum skrip sampai ke langkah 7.
+#
+# Tanpa pemeriksaan ini, skrip menarik perubahan, membangun, menjalankan uji,
+# dan menyelaraskan indeks LEBIH DULU, lalu baru gagal di 'systemctl restart' —
+# meninggalkan kode baru di disk sementara proses lama yang masih melayani.
+# Keadaan itu tidak rusak, tapi membingungkan: git sudah menunjuk commit baru
+# padahal yang berjalan bukan itu.
+for layanan in "$LAYANAN_API" "$LAYANAN_WORKER"; do
+  systemctl cat "$layanan" > /dev/null 2>&1 ||
+    gagal "unit ${layanan}.service belum terpasang — kerjakan dulu bagian 'Pindah dari PM2' di deploy/README.md"
+done
+
+# PM2 yang masih memegang proses lama merebut porta yang sama, dan layanan
+# systemd-nya mati saat start dengan pesan yang menyesatkan.
+if command -v pm2 > /dev/null 2>&1; then
+  SISA_PM2="$(pm2 jlist 2> /dev/null | grep -oE '"name":"(server|worker)"' | head -1 || true)"
+  [[ -z "$SISA_PM2" ]] ||
+    gagal "PM2 masih menjalankan proses lama — jalankan dulu: pm2 delete server worker && pm2 save && pm2 unstartup systemd"
+fi
+
 # Pohon kerjanya milik pengguna layanan, bukan milik yang mengetik. Skrip ini
 # menulis ke node_modules/ dan dist/ lalu mengembalikan kepemilikannya di
 # akhir, jadi ia memang dijalankan sebagai root di server ini.
@@ -113,6 +146,23 @@ fi
 # ---------------------------------------------------------------------
 # 2. Paket
 # ---------------------------------------------------------------------
+# Modul native dikompilasi untuk satu ABI Node tertentu. Proyek ini memuat tiga:
+# bcrypt (node-gyp-build), msgpackr-extract (lewat BullMQ), dan esbuild.
+#
+# Sesudah Node dinaikkan versi mayornya, berkas .node lama tidak lagi dapat
+# dimuat — dan yang paling berbahaya adalah bentuk gagalnya. Prosesnya TETAP
+# menyala, systemctl melaporkan active, kurva pemantauan terlihat normal; yang
+# gagal adalah SETIAP login, karena bcrypt baru disentuh saat permintaan masuk.
+#
+# Syarat 'npm ci' di bawah tidak menangkap keadaan ini: node_modules ada dan
+# package-lock.json tidak berubah, jadi tanpa pemeriksaan ini pemasangan ulang
+# akan dilewati justru pada saat ia paling dibutuhkan.
+if [[ -d node_modules ]] && ! node -e 'require("bcrypt")' > /dev/null 2>&1; then
+  kuning "    modul native tidak dapat dimuat pada Node $(node --version)"
+  kuning "    (lazimnya sesudah Node naik versi) — node_modules dipasang ulang"
+  rm -rf node_modules
+fi
+
 # `npm ci` menolak bila package-lock.json tidak sejalan dengan package.json —
 # dan itu justru yang diinginkan di server: yang terpasang harus persis sama
 # dengan yang diuji, bukan versi terbaru yang kebetulan cocok.
