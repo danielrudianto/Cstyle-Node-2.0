@@ -1,0 +1,24 @@
+[Unit]
+Description=Cstyle Worker
+After=network.target mongod.service redis-server.service
+Wants=mongod.service redis-server.service
+
+[Service]
+Type=simple
+User=danielrudianto
+WorkingDirectory=/home/danielrudianto/Cstyle-Node-2.0
+Environment=NODE_ENV=production
+
+# Worker BUKAN pelengkap. Dialah yang menjalankan mesin FIFO: setiap nota yang
+# masuk dari kasir menghasilkan job insertStockOut, dan tanpa worker antreannya
+# menumpuk di Redis tanpa satu pun harga pokok terhitung. API tetap menjawab
+# seperti biasa, jadi tidak ada yang terlihat salah sampai laporan dibuka.
+ExecStart=/usr/bin/node dist/worker.js
+
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,25 @@
+[Unit]
+Description=Cstyle API
+# MongoDB dan Redis WAJIB disebut. API membaca cache pengguna dari Redis pada
+# setiap permintaan terautentikasi, dan tanpa keduanya proses menyala lalu
+# menggantung tanpa satu pun pesan yang menjelaskan sebabnya.
+After=network.target mongod.service redis-server.service
+Wants=mongod.service redis-server.service
+
+[Service]
+Type=simple
+User=danielrudianto
+WorkingDirectory=/home/danielrudianto/Cstyle-Node-2.0
+Environment=NODE_ENV=production
+
+# dist/server.js, bukan src/server.ts. Berkas TypeScript hanya dijalankan
+# lewat nodemon saat pengembangan; produksi menjalankan hasil kompilasi.
+ExecStart=/usr/bin/node dist/server.js
+
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
