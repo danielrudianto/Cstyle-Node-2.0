@@ -41,6 +41,14 @@ buat("overflows", { itemID: 1 });
 
 print("");
 print("=== nota kasir ===");
+/*
+  Keunikan nomor nota berlaku PER TOKO, bukan global.
+
+  Perpindahan dari unique { name } — termasuk membuang indeks lamanya —
+  dikerjakan scripts/migrate-bill-name-index.js. Di sini indeksnya hanya
+  dipastikan ada; createIndex() tidak akan membuang yang lama.
+*/
+buat("bills", { storeID: 1, name: 1 }, { unique: true });
 buat("bills", { storeID: 1, date: -1 });
 buat("bills", { isHidden: 1, storeID: 1, date: -1 });
 buat("bills", { storeID: 1, isDelete: 1, createdAt: -1 });

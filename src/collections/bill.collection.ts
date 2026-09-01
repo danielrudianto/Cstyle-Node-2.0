@@ -14,7 +14,19 @@ const BillPayment = new Schema({
 });
 
 const BillSchema = new Schema({
-  name: { type: String, required: true, unique: true },
+  /*
+    TIDAK lagi unique secara global — keunikannya sekarang gabungan
+    { storeID, name }, dipasang di bawah.
+
+    Nomornya dibuat di perangkat kasir dari delapan digit acak tanpa kode
+    toko, sementara keunikan global memperlakukan angka yang sama dari toko
+    berbeda sebagai tabrakan. Yang ditolak lalu dibuang diam-diam oleh
+    sinkronisasi. Dengan toko ikut masuk kunci, keduanya sah berdampingan.
+
+    Indeks lama harus dibuang di server; Mongoose tidak membuang indeks yang
+    sudah ada sendiri. Lihat scripts/migrate-bill-name-index.js.
+  */
+  name: { type: String, required: true },
   date: { type: Date, required: true },
   storeID: { type: Schema.Types.ObjectId, ref: "stores", required: true },
   memberID: {
@@ -41,5 +53,13 @@ const BillSchema = new Schema({
   },
   point: { type: Number, required: true, default: 0 },
 });
+
+/*
+  Keunikan nomor nota berlaku PER TOKO.
+
+  Aman dipasang pada data yang ada: selama ini `name` unique global, jadi tiap
+  pasangan { storeID, name } dengan sendirinya juga sudah unik.
+*/
+BillSchema.index({ storeID: 1, name: 1 }, { unique: true });
 
 export default BillSchema;

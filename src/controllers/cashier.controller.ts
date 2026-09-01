@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import moment from "moment";
+import { pilahNotaKiriman } from "../utils/bill-sync.helper";
 import { ErrorList } from "../constants/error-list.constant";
 import { BillInterface } from "../interfaces/bill.interface";
 import { LoggerType } from "../interfaces/logger.interface";
@@ -59,15 +60,66 @@ export class CashierController {
     const data = req.body.data as any[];
 
     try {
-      const existingBills = await this.billRepository.fetchExistingNames(
+      /*
+        DUA CACAT YANG DIPERBAIKI DI SINI.
+
+        Bentuk lama: cari nota yang namanya sudah ada (TANPA memandang toko),
+        buang dari kiriman, lalu balas hanya yang baru tersimpan. Aplikasi
+        kasir menandai nota sebagai "sudah tersinkron" HANYA untuk yang muncul
+        di balasan. Akibatnya:
+
+        1. Nota toko A yang nomornya kebetulan sama dengan nota toko B
+           dianggap sudah ada lalu dibuang. Nomornya delapan digit acak tanpa
+           kode toko, dipakai bersama enam toko — sekitar 27% kemungkinan
+           bentrok tiap bulan. Nota itu HILANG tanpa jejak di mana pun.
+
+        2. Bila sambungan putus SESUDAH server menyimpan tetapi SEBELUM
+           balasannya sampai, perangkat mengirim ulang. Server melihatnya
+           sudah ada lalu membuangnya dari balasan — jadi perangkat tidak
+           pernah menandainya tersinkron dan mengirim ulang lagi tiap tiga
+           puluh detik, selamanya. Ini yang paling sering kejadian; putus
+           jaringan di kasir jauh lebih lumrah daripada tabrakan angka.
+
+        Sekarang pencocokannya per toko, dan nota yang memang sudah tersimpan
+        IKUT DIBALAS supaya perangkat berhenti mengulang.
+      */
+      const existingBills = await this.billRepository.fetchExistingByStore(
+        storeID,
         data.map((x) => x.name)
       );
 
-      const existingNames = new Set(existingBills.map((y: any) => y.name));
+      /*
+        Pemilahannya ada di utils/bill-sync.helper.ts bersama penjelasan
+        lengkapnya, supaya bisa diuji tanpa database maupun express.
+      */
+      const { perluDisimpan, sudahTersimpan, bentrok } = pilahNotaKiriman(
+        data,
+        existingBills as any[]
+      );
+
+      if (bentrok.length > 0) {
+        /*
+          Dicatat sebagai galat, bukan dibalas. Bentuk balasannya berupa larik
+          dokumen nota dan versi aplikasi yang sudah terpasang di enam toko
+          membacanya begitu; menyisipkan penanda penolakan di situ akan
+          merusaknya. Sampai aplikasinya diperbarui, yang bentrok memang
+          dibiarkan mengulang — bedanya sekarang ia TERLIHAT di journalctl,
+          bukan hilang tanpa jejak seperti sebelumnya.
+        */
+        new LoggerHelper({
+          message:
+            `Bill number collision within store ${storeID}: ` +
+            `${bentrok.join(", ")}. NOT saved; the terminal will keep ` +
+            `retrying until these are renumbered.`,
+          type: LoggerType.error,
+          tag: "Cashier",
+        }).log();
+      }
+
       const memberCodeSet = new Set<string>();
       const bills: any[] = [];
 
-      for (const x of data.filter((x) => !existingNames.has(x.name))) {
+      for (const x of perluDisimpan) {
         if (x.memberID != null) {
           memberCodeSet.add(x.memberID);
         }
@@ -105,11 +157,21 @@ export class CashierController {
         ...memberCodeSet,
       ]);
 
-      /* Nota yang menyebut anggota tak dikenal DILEWATI, bukan ditolak. */
+      /*
+        Nota yang menyebut anggota tak dikenal DILEWATI, bukan ditolak.
+
+        Ini pembuangan diam-diam yang ketiga, dan perilakunya sengaja tidak
+        diubah — menyimpannya tanpa anggota berarti memutuskan sesuatu tentang
+        poin belanja yang bukan urusan lapisan ini. Yang ditambahkan hanya
+        catatannya, supaya nota yang tersangkut mengulang selamanya punya
+        jejak yang bisa ditelusuri.
+      */
       const modifiedBills: BillInterface[] = [];
+      const anggotaTakDikenal: string[] = [];
       for (const x of bills) {
         const member = members.find((y: any) => y.code == x.memberID);
         if (x.memberID != null && member == null) {
+          anggotaTakDikenal.push(x.name);
           continue;
         }
 
@@ -121,6 +183,28 @@ export class CashierController {
           */
           memberID: (x.memberID == null ? null : member!._id) as any,
         });
+      }
+
+      if (anggotaTakDikenal.length > 0) {
+        new LoggerHelper({
+          message:
+            `Skipped ${anggotaTakDikenal.length} bill(s) from store ` +
+            `${storeID} referencing unknown members: ` +
+            `${anggotaTakDikenal.join(", ")}. The terminal will keep ` +
+            `retrying them.`,
+          type: LoggerType.error,
+          tag: "Cashier",
+        }).log();
+      }
+
+      /*
+        Kalau seluruh kiriman ternyata sudah tersimpan, balas di sini. Tanpa
+        jalan pintas ini kita mengambil kunci untuk himpunan barang kosong dan
+        memanggil insertMany([]) tanpa keperluan — dan justru inilah keadaan
+        yang paling sering terjadi pada perangkat yang tersangkut mengulang.
+      */
+      if (modifiedBills.length === 0) {
+        return res.status(200).send(sudahTersimpan);
       }
 
       const kunciBarang = new Set<string>();
@@ -154,7 +238,13 @@ export class CashierController {
             tag: "Cashier",
           }).log();
 
-          return res.status(200).send(result);
+          /*
+            Yang sudah tersimpan ikut dibalas. Bentuk balasannya tetap larik
+            berisi dokumen nota — aplikasi kasir membaca result[i]['name'] dan
+            result[i]['_id'] — jadi versi yang sudah terpasang di enam toko
+            tidak perlu diperbarui untuk mendapat perbaikan ini.
+          */
+          return res.status(200).send([...result, ...sudahTersimpan]);
         } catch (error) {
           new LoggerHelper({
             message: `Error on creating bill ${error}`,

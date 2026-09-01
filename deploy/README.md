@@ -80,6 +80,23 @@ Jawaban 404 sudah benar — aplikasi ini memang tidak punya endpoint di akar
 alamat. Yang salah adalah kode `000`, yang berarti tidak ada jawaban sama
 sekali.
 
+## Migrasi indeks nomor nota (sekali saja)
+
+Keunikan `bills.name` berpindah dari global menjadi gabungan
+`{ storeID, name }`. Mongoose membuat indeks baru sendiri, tetapi TIDAK
+membuang indeks lama — selama indeks lama masih ada, nomor yang sama dari dua
+toko tetap ditolak database dan perbaikannya tidak berlaku.
+
+Jalankan **sebelum** merilis kode baru:
+
+```bash
+mongosh Cstyle --quiet --file scripts/migrate-bill-name-index.js
+```
+
+Skrip itu memeriksa dulu apakah ada pasangan `{ storeID, name }` kembar, lalu
+membuat indeks baru sebelum membuang yang lama — jadi pada tiap saat selalu ada
+yang menjaga. Aman diulang, dan berhenti sendiri kalau menemukan kembaran.
+
 ## Kenapa worker tidak boleh dilupakan
 
 Worker bukan pelengkap. Dialah yang menjalankan mesin FIFO: setiap nota yang

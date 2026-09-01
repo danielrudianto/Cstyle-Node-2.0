@@ -71,14 +71,24 @@ export class BillRepository {
   }
 
   /**
-   * Nama nota yang SUDAH ada di antara daftar yang dikirim.
+   * Nota milik SATU TOKO yang namanya ada di antara daftar yang dikirim.
    *
-   * Dipakai sinkronisasi untuk menyaring kiriman ulang. Perhatikan
-   * pencocokannya hanya pada `name`, tanpa toko — jadi nota dari toko lain
-   * yang kebetulan bernomor sama ikut dianggap sudah ada.
+   * Dipakai sinkronisasi untuk mengenali kiriman ulang.
+   *
+   * DULU MENCOCOKKAN NAMA SAJA, TANPA TOKO.
+   *
+   * Nomor nota dibuat di perangkat masing-masing dari delapan digit acak tanpa
+   * kode toko, sementara indeks unique-nya berlaku global. Akibatnya nota dari
+   * toko A yang kebetulan bernomor sama dengan nota toko B dianggap "sudah
+   * ada", lalu dibuang tanpa jejak — dan perangkatnya mencoba lagi setiap tiga
+   * puluh detik selamanya karena tidak pernah menerima balasan untuknya.
+   *
+   * Dengan toko ikut dicocokkan, dua toko yang mendapat angka sama bukan lagi
+   * tabrakan. Yang tersisa hanya tabrakan di dalam satu toko, yang jauh lebih
+   * jarang dan ditangani terpisah oleh pemanggilnya.
    */
-  fetchExistingNames(names: string[]) {
-    return this.collection.find({ name: { $in: names } });
+  fetchExistingByStore(storeID: any, names: string[]) {
+    return this.collection.find({ storeID: storeID, name: { $in: names } });
   }
 
   /**
