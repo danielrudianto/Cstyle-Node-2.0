@@ -18,16 +18,23 @@ import { monthFilter } from "../utils/period.helper";
  *
  * ==================== NOMOR NOTA BENTROK ====================
  *
- * `bills.name` bertanda unique SECARA GLOBAL, padahal nomornya dibuat di
- * perangkat masing-masing dari 8 digit acak tanpa kode toko. Dengan sekitar
- * 8.000 nota per bulan pada ruang 100 juta, peluang bentrok mencapai ~27% per
+ * Nomor nota dibuat di perangkat masing-masing dari digit acak tanpa kode
+ * toko, jadi keunikannya bersandar pada peluang. Dulu `bills.name` bertanda
+ * unique SECARA GLOBAL: dengan sekitar 8.000 nota sebulan pada ruang seratus
+ * juta, peluang dua toko mendapat angka sama mencapai ~27% per bulan, dan
+ * sinkronisasi membuang yang kalah tanpa jejak.
+ *
+ * Sekarang keunikannya gabungan { storeID, name }, dan fetchExistingByStore()
+ * di bawah mencocokkan toko juga — dua toko yang mendapat angka sama bukan
+ * lagi tabrakan. Aplikasi kasir juga sudah dilebarkan menjadi dua belas digit,
+ * yang menurunkan peluang tabrakan di dalam satu toko ke sekitar 0,003% per
  * bulan.
  *
- * Yang membuatnya berbahaya bukan bentroknya, melainkan penanganannya:
- * sinkronisasi menyaring keluar nota yang namanya sudah ada, sehingga nota
- * kedua DIBUANG tanpa jejak dan perangkatnya mencoba lagi setiap 30 detik
- * selamanya. Lihat fetchExistingNames() di bawah dan pemakainya di
- * cashier.controller.ts.
+ * Indeks unique lama pada `name` harus dibuang di server; Mongoose tidak
+ * membuang indeks yang sudah ada. Skripnya scripts/migrate-bill-name-index.js.
+ *
+ * Pemilahan kiriman ulang dari tabrakan sungguhan ada di
+ * utils/bill-sync.helper.ts, dan pemakainya di cashier.controller.ts.
  * ============================================================
  *
  * CACAT LAIN YANG DIPERTAHANKAN.
