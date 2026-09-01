@@ -1,167 +1,145 @@
 import { Request, Response } from "express";
-import LoggerHelper from "../utils/logger.utils";
+import { ErrorList } from "../constants/error-list.constant";
 import { LoggerType } from "../interfaces/logger.interface";
-import { ErrorList } from "../data/error-list";
-import MembershipModelModel from "../models/membership.model";
+import { MembershipRepository } from "../repositories/membership.repository";
+import LoggerHelper from "../utils/logger.helper";
 
-class MembershipController {
-  static fetch = (req: Request, res: Response) => {
-    const keyword = req.query.keyword as string;
-    const page = !req.query.page ? 1 : parseInt(req.query.page.toString());
+/** Lapisan HTTP untuk keanggotaan. */
+export class MembershipController {
+  private membershipRepository: MembershipRepository;
 
-    MembershipModelModel.fetch({
-      keyword: keyword,
-      page: page,
-    })
-      .then(([result, count]) => {
-        return res.status(200).send({
-          data: result,
-          count: count,
-        });
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          message: `Error on fetching memberships: ${error.message}`,
-          tag: "Membership",
-          type: LoggerType.error,
-        }).log();
-        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+  constructor(membershipRepository: MembershipRepository) {
+    this.membershipRepository = membershipRepository;
+  }
+
+  fetch = async (req: Request, res: Response) => {
+    try {
+      const result = await this.membershipRepository.fetch({
+        keyword: req.query.keyword as string,
+        page: !req.query.page ? 1 : parseInt(req.query.page.toString()),
       });
+
+      return res.status(200).send(result);
+    } catch (error: any) {
+      new LoggerHelper({
+        message: `Error on fetching memberships: ${error?.message}`,
+        tag: "Membership",
+        type: LoggerType.error,
+      }).log();
+
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    }
   };
 
-  static fetchByID = (req: Request, res: Response) => {
-    const id = req.params.id;
-    MembershipModelModel.fetchByID(id)
-      .then((result) => {
-        if (!result) {
-          return res.status(404).send(ErrorList["MEMBER_NOT_FOUND"]);
-        } else {
-          return res.status(200).send(result);
-        }
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          message: `Error on fetching membership by id: ${error}`,
-          type: LoggerType.error,
-          tag: "Membership",
-        }).log();
-
-        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
-      });
-  };
-
-  static fetchByCode = (req: Request, res: Response) => {
-    const code = req.params.membershipCode;
-    MembershipModelModel.fetchByCode(code)
-      .then((result) => {
-        if (!result) {
-          return res.status(404).send(ErrorList["MEMBER_NOT_FOUND"]);
-        } else {
-          return res.status(200).send(result);
-        }
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          type: LoggerType.error,
-          message: `Error on fetching membership by8 code: ${error.message}`,
-          tag: "Membership",
-        }).log();
-        return res.status(500).send(error);
-      });
-  };
-
-  static create = (req: Request, res: Response) => {
-    const nationality = req.body.nationality;
-    const name = req.body.name;
-    const code = req.body.code;
-    const phoneNumber = req.body.phoneNumber;
-    const email = req.body.email;
-    const language = req.body.language;
-    const userID = req.body.userID;
-    const storeID = req.body.storeID;
-    const birthday = new Date(req.body.birthday);
-    MembershipModelModel.preCreate(code).then((validation) => {
-      if (!validation) {
-        return res.status(400).send(ErrorList["DUPLICATE_MEMBER_CODE"]);
-      } else {
-        new MembershipModelModel({
-          code: code,
-          name: name,
-          nationality: nationality,
-          language: language,
-          email: email,
-          phoneNumber: phoneNumber,
-          createdBy: userID,
-          storeID: storeID,
-          birthday: birthday,
-          point: 0,
-        })
-          .create()
-          .then((result) => {
-            return res.status(201).send(result);
-          })
-          .catch((error) => {
-            new LoggerHelper({
-              type: LoggerType.error,
-              message: `Error on creating membership: ${error.message}`,
-              tag: "Membership",
-            }).log();
-            return res.status(500).send(error);
-          });
+  fetchByID = async (req: Request, res: Response) => {
+    try {
+      const result = await this.membershipRepository.fetchByID(req.params.id);
+      if (!result) {
+        return res.status(404).send(ErrorList["MEMBER_NOT_FOUND"]);
       }
-    });
+
+      return res.status(200).send(result);
+    } catch (error) {
+      new LoggerHelper({
+        message: `Error on fetching membership by id: ${error}`,
+        type: LoggerType.error,
+        tag: "Membership",
+      }).log();
+
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    }
   };
 
-  static updateByID = (req: Request, res: Response) => {
-    const id = req.body.id;
-    const name = req.body.name;
-    const nationality = req.body.nationality;
-    const phoneNumber = req.body.phoneNumber;
-    const email = req.body.email;
-    const birthday = req.body.birthday;
-    const language = req.body.language;
+  fetchByCode = async (req: Request, res: Response) => {
+    try {
+      const result = await this.membershipRepository.fetchByCode(
+        req.params.membershipCode
+      );
 
-    MembershipModelModel.preUpdate(id)
-      .then((member) => {
-        if (!member) {
-          return res.status(404).send(ErrorList["MEMBER_NOT_FOUND"]);
-        } else {
-          new MembershipModelModel({
-            id: id,
-            name: name,
-            nationality: nationality,
-            phoneNumber: phoneNumber,
-            email: email,
-            birthday: birthday,
-            point: member.point,
-            storeID: member.storeID,
-            createdBy: member.createdBy,
-            code: member.code,
-            language: language,
-          })
-            .update()
-            .then((result) => {
-              return res.status(201).send(result);
-            })
-            .catch((error) => {
-              new LoggerHelper({
-                type: LoggerType.error,
-                message: `Error on updating membership: ${error.message}`,
-                tag: "Membership",
-              }).log();
-              return res.status(500).send(error);
-            });
-        }
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          message: `Error on fetching member ${error}`,
-          tag: "Memebership",
-          type: LoggerType.error,
-        }).log();
+      if (!result) {
+        return res.status(404).send(ErrorList["MEMBER_NOT_FOUND"]);
+      }
 
-        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+      return res.status(200).send(result);
+    } catch (error: any) {
+      new LoggerHelper({
+        type: LoggerType.error,
+        message: `Error on fetching membership by code: ${error?.message}`,
+        tag: "Membership",
+      }).log();
+
+      return res.status(500).send(error);
+    }
+  };
+
+  create = async (req: Request, res: Response) => {
+    try {
+      if (await this.membershipRepository.isCodeTaken(req.body.code)) {
+        return res.status(400).send(ErrorList["DUPLICATE_MEMBER_CODE"]);
+      }
+
+      /*
+        `birthday` dan `storeID` diteruskan seperti sebelumnya, tetapi
+        repository memang tidak menuliskannya — lihat catatan di
+        membership.repository.ts.
+      */
+      const result = await this.membershipRepository.create({
+        code: req.body.code,
+        name: req.body.name,
+        nationality: req.body.nationality,
+        language: req.body.language,
+        email: req.body.email,
+        phoneNumber: req.body.phoneNumber,
+        createdBy: req.body.userID,
+        storeID: req.body.storeID,
+        birthday: new Date(req.body.birthday),
+        point: 0,
       });
+
+      return res.status(201).send(result);
+    } catch (error: any) {
+      new LoggerHelper({
+        type: LoggerType.error,
+        message: `Error on creating membership: ${error?.message}`,
+        tag: "Membership",
+      }).log();
+
+      return res.status(500).send(error);
+    }
+  };
+
+  updateByID = async (req: Request, res: Response) => {
+    try {
+      const member = await this.membershipRepository.fetchByID(req.body.id);
+      if (!member) {
+        return res.status(404).send(ErrorList["MEMBER_NOT_FOUND"]);
+      }
+
+      /* Poin, toko, kode, dan pembuat diambil dari data lama — tidak bisa disunting. */
+      const result = await this.membershipRepository.update({
+        _id: req.body.id,
+        name: req.body.name,
+        nationality: req.body.nationality,
+        phoneNumber: req.body.phoneNumber,
+        email: req.body.email,
+        birthday: req.body.birthday,
+        language: req.body.language,
+        point: member.point,
+        storeID: member.storeID,
+        createdBy: member.createdBy,
+        code: member.code,
+      });
+
+      return res.status(201).send(result);
+    } catch (error: any) {
+      new LoggerHelper({
+        message: `Error on updating membership: ${error?.message}`,
+        tag: "Membership",
+        type: LoggerType.error,
+      }).log();
+
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    }
   };
 }
 

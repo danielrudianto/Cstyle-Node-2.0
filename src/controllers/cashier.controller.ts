@@ -1,430 +1,435 @@
 import { Request, Response } from "express";
-import BillModelModel from "../models/bill.model";
 import moment from "moment";
-import { Types } from "mongoose";
-import MembershipModelModel from "../models/membership.model";
+import { ErrorList } from "../constants/error-list.constant";
 import { BillInterface } from "../interfaces/bill.interface";
-import StockModelModel from "../models/stock.model";
-import { ErrorList } from "../data/error-list";
-import LoggerHelper from "../utils/logger.utils";
 import { LoggerType } from "../interfaces/logger.interface";
-import { queue } from "../utils/queue.utils";
-import StoreModelModel from "../models/store.model";
-import lock from "../utils/lock.utils";
-import ItemModelModel from "../models/item.model";
+import { BillRepository } from "../repositories/bill.repository";
+import { ItemRepository } from "../repositories/item.repository";
+import { MembershipRepository } from "../repositories/membership.repository";
+import { StockRepository } from "../repositories/stock.repository";
+import { StoreRepository } from "../repositories/store.repository";
+import lock from "../utils/lock.helper";
+import LoggerHelper from "../utils/logger.helper";
+import { queue } from "../utils/queue.helper";
 
-class CashierController {
-  static sync = async (req: Request, res: Response) => {
+/**
+ * Lapisan HTTP untuk aplikasi kasir.
+ *
+ * Controller ini menyentuh empat domain sekaligus — barang, stok, toko,
+ * keanggotaan, dan nota — karena satu perangkat kasir memang memakai
+ * kelimanya lewat satu pintu.
+ */
+export class CashierController {
+  private itemRepository: ItemRepository;
+  private stockRepository: StockRepository;
+  private storeRepository: StoreRepository;
+  private membershipRepository: MembershipRepository;
+  private billRepository: BillRepository;
+
+  constructor(
+    itemRepository: ItemRepository,
+    stockRepository: StockRepository,
+    storeRepository: StoreRepository,
+    membershipRepository: MembershipRepository,
+    billRepository: BillRepository
+  ) {
+    this.itemRepository = itemRepository;
+    this.stockRepository = stockRepository;
+    this.storeRepository = storeRepository;
+    this.membershipRepository = membershipRepository;
+    this.billRepository = billRepository;
+  }
+
+  /**
+   * Menerima kiriman nota dari perangkat kasir yang sedang luring.
+   *
+   * PEMERIKSAAN STOK DIMATIKAN.
+   *
+   * Kode lama memuat blok pemeriksaan ketersediaan stok yang seluruhnya
+   * dikomentari, sehingga nota masuk tanpa pernah diperiksa dan stok bisa
+   * menjadi minus. Blok komentar itu TIDAK dibawa ke sini — isinya sudah ada
+   * di riwayat git — tapi perilakunya dipertahankan: tidak ada pemeriksaan.
+   *
+   * Akibat lain dari matinya pemeriksaan itu: kunci di bawah kini tidak
+   * melindungi apa pun, karena tidak ada lagi urutan baca-lalu-tulis yang
+   * perlu dijaga. Kuncinya tetap dipasang supaya perilaku antriannya sama.
+   */
+  sync = async (req: Request, res: Response) => {
     const storeID = req.body.storeID;
     const data = req.body.data as any[];
-    const memberCodeSet = new Set<string>();
-    const bills: BillModelModel[] = [];
 
-    new LoggerHelper({
-      message: `Syncing data from ${storeID}`,
-      type: LoggerType.info,
-      tag: "Cashier",
-    });
+    try {
+      const existingBills = await this.billRepository.fetchExistingNames(
+        data.map((x) => x.name)
+      );
 
-    new LoggerHelper({
-      message: `Found ${data.length} data to be synced`,
-      type: LoggerType.info,
-      tag: "Cashier",
-    });
+      const existingNames = new Set(existingBills.map((y: any) => y.name));
+      const memberCodeSet = new Set<string>();
+      const bills: any[] = [];
 
-    BillModelModel.fetchBillByNames(data.map((x) => x.name)).then(
-      async (existingBills) => {
-        data
-          .filter((x) => !existingBills.map((y) => y.name).includes(x.name))
-          .forEach((x) => {
-            if (x.memberID != null) {
-              memberCodeSet.add(x.memberID);
-            }
+      for (const x of data.filter((x) => !existingNames.has(x.name))) {
+        if (x.memberID != null) {
+          memberCodeSet.add(x.memberID);
+        }
 
-            const bill = new BillModelModel({
-              name: x.name,
-              date: moment(x.date).format("YYYY-MM-DD"),
-              memberID: x.memberID,
-              storeID: storeID,
-              createdBy: x.createdBy,
-              createdAt: new Date(x.createdAt),
-              items: (x.bills as any[]).map((a) => {
-                return {
-                  itemID: a.itemID,
-                  quantity: a.quantity,
-                  price: a.price,
-                  discount: (a.discount * a.price) / 100,
-                  percentage: a.discount,
-                };
-              }),
-              payment: (x.payments as any[]).map((b) => {
-                return {
-                  type: b.paymentMethod,
-                  amount: b.amount,
-                };
-              }),
-            });
-
-            bills.push(bill);
-          });
-
-        const memberIDs = await MembershipModelModel.fetchByIDs([
-          ...memberCodeSet,
-        ]);
-        const modifiedBills: BillInterface[] = [];
-        bills.forEach((x) => {
-          const member = memberIDs.find((y) => y.code == x.memberID);
-          if (x.memberID != null && member == null) {
-            return;
-          } else {
-            modifiedBills.push({
-              ...x,
-              memberID: x.memberID == null ? null : member!._id,
-            });
-          }
-        });
-
-        const groupedData = modifiedBills.reduce(
-          (
-            acc: { [key: string]: { itemID: string; quantity: number } },
-            current
-          ) => {
-            current.items.forEach((item) => {
-              if (!acc[item.itemID.toString()]) {
-                acc[item.itemID.toString()] = {
-                  itemID: item.itemID.toString(),
-                  quantity: 0,
-                };
-              }
-              acc[item.itemID.toString()].quantity += item.quantity;
-            });
-            return acc;
-          },
-          {}
-        );
-
-        await lock.acquire(
-          Object.entries(groupedData).map(([_, value]) => {
-            return `${value.itemID}:${storeID}`;
-          }),
-          async (done) => {
-            // StockModelModel.checkStockByItemIDs(
-            //   Object.entries(groupedData).map(([_, value]) => {
-            //     return { itemID: value.itemID, quantity: value.quantity };
-            //   }),
-            //   storeID
-            // )
-            //   .then(async (result) => {
-            //     const comparisonResults = result.map((item) => {
-            //       const groupedItem = groupedData[item.itemID];
-            //       return groupedItem.quantity <= item.quantity;
-            //     });
-
-            //     if (comparisonResults.includes(false)) {
-            //       done();
-            //       new LoggerHelper({
-            //         message: `Error on insufficient stock ${comparisonResults}`,
-            //         type: LoggerType.error,
-            //         tag: "Cashier",
-            //       }).log();
-            //       return res.status(400).send(ErrorList["INSUFFICIENT_STOCK"]);
-            //     } else {
-            BillModelModel.insertMany(
-              modifiedBills.filter((x) => {
-                return !existingBills.map((y) => y.name).includes(x.name);
-              })
-            )
-              .then(async (result) => {
-                for (let i = 0; i < result.length; i++) {
-                  for (let j = 0; j < result[i].items.length; j++) {
-                    await new StockModelModel({
-                      itemID: result[i].items[j].itemID,
-                      quantity: result[i].items[j].quantity * -1,
-                      storeID: result[i].storeID,
-                    }).update();
-                  }
-
-                  await queue.add("createBill", {
-                    id: result[i]._id,
-                  });
-                }
-
-                done();
-                new LoggerHelper({
-                  message: `Success on creating bill from ${storeID}`,
-                  type: LoggerType.info,
-                  tag: "Cashier",
-                }).log();
-                return res.status(200).send(result);
-              })
-              .catch((error) => {
-                new LoggerHelper({
-                  message: `Error on creating bill ${error}`,
-                  type: LoggerType.error,
-                  tag: "Cashier",
-                }).log();
-
-                done();
-
-                return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
-              });
-          }
-          // })
-          // .catch((error) => {
-          //   new LoggerHelper({
-          //     message: `Error on checking stock ${error}`,
-          //     type: LoggerType.error,
-          //     tag: "Cashier",
-          //   }).log();
-          //   return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
-          // });
-          // }
+        bills.push(
+          ({
+            name: x.name,
+            /*
+              Tanggal dipangkas menjadi "YYYY-MM-DD" lalu dicor Mongoose ke
+              tengah malam UTC — bukan waktu setempat. Untuk toko di WITA/WIB
+              itu menggeser sebagian transaksi ke tanggal sebelumnya pada
+              laporan harian. Dipertahankan apa adanya.
+            */
+            date: moment(x.date).format("YYYY-MM-DD"),
+            memberID: x.memberID,
+            storeID: storeID,
+            createdBy: x.createdBy,
+            createdAt: new Date(x.createdAt),
+            items: (x.bills as any[]).map((a) => ({
+              itemID: a.itemID,
+              quantity: a.quantity,
+              price: a.price,
+              discount: (a.discount * a.price) / 100,
+              percentage: a.discount,
+            })),
+            payment: (x.payments as any[]).map((b) => ({
+              type: b.paymentMethod,
+              amount: b.amount,
+            })),
+          })
         );
       }
-    );
-  };
 
-  static stats = (req: Request, res: Response) => {
-    const storeID = req.body.storeID;
-    const period = Number(req.query.period as string);
+      const members = await this.membershipRepository.fetchByCodes([
+        ...memberCodeSet,
+      ]);
 
-    Promise.all([
-      MembershipModelModel.countNewMembers(storeID),
-      MembershipModelModel.countMembers(storeID),
-      BillModelModel.countBills(storeID, period),
-    ])
-      .then(([newMember, totalMember, [billCount, billSales]]) => {
-        return res
-          .status(200)
-          .send([
-            newMember,
-            totalMember,
-            billCount,
-            billSales.length == 0 ? 0 : Math.round(billSales[0].value),
-          ]);
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          message: `Error on fetching stats ${error}`,
-          type: LoggerType.error,
-          tag: "Cashier",
-        }).log();
+      /* Nota yang menyebut anggota tak dikenal DILEWATI, bukan ditolak. */
+      const modifiedBills: BillInterface[] = [];
+      for (const x of bills) {
+        const member = members.find((y: any) => y.code == x.memberID);
+        if (x.memberID != null && member == null) {
+          continue;
+        }
 
-        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
-      });
-  };
-
-  static checkStore = (req: Request, res: Response) => {
-    var uid = req.params.storeCode;
-    let formattedUID = "";
-    // If UID is not formatted as UUID, convert it to UUID
-    if (uid.match(/^[0-9a-fA-F]{32}$/)) {
-      // Format UID as UUID (36 characters) from a 24-character string
-      formattedUID =
-        uid.substring(0, 8) +
-        "-" +
-        uid.substring(8, 12) +
-        "-" +
-        uid.substring(12, 16) +
-        "-" +
-        uid.substring(16, 20) +
-        "-" +
-        uid.substring(20, 32);
-      StoreModelModel.fetchByCode(formattedUID.toLowerCase())
-        .then((result) => {
-          return res.status(200).send(result);
-        })
-        .catch((error) => {
-          new LoggerHelper({
-            message: `Error on fetching store ${error}`,
-            tag: "Store",
-            type: LoggerType.error,
-          }).log();
-          return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+        modifiedBills.push({
+          ...x,
+          /*
+            `_id` sekarang berupa teks, bukan ObjectId — Mongoose mengecornya
+            sendiri saat penyimpanan, jadi yang tersimpan tetap sama.
+          */
+          memberID: (x.memberID == null ? null : member!._id) as any,
         });
-    } else {
-      return res.status(400).send(ErrorList["INVALID_STORE_UID"]);
+      }
+
+      const kunciBarang = new Set<string>();
+      for (const bill of modifiedBills) {
+        for (const item of bill.items) {
+          kunciBarang.add(`${item.itemID.toString()}:${storeID}`);
+        }
+      }
+
+      await lock.acquire([...kunciBarang], async (done) => {
+        try {
+          const result = await this.billRepository.insertMany(modifiedBills);
+
+          for (const bill of result) {
+            for (const item of bill.items) {
+              await this.stockRepository.increment({
+                itemID: item.itemID,
+                quantity: item.quantity * -1,
+                storeID: bill.storeID,
+              });
+            }
+
+            await queue.add("createBill", { id: bill._id });
+          }
+
+          done();
+
+          new LoggerHelper({
+            message: `Success on creating bill from ${storeID}`,
+            type: LoggerType.info,
+            tag: "Cashier",
+          }).log();
+
+          return res.status(200).send(result);
+        } catch (error) {
+          new LoggerHelper({
+            message: `Error on creating bill ${error}`,
+            type: LoggerType.error,
+            tag: "Cashier",
+          }).log();
+
+          done();
+
+          return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+        }
+      });
+    } catch (error) {
+      /*
+        Kode lama tidak memasang penangkap galat di rantai terluar, sehingga
+        kegagalan di sini berakhir sebagai unhandled rejection dan permintaan
+        menggantung sampai perangkat kasir menyerah. Sekarang dibalas 500.
+      */
+      new LoggerHelper({
+        message: `Error on syncing bills ${error}`,
+        type: LoggerType.error,
+        tag: "Cashier",
+      }).log();
+
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
     }
   };
 
-  static fetchStock = (req: Request, res: Response) => {
-    const storeID = req.body.storeID;
-    StockModelModel.fetchByStoreID(storeID)
-      .then((result) => {
-        return res.status(200).send(
-          result.map((x) => {
-            return {
-              mongoID: x.itemID,
-              stock: x.quantity,
-            };
-          })
-        );
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          message: `Error on fetching stock data ${error}`,
-          type: LoggerType.error,
-          tag: "Cashier",
-        }).log();
+  stats = async (req: Request, res: Response) => {
+    try {
+      const [newMember, totalMember, [billCount, billSales]] =
+        await Promise.all([
+          this.membershipRepository.countNewMembers(req.body.storeID),
+          this.membershipRepository.countMembers(req.body.storeID),
+          this.billRepository.countBills(
+            req.body.storeID,
+            Number(req.query.period as string)
+          ),
+        ]);
 
-        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
-      });
+      return res
+        .status(200)
+        .send([
+          newMember,
+          totalMember,
+          billCount,
+          billSales.length == 0 ? 0 : Math.round(billSales[0].value),
+        ]);
+    } catch (error) {
+      new LoggerHelper({
+        message: `Error on fetching stats ${error}`,
+        type: LoggerType.error,
+        tag: "Cashier",
+      }).log();
+
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    }
   };
 
-  static fetchReport = (req: Request, res: Response) => {
-    const storeID = req.body.storeID;
-    BillModelModel.fetchStoreReport(storeID)
-      .then((bills) => {
-        const paymentMethods = [
-          "cash",
-          "card",
-          "qris",
-          "bank transfer",
-          "voucher",
-          "grab",
-          "paypal",
-        ];
+  /**
+   * Menukar kode toko 32 karakter menjadi bentuk UUID lalu mencarinya.
+   *
+   * Aplikasi kasir menyimpan kodenya tanpa tanda hubung di SharedPreference,
+   * sedangkan yang tersimpan di database berbentuk UUID. Karena itu kodenya
+   * disusun ulang di sini.
+   */
+  checkStore = async (req: Request, res: Response) => {
+    const uid = req.params.storeCode;
 
-        const payments = paymentMethods.map((x) => {
-          return {
-            type: x,
-            value: 0,
-          };
-        });
+    if (!uid.match(/^[0-9a-fA-F]{32}$/)) {
+      return res.status(400).send(ErrorList["INVALID_STORE_UID"]);
+    }
 
-        bills.forEach((bill) => {
-          bill.payment.forEach((payment: any) => {
-            const index = payments.findIndex(
-              (x) => x.type.toLowerCase() === payment.type.toLowerCase()
-            );
-            payments[index].value += payment.amount;
-          });
-        });
+    const formattedUID = [
+      uid.substring(0, 8),
+      uid.substring(8, 12),
+      uid.substring(12, 16),
+      uid.substring(16, 20),
+      uid.substring(20, 32),
+    ].join("-");
 
-        return res.status(200).send({
-          count: bills.length,
-          payments: payments,
-        });
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          message: `Error on fetching report ${error}`,
-          type: LoggerType.error,
-          tag: "Cashier",
-        }).log();
+    try {
+      const result = await this.storeRepository.fetchByCode(
+        formattedUID.toLowerCase()
+      );
 
-        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
-      });
+      return res.status(200).send(result);
+    } catch (error) {
+      new LoggerHelper({
+        message: `Error on fetching store ${error}`,
+        tag: "Store",
+        type: LoggerType.error,
+      }).log();
+
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    }
   };
 
-  static checkStock = (req: Request, res: Response) => {
-    const storeID = req.body.storeID;
-    const keyword = req.body.keyword;
-    const page = req.body.page;
+  fetchStock = async (req: Request, res: Response) => {
+    try {
+      const result = await this.stockRepository.fetchByStoreID(
+        req.body.storeID
+      );
 
-    Promise.all([
-      ItemModelModel.fetch({
-        keyword: keyword,
-        page: page,
-        onlyActive: true,
-      }),
-      StoreModelModel.fetchOthers(storeID),
-    ])
-      .then(([[result, count], stores]) => {
-        StockModelModel.fetchCashier(result.map((x) => x._id))
-          .then((stocks) => {
-            return res.status(200).send({
-              store: stores,
-              data: result.map((x) => {
-                const stockArray = stocks.filter(
-                  (y) => y._id.itemID.toString() === x._id.toString()
-                );
-                return {
-                  id: x._id,
-                  reference: x.reference,
-                  description: x.description,
-                  brand: x.itemBrandID == null ? "" : x.itemBrandID.name,
-                  type: x.itemTypeID == null ? "" : x.itemTypeID.name,
-                  stock:
-                    stockArray.map((z) => {
-                      return {
-                        storeID: z._id.storeID,
-                        quantity: z.quantity,
-                      };
-                    }) ?? [],
-                };
-              }),
-              count: count,
-            });
-          })
-          .catch((error) => {
+      return res.status(200).send(
+        result.map((x) => ({
+          mongoID: x.itemID,
+          stock: x.quantity,
+        }))
+      );
+    } catch (error) {
+      new LoggerHelper({
+        message: `Error on fetching stock data ${error}`,
+        type: LoggerType.error,
+        tag: "Cashier",
+      }).log();
+
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    }
+  };
+
+  fetchReport = async (req: Request, res: Response) => {
+    try {
+      const bills = await this.billRepository.fetchStoreReport(req.body.storeID);
+
+      const paymentMethods = [
+        "cash",
+        "card",
+        "qris",
+        "bank transfer",
+        "voucher",
+        "grab",
+        "paypal",
+      ];
+
+      const payments = paymentMethods.map((x) => ({ type: x, value: 0 }));
+
+      for (const bill of bills) {
+        for (const payment of bill.payment as any[]) {
+          const index = payments.findIndex(
+            (x) => x.type.toLowerCase() === payment.type.toLowerCase()
+          );
+
+          /*
+            Daftar metode pembayaran di atas ditulis tetap di kode. Metode yang
+            tidak ada di daftar menghasilkan index -1, dan kode lama langsung
+            menulis ke payments[-1] sehingga permintaannya gagal dengan 500 —
+            itulah yang terjadi saat "grab" ditambahkan di sisi kasir sebelum
+            daftar ini menyusul. Penjagaan di bawah membuat metode tak dikenal
+            DILEWATI, bukan menjatuhkan seluruh laporan.
+          */
+          if (index === -1) {
             new LoggerHelper({
-              message: `Error on fetching stock ${error}`,
-              type: LoggerType.error,
+              message: `Unknown payment type "${payment.type}" on store ${req.body.storeID}`,
+              type: LoggerType.warning,
               tag: "Cashier",
             }).log();
+            continue;
+          }
 
-            return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
-          });
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          message: `Error on fetching items ${error}`,
-          tag: "Cashier",
-          type: LoggerType.error,
-        }).log();
-
-        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
-      });
-  };
-
-  static fetchBill = (req: Request, res: Response) => {
-    const storeID = req.body.storeID as string;
-    const page =
-      req.query.page == undefined ? 1 : Number(req.query.page as string);
-
-    BillModelModel.fetchStore({
-      storeID: storeID,
-      page: page,
-    })
-      .then(([result, count]) => {
-        return res.status(200).send({
-          data: result,
-          count: count,
-        });
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          message: `Error on fetching bill ${error}`,
-          type: LoggerType.error,
-          tag: "Cashier",
-        }).log();
-
-        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
-      });
-  };
-
-  static fetchBillByID = (req: Request, res: Response) => {
-    const id = req.params.id;
-    const storeID = req.body.storeID;
-
-    BillModelModel.fetchByID(id)
-      .then((result) => {
-        if (result.storeID.toString() != req.body.storeID.toString()) {
-          return res.status(403).send(ErrorList["ACCESS_DENIED"]);
-        } else {
-          return res.status(200).send(result);
+          payments[index].value += payment.amount;
         }
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          message: `Error on fetching bill by ID ${error}`,
-          type: LoggerType.error,
-          tag: "Cashier",
-        }).log();
+      }
 
-        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+      return res.status(200).send({
+        count: bills.length,
+        payments: payments,
       });
+    } catch (error) {
+      new LoggerHelper({
+        message: `Error on fetching report ${error}`,
+        type: LoggerType.error,
+        tag: "Cashier",
+      }).log();
+
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    }
+  };
+
+  checkStock = async (req: Request, res: Response) => {
+    try {
+      const [{ data: result, count }, stores] = await Promise.all([
+        this.itemRepository.fetch({
+          keyword: req.body.keyword,
+          page: req.body.page,
+          onlyActive: true,
+        }),
+        this.storeRepository.fetchOthers(req.body.storeID),
+      ]);
+
+      const stocks = await this.stockRepository.fetchGroupedByStore(
+        result.map((x: any) => x._id)
+      );
+
+      const stokPerBarang = new Map<string, any[]>();
+      for (const z of stocks) {
+        const kunci = z._id.itemID.toString();
+        const wadah = stokPerBarang.get(kunci);
+        if (wadah) {
+          wadah.push(z);
+        } else {
+          stokPerBarang.set(kunci, [z]);
+        }
+      }
+
+      return res.status(200).send({
+        store: stores,
+        data: result.map((x: any) => ({
+          id: x._id,
+          reference: x.reference,
+          description: x.description,
+          brand: x.itemBrandID == null ? "" : x.itemBrandID.name,
+          type: x.itemTypeID == null ? "" : x.itemTypeID.name,
+          stock: (stokPerBarang.get(x._id.toString()) ?? []).map((z) => ({
+            storeID: z._id.storeID,
+            quantity: z.quantity,
+          })),
+        })),
+        count: count,
+      });
+    } catch (error) {
+      new LoggerHelper({
+        message: `Error on fetching stock ${error}`,
+        tag: "Cashier",
+        type: LoggerType.error,
+      }).log();
+
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    }
+  };
+
+  fetchBill = async (req: Request, res: Response) => {
+    try {
+      const result = await this.billRepository.fetchStore({
+        storeID: req.body.storeID as string,
+        page:
+          req.query.page == undefined ? 1 : Number(req.query.page as string),
+      });
+
+      return res.status(200).send(result);
+    } catch (error) {
+      new LoggerHelper({
+        message: `Error on fetching bill ${error}`,
+        type: LoggerType.error,
+        tag: "Cashier",
+      }).log();
+
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    }
+  };
+
+  fetchBillByID = async (req: Request, res: Response) => {
+    try {
+      const result = await this.billRepository.fetchByID(req.params.id);
+
+      /*
+        req.body.storeID hanya terisi kalau pemanggil masuk lewat header toko.
+        Pada jalur token JWT nilainya undefined, dan pembandingan di bawah
+        gagal dengan galat — berakhir sebagai 500. Perilaku itu dipertahankan;
+        perbaikannya ada di auth.interceptor, bukan di sini.
+      */
+      if (result.storeID.toString() != req.body.storeID.toString()) {
+        return res.status(403).send(ErrorList["ACCESS_DENIED"]);
+      }
+
+      return res.status(200).send(result);
+    } catch (error) {
+      new LoggerHelper({
+        message: `Error on fetching bill by ID ${error}`,
+        type: LoggerType.error,
+        tag: "Cashier",
+      }).log();
+
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    }
   };
 }
 

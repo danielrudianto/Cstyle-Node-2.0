@@ -1,22 +1,27 @@
-export interface InvoiceInterface {
-  id?: string;
+/** Bentuk data faktur penjualan, mengikuti koleksi `invoices`. */
+export interface IInvoice {
+  _id?: string;
   name: string;
   date: Date;
   note: string;
   dueDate: Date;
-  packingListID: string | null;
-  deliverySlipID: string | null;
-  createdBy: string;
+  /** Faktur berasal dari packing list ATAU surat jalan, tidak keduanya. */
+  packingListID: any;
+  deliverySlipID: any;
+  createdBy: any;
   createdAt?: Date;
-  customerID: string;
-  salesID: String;
+  customerID: any;
+  salesID: any;
+  isPaid?: boolean;
+  payments?: any[];
   isHidden?: boolean;
   isDelete?: boolean;
-  deletedBy?: string;
-  deletedAt?: Date;
+  deletedBy?: any;
+  deletedAt?: Date | null;
 }
 
-export interface InvoiceFetchInterface {
+/** Masukan pencarian faktur. */
+export interface IInvoiceFetch {
   keyword: string;
   status: string[];
   paymentStatus: string[];
@@ -25,7 +30,8 @@ export interface InvoiceFetchInterface {
   year: number;
 }
 
-export interface UpdateInvoicePaymentInterface {
+/** Masukan pencatatan pembayaran. */
+export interface IInvoicePayment {
   id: string;
   paidAt: Date;
   paymentMethod: string;
@@ -33,7 +39,19 @@ export interface UpdateInvoicePaymentInterface {
   amount: number;
 }
 
-export interface InvoiceUpdateInterface {
+/** Masukan penyembunyian faktur dari laporan. */
+export interface IInvoiceVisibility {
   id: string;
   isHidden: boolean;
 }
+
+/**
+ * Nama lama, dipertahankan selama masa peralihan.
+ *
+ * Hapus begitu tidak ada lagi yang memakainya:
+ *   grep -rn "InvoiceInterface\|InvoiceUpdateInterface" src
+ */
+export type InvoiceInterface = IInvoice;
+export type InvoiceFetchInterface = IInvoiceFetch;
+export type UpdateInvoicePaymentInterface = IInvoicePayment;
+export type InvoiceUpdateInterface = IInvoiceVisibility;

@@ -1,50 +1,78 @@
-import { Types } from "mongoose";
-
-export interface BillInterface {
-  _id?: String;
-  name: String;
-  date: String;
-  memberID: Types.ObjectId | null;
-  storeID: Types.ObjectId;
-  createdBy: Types.ObjectId;
-  createdAt: Date;
-  items: BillItemInterface[];
-  payment: BillPaymentInterface[];
-}
-
-export interface BillItemInterface {
-  itemID: Types.ObjectId;
+/** Satu baris barang pada nota kasir. */
+export interface IBillItem {
+  itemID: any;
   quantity: number;
   price: number;
+  /** Nilai potongan per satuan, sudah berupa rupiah — bukan persen. */
   discount: number;
+  /** Persentase potongan yang dikirim kasir, disimpan untuk jejak. */
   percentage: number;
 }
 
-export interface BillPaymentInterface {
+/** Satu baris pembayaran; satu nota bisa dibayar dengan beberapa metode. */
+export interface IBillPayment {
   type: string;
   amount: number;
 }
 
-export interface BillFetchInterface {
+/**
+ * Bentuk data nota kasir, mengikuti koleksi `bills`.
+ *
+ * `date` bertipe teks, bukan Date — perangkat kasir mengirimnya sudah dalam
+ * bentuk "YYYY-MM-DD" dan Mongoose yang mengecornya saat menyimpan.
+ */
+export interface IBill {
+  _id?: any;
+  name: string;
+  date: string;
+  memberID: any;
+  storeID: any;
+  createdBy: any;
+  createdAt: Date;
+  items: IBillItem[];
+  payment: IBillPayment[];
+  isHidden?: boolean;
+  isDelete?: boolean;
+  deletedBy?: any;
+  deletedAt?: Date | null;
+}
+
+/** Masukan pencarian nota dari aplikasi kantor. */
+export interface IBillFetch {
   page: number;
+  /** Kosong berarti seluruh toko. */
   storeID: string[];
+  /** 0 - 11, gaya JavaScript; repository yang menambahkan satu. */
   month: number;
   year: number;
+  /** Pemilik melihat lebih sedikit: nota tersembunyi disaring keluar. */
   isOwner: boolean;
   keyword: string;
 }
 
-export interface BillUpdateInterface {
-  id: string;
-  isHidden: boolean;
-}
-
-export interface StoreBillFetchInterface {
+/** Masukan daftar nota harian satu toko, dipakai aplikasi kasir. */
+export interface IStoreBillFetch {
   page: number;
   storeID: string;
 }
 
-export interface BillDeleteInterface {
+/** Masukan penyembunyian nota dari laporan. */
+export interface IBillVisibility {
+  id: string;
+  isHidden: boolean;
+}
+
+export interface IBillDelete {
   id: string;
   userID: string;
 }
+
+/**
+ * Nama lama, dipertahankan selama masa peralihan.
+ *
+ * Hapus begitu tidak ada lagi yang memakainya:
+ *   grep -rn "BillInterface\|BillItemInterface" src
+ */
+export type BillInterface = IBill;
+export type BillItemInterface = IBillItem;
+export type BillPaymentInterface = IBillPayment;

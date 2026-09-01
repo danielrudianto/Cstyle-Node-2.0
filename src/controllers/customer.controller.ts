@@ -1,182 +1,182 @@
 import { Request, Response } from "express";
-import { ErrorList } from "../data/error-list";
+import { ErrorList } from "../constants/error-list.constant";
 import { LoggerType } from "../interfaces/logger.interface";
-import CustomerModelModel from "../models/customer.model";
-import LoggerHelper from "../utils/logger.utils";
+import { CustomerRepository } from "../repositories/customer.repository";
+import LoggerHelper from "../utils/logger.helper";
 
-class CustomerController {
-  static create = (req: Request, res: Response) => {
-    const name = req.body.name;
-    const userID = req.body.userID;
-    const address = req.body.address;
-    const type = req.body.type;
-    const phone = req.body.phone;
-    const email = req.body.email;
-    const npwp = req.body.npwp;
+/**
+ * Lapisan HTTP untuk pelanggan.
+ *
+ * Tugasnya hanya tiga: membaca permintaan, memanggil repository, dan memilih
+ * status balasan. Tidak ada query di sini.
+ *
+ * Repository disuntikkan lewat constructor supaya controller bisa diuji
+ * dengan repository tiruan tanpa menyalakan MongoDB — sesuatu yang mustahil
+ * ketika query masih menempel di model yang diimpor langsung.
+ *
+ * Di sinilah kosakata HTTP diterjemahkan ke kosakata database: klien
+ * mengirim `phone`, koleksi menyimpan `phoneNumber`.
+ */
+export class CustomerController {
+  private customerRepository: CustomerRepository;
 
-    new CustomerModelModel({
-      name: name,
-      address: address,
-      type: type,
-      phone: phone,
-      email: email,
-      npwp: npwp,
-      createdBy: userID,
-      createdAt: new Date(),
-    })
-      .create()
-      .then((result) => {
-        return res.status(201).send(result);
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          message: `Error on creating customer ${error}`,
-          type: LoggerType.error,
-          tag: "Customer",
-        }).log();
-        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+  constructor(customerRepository: CustomerRepository) {
+    this.customerRepository = customerRepository;
+  }
+
+  create = async (req: Request, res: Response) => {
+    try {
+      const result = await this.customerRepository.create({
+        name: req.body.name,
+        address: req.body.address,
+        type: req.body.type,
+        phoneNumber: req.body.phone,
+        email: req.body.email,
+        npwp: req.body.npwp,
+        createdBy: req.body.userID,
+        createdAt: new Date(),
       });
+
+      return res.status(201).send(result);
+    } catch (error) {
+      new LoggerHelper({
+        message: `Error on creating customer ${error}`,
+        type: LoggerType.error,
+        tag: "Customer",
+      }).log();
+
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    }
   };
 
-  static updateV2 = (req: Request, res: Response) => {
-    const id = req.body.id;
-    const name = req.body.name;
-    const address = req.body.address;
-    const type = req.body.type;
-    const phone = req.body.phone;
-    const email = req.body.email;
-    const npwp = req.body.npwp;
-
-    CustomerModelModel.fetchByID(id).then((customer) => {
-      if (!customer) {
+  update = async (req: Request, res: Response) => {
+    try {
+      const existing = await this.customerRepository.fetchByID(req.body.id);
+      if (!existing || existing.isDelete) {
         return res.status(404).send(ErrorList["CUSTOMER_NOT_FOUND"]);
-      } else if (customer.isDelete) {
-        return res.status(404).send(ErrorList["CUSTOMER_NOT_FOUND"]);
-      } else {
-        new CustomerModelModel({
-          id: id,
-          name: name,
-          address: address,
-          type: type,
-          phone: phone,
-          email: email,
-          npwp: npwp,
-        })
-          .update()
-          .then((result) => {
-            return res.status(201).send(result);
-          })
-          .catch((error) => {
-            new LoggerHelper({
-              type: LoggerType.error,
-              message: `Error on creating customer ${error}`,
-              tag: "Customer",
-            }).log();
-            return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
-          });
       }
-    });
+
+      const result = await this.customerRepository.update({
+        _id: req.body.id,
+        name: req.body.name,
+        address: req.body.address,
+        type: req.body.type,
+        phoneNumber: req.body.phone,
+        email: req.body.email,
+        npwp: req.body.npwp,
+      });
+
+      return res.status(201).send(result);
+    } catch (error) {
+      new LoggerHelper({
+        type: LoggerType.error,
+        message: `Error on updating customer ${error}`,
+        tag: "Customer",
+      }).log();
+
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    }
   };
 
-  static deleteByID = (req: Request, res: Response) => {
-    const id = req.params.id;
-    const userID = req.body.userID;
-
-    CustomerModelModel.fetchByID(id).then((customer) => {
-      if (!customer || customer.isDelete) {
+  deleteByID = async (req: Request, res: Response) => {
+    try {
+      const existing = await this.customerRepository.fetchByID(req.params.id);
+      if (!existing || existing.isDelete) {
         return res.status(404).send(ErrorList["CUSTOMER_NOT_FOUND"]);
-      } else {
-        CustomerModelModel.deleteByID(id, userID)
-          .then((result) => {
-            return res.status(200).send(result);
-          })
-          .catch((error) => {
-            new LoggerHelper({
-              message: `Error on deleting customer ${error}`,
-              type: LoggerType.error,
-              tag: "Customer",
-            }).log();
-
-            return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
-          });
       }
-    });
+
+      const result = await this.customerRepository.delete(
+        req.params.id,
+        req.body.userID
+      );
+
+      return res.status(200).send(result);
+    } catch (error) {
+      new LoggerHelper({
+        message: `Error on deleting customer ${error}`,
+        type: LoggerType.error,
+        tag: "Customer",
+      }).log();
+
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    }
   };
 
-  static fetchV2 = (req: Request, res: Response) => {
+  fetch = async (req: Request, res: Response) => {
     const keyword = req.query.keyword?.toString() ?? "";
     const page =
       req.query.page == undefined ? 1 : parseInt(req.query.page.toString());
 
-    CustomerModelModel.fetchV2({
-      keyword: keyword,
-      page: page,
-    })
-      .then(([result, count]) => {
-        return res.status(200).send({
-          data: result,
-          count: count,
-        });
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          message: `Error on fetching customer ${error}`,
-          type: LoggerType.error,
-          tag: "Customer",
-        }).log();
-        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    try {
+      const result = await this.customerRepository.fetch({
+        keyword: keyword,
+        page: page,
       });
+
+      return res.status(200).send(result);
+    } catch (error) {
+      new LoggerHelper({
+        message: `Error on fetching customer ${error}`,
+        type: LoggerType.error,
+        tag: "Customer",
+      }).log();
+
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    }
   };
 
-  static fetchAutocompleteBulk = (req: Request, res: Response) => {
-    const keyword = req.query.keyword as string;
-    CustomerModelModel.fetchAutocomplete(keyword, "bulk")
-      .then((result) => {
-        return res.status(200).send(result);
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          message: `Error on fetching customer ${error}`,
-          tag: "Customer",
-          type: LoggerType.error,
-        }).log();
-        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
-      });
+  fetchAutocompleteBulk = async (req: Request, res: Response) => {
+    return this.fetchAutocomplete(req, res, "bulk");
   };
 
-  static fetchAutocompleteConsignment = (req: Request, res: Response) => {
-    const keyword = req.query.keyword as string;
-    CustomerModelModel.fetchAutocomplete(keyword, "consignment")
-      .then((result) => {
-        return res.status(200).send(result);
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          message: `Error on fetching customer ${error}`,
-          tag: "Customer",
-          type: LoggerType.error,
-        }).log();
-        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
-      });
+  fetchAutocompleteConsignment = async (req: Request, res: Response) => {
+    return this.fetchAutocomplete(req, res, "consignment");
   };
 
-  static fetchByID = (req: Request, res: Response) => {
-    const id = req.params.id;
-    CustomerModelModel.fetchByID(id)
-      .then((customer) => {
-        if (!customer) {
-          return res.status(404).send(ErrorList["CUSTOMER_NOT_FOUND"]);
-        } else {
-          return res.status(200).send(customer);
-        }
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          message: `Error on fetching customer ${error}`,
-          tag: "Customer",
-          type: LoggerType.error,
-        }).log();
-      });
+  /**
+   * Dua route autocomplete hanya berbeda pada tipe pelanggan, jadi isinya
+   * disatukan di sini. Sebelumnya dua metode ini identik baris per baris.
+   */
+  private fetchAutocomplete = async (
+    req: Request,
+    res: Response,
+    type: string
+  ) => {
+    try {
+      const result = await this.customerRepository.fetchAutocomplete(
+        req.query.keyword as string,
+        type
+      );
+
+      return res.status(200).send(result);
+    } catch (error) {
+      new LoggerHelper({
+        message: `Error on fetching customer ${error}`,
+        tag: "Customer",
+        type: LoggerType.error,
+      }).log();
+
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    }
+  };
+
+  fetchByID = async (req: Request, res: Response) => {
+    try {
+      const result = await this.customerRepository.fetchByID(req.params.id);
+      if (!result) {
+        return res.status(404).send(ErrorList["CUSTOMER_NOT_FOUND"]);
+      }
+
+      return res.status(200).send(result);
+    } catch (error) {
+      new LoggerHelper({
+        message: `Error on fetching customer ${error}`,
+        tag: "Customer",
+        type: LoggerType.error,
+      }).log();
+
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    }
   };
 }
 

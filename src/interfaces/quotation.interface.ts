@@ -1,26 +1,33 @@
-export interface QuotationInterface {
-  id?: string;
-  date: Date;
-  expiryDate: Date;
-  name?: string;
-  customerID?: string;
-  note?: string;
-  createdBy: string;
-  createdAt: Date;
-  items: QuotationItemInteface[];
-}
-
-export interface QuotationItemInteface {
-  itemID: string;
+/** Satu baris barang pada penawaran. */
+export interface IQuotationItem {
+  itemID: any;
   quantity: number;
   price: number;
   discount: number;
 }
 
-export interface QuotationSearchInterface {
+/** Bentuk data penawaran, mengikuti koleksi `quotations`. */
+export interface IQuotation {
+  _id?: string;
+  date: Date;
+  expiryDate: Date;
+  name?: string;
+  customerID?: any;
+  note?: string;
+  createdBy: any;
+  createdAt: Date;
+  items: IQuotationItem[];
+  isDelete?: boolean;
+  deletedBy?: any;
+  deletedAt?: Date | null;
+}
+
+/** Masukan pencarian penawaran. */
+export interface IQuotationSearch {
   keyword: string;
   page: number;
-  month: number; // 0 - 11
+  /** 1 - 12, bukan 0 - 11: controller sudah menambahkan satu. */
+  month: number;
   year: number;
   status: QuotationStatus[];
 }
@@ -30,3 +37,12 @@ export enum QuotationStatus {
   "Expired" = "expired",
   "Canceled" = "canceled",
 }
+
+/**
+ * Nama lama, dipertahankan selama masa peralihan.
+ *
+ * Hapus begitu tidak ada lagi yang memakainya:
+ *   grep -rn "QuotationInterface\|QuotationItemInteface" src
+ */
+export type QuotationInterface = IQuotation;
+export type QuotationItemInteface = IQuotationItem;

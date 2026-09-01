@@ -1,183 +1,74 @@
-import { FetchInterface } from "../interfaces/fetch.interface";
-import { CustomerInterface } from "../interfaces/customer.interface";
-import { connectionFactory } from "../utils/connector.utils";
+import { ICustomer } from "../interfaces/customer.interface";
 
-const conn = connectionFactory();
-
-class CustomerModelModel {
-  id?: string;
-  name?: string;
-  address?: string;
-  phone?: string;
-  type?: string;
+/**
+ * Pelanggan sebagai objek data murni.
+ *
+ * Kelas ini TIDAK menyentuh database. Sebelumnya berkas ini memanggil
+ * connectionFactory() di tingkat modul lalu menjalankan query Mongoose di
+ * dalam metodenya, jadi ia sekaligus jadi wadah data dan lapisan akses data.
+ * Query-nya sekarang tinggal di repositories/customer.repository.ts.
+ *
+ * BENTUK BALASAN HTTP.
+ *
+ * Bidang di bawah sengaja mencerminkan dokumen MongoDB satu per satu, karena
+ * controller mengirim objek ini langsung ke klien. Menambah, menghapus, atau
+ * mengganti nama bidang di sini akan mengubah badan balasan API.
+ *
+ * Satu-satunya bidang dokumen yang tidak ikut adalah `__v`, penghitung versi
+ * internal Mongoose yang tidak dipakai klien mana pun.
+ */
+export class CustomerModel {
+  _id?: string;
+  name: string;
+  address: string;
+  phoneNumber: string | null;
+  email: string | null;
+  npwp: string | null;
+  type: string;
   createdBy?: string;
   createdAt?: Date;
-  email?: string;
-  npwp?: string;
+  isDelete?: boolean;
+  deletedBy?: string | null;
+  deletedAt?: Date | null;
 
-  constructor(data: CustomerInterface) {
+  constructor(data: ICustomer) {
+    this._id = data._id;
     this.name = data.name;
     this.address = data.address;
-    this.phone = data.phone;
+    this.phoneNumber = data.phoneNumber;
+    this.email = data.email;
+    this.npwp = data.npwp;
     this.type = data.type;
     this.createdBy = data.createdBy;
     this.createdAt = data.createdAt;
-    this.id = data.id;
-    this.email = data.email;
-    this.npwp = data.npwp;
+    this.isDelete = data.isDelete;
+    this.deletedBy = data.deletedBy;
+    this.deletedAt = data.deletedAt;
   }
 
-  create() {
-    return conn.model("customer").create({
-      name: this.name,
-      address: this.address,
-      phoneNumber: this.phone,
-      type: this.type,
-      createdBy: this.createdBy!,
-      createdAt: new Date(),
-      email: this.email,
-      npwp: this.npwp,
-    });
-  }
-
-  update() {
-    return conn.model("customer").findByIdAndUpdate(this.id, {
-      name: this.name,
-      address: this.address,
-      phoneNumber: this.phone,
-      type: this.type,
-      createdBy: this.createdBy!,
-      createdAt: new Date(),
-      email: this.email,
-      npwp: this.npwp,
-    });
-  }
-
-  static fetchV2(data: FetchInterface) {
-    return Promise.all([
-      conn
-        .model("customer")
-        .find({
-          isDelete: false,
-          $or: [
-            {
-              name: {
-                $regex: data.keyword,
-                $options: "i",
-              },
-            },
-            {
-              address: {
-                $regex: data.keyword,
-                $options: "i",
-              },
-            },
-            {
-              phoneNumber: {
-                $regex: data.keyword,
-                $options: "i",
-              },
-            },
-            {
-              type: {
-                $regex: data.keyword,
-                $options: "i",
-              },
-            },
-            {
-              email: {
-                $regex: data.keyword,
-                $options: "i",
-              },
-            },
-            {
-              npwp: {
-                $regex: data.keyword,
-                $options: "i",
-              },
-            },
-          ],
-        })
-        .sort({
-          name: 1,
-        })
-        .skip((data.page - 1) * 20)
-        .limit(20),
-      conn.model("customer").countDocuments({
-        isDelete: false,
-        $or: [
-          {
-            name: {
-              $regex: data.keyword,
-              $options: "i",
-            },
-          },
-          {
-            address: {
-              $regex: data.keyword,
-              $options: "i",
-            },
-          },
-          {
-            phoneNumber: {
-              $regex: data.keyword,
-              $options: "i",
-            },
-          },
-          {
-            type: {
-              $regex: data.keyword,
-              $options: "i",
-            },
-          },
-          {
-            email: {
-              $regex: data.keyword,
-              $options: "i",
-            },
-          },
-          {
-            npwp: {
-              $regex: data.keyword,
-              $options: "i",
-            },
-          },
-        ],
-      }),
-    ]);
-  }
-
-  static fetchAutocomplete(keyword: string, type: string) {
-    if (type == "bulk" || type == "consignment") {
-      return conn
-        .model("customer")
-        .find({
-          isDelete: false,
-          name: {
-            $regex: new RegExp(keyword, "i"),
-          },
-          type: type,
-        })
-        .limit(5)
-        .populate("_id name");
-    } else {
-      return new Promise((resolve, reject) => {
-        resolve([]);
-      });
-    }
-  }
-
-  static fetchByID(id: string) {
-    return conn.model("customer").findById(id);
-  }
-
-  static deleteByID(id: string, userID: string) {
-    return conn.model("customer").findByIdAndUpdate(id, {
-      isDelete: true,
-      deletedAt: new Date(),
-      deletedBy: userID,
+  /**
+   * Membangun model dari dokumen Mongoose mentah.
+   *
+   * ObjectId diubah menjadi teks di sini supaya lapisan di atas repository
+   * tidak perlu tahu tipe bawaan MongoDB. JSON yang dikirim ke klien tetap
+   * sama, karena ObjectId memang diserialisasi sebagai teks.
+   */
+  static fromMap(data: any): CustomerModel {
+    return new CustomerModel({
+      _id: data._id?.toString(),
+      name: data.name,
+      address: data.address,
+      phoneNumber: data.phoneNumber ?? null,
+      email: data.email ?? null,
+      npwp: data.npwp ?? null,
+      type: data.type,
+      createdBy: data.createdBy?.toString(),
+      createdAt: data.createdAt,
+      isDelete: data.isDelete,
+      deletedBy: data.deletedBy?.toString() ?? null,
+      deletedAt: data.deletedAt ?? null,
     });
   }
 }
 
-export default CustomerModelModel;
+export default CustomerModel;

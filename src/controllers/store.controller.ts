@@ -1,210 +1,205 @@
 import { Request, Response } from "express";
-import StoreModelModel from "../models/store.model";
-import { ErrorList } from "../data/error-list";
-import { v4 } from "uuid";
-import LoggerHelper from "../utils/logger.utils";
-import { LoggerType } from "../interfaces/logger.interface";
 import { redisClient } from "../app";
+import { ErrorList } from "../constants/error-list.constant";
+import { LoggerType } from "../interfaces/logger.interface";
+import { StoreRepository } from "../repositories/store.repository";
+import LoggerHelper from "../utils/logger.helper";
 
-class StoreController {
-  static create = (req: Request, res: Response) => {
-    const name = req.body.name;
-    const address = req.body.address;
-    const phoneNumber = req.body.phoneNumber;
-    const prefix = req.body.prefix;
-    const code = req.body.code;
-    const userID = req.body.userID;
+/**
+ * Lapisan HTTP untuk toko.
+ */
+export class StoreController {
+  private storeRepository: StoreRepository;
 
-    StoreModelModel.preCreate({
-      name: name,
-      address: address,
-      phoneNumber: phoneNumber,
-      prefix: prefix,
-      code: code,
-    })
-      .then((validation) => {
-        if (!validation) {
-          return res.status(400).send(ErrorList["STORE_ALREADY_EXIST"]);
-        } else {
-          new StoreModelModel({
-            name: name,
-            address: address,
-            phoneNumber: phoneNumber,
-            prefix: prefix,
-            code: code,
-            createdBy: userID,
-          })
-            .create()
-            .then((result) => {
-              return res.status(201).send(result);
-            })
-            .catch((error) => {
-              new LoggerHelper({
-                message: `Error on creating store ${error}`,
-                type: LoggerType.error,
-                tag: "Store",
-              }).log();
-              return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
-            });
-        }
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          message: `Error on pre-creating store ${error}`,
-          type: LoggerType.error,
-          tag: "Store",
-        }).log();
-        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+  constructor(storeRepository: StoreRepository) {
+    this.storeRepository = storeRepository;
+  }
+
+  create = async (req: Request, res: Response) => {
+    try {
+      const taken = await this.storeRepository.isTaken({
+        name: req.body.name,
+        address: req.body.address,
+        phoneNumber: req.body.phoneNumber,
+        prefix: req.body.prefix,
+        code: req.body.code,
       });
+
+      if (taken) {
+        return res.status(400).send(ErrorList["STORE_ALREADY_EXIST"]);
+      }
+
+      const result = await this.storeRepository.create({
+        name: req.body.name,
+        address: req.body.address,
+        phoneNumber: req.body.phoneNumber,
+        prefix: req.body.prefix,
+        code: req.body.code,
+        createdBy: req.body.userID,
+      });
+
+      return res.status(201).send(result);
+    } catch (error) {
+      new LoggerHelper({
+        message: `Error on creating store ${error}`,
+        type: LoggerType.error,
+        tag: "Store",
+      }).log();
+
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    }
   };
 
-  static fetch = (req: Request, res: Response) => {
-    const keyword = req.query.keyword as string;
-    const page = !req.query.page ? 1 : parseInt(req.query.page as string);
-    StoreModelModel.fetch({
-      keyword: keyword,
-      page: page,
-    })
-      .then(([result, count]) => {
-        return res.status(200).send({
-          data: result,
-          count: count,
-        });
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          message: `Error on fetching store ${error}`,
-          type: LoggerType.error,
-          tag: "Store",
-        }).log();
-        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+  fetch = async (req: Request, res: Response) => {
+    try {
+      const result = await this.storeRepository.fetch({
+        keyword: req.query.keyword as string,
+        page: !req.query.page ? 1 : parseInt(req.query.page as string),
       });
+
+      return res.status(200).send(result);
+    } catch (error) {
+      new LoggerHelper({
+        message: `Error on fetching store ${error}`,
+        type: LoggerType.error,
+        tag: "Store",
+      }).log();
+
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    }
   };
 
-  static fetchByID = (req: Request, res: Response) => {
-    const id = req.params.id;
-    StoreModelModel.fetchByID(id)
-      .then((result) => {
-        return res.status(200).send(result);
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          message: `Error on fetching store ${error}`,
-          type: LoggerType.error,
-          tag: "Store",
-        }).log();
-        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
-      });
+  fetchByID = async (req: Request, res: Response) => {
+    try {
+      const result = await this.storeRepository.fetchByID(req.params.id);
+
+      /* Toko yang tidak ada dibalas 200 dengan badan null, seperti sebelumnya. */
+      return res.status(200).send(result);
+    } catch (error) {
+      new LoggerHelper({
+        message: `Error on fetching store ${error}`,
+        type: LoggerType.error,
+        tag: "Store",
+      }).log();
+
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    }
   };
 
-  static fetchAutocomplete = (req: Request, res: Response) => {
-    const keyword = req.query.keyword as string;
-    StoreModelModel.fetchAutocomplete(keyword)
-      .then((result) => {
-        return res.status(200).send(result);
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          message: `Error on fetching store autocomplete ${error}`,
-          tag: "Store",
-          type: LoggerType.error,
-        }).log();
-        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
-      });
+  fetchAutocomplete = async (req: Request, res: Response) => {
+    try {
+      const result = await this.storeRepository.fetchAutocomplete(
+        req.query.keyword as string
+      );
+
+      return res.status(200).send(result);
+    } catch (error) {
+      new LoggerHelper({
+        message: `Error on fetching store autocomplete ${error}`,
+        tag: "Store",
+        type: LoggerType.error,
+      }).log();
+
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    }
   };
 
-  static fetchOthers = (req: Request, res: Response) => {
-    const storeID = req.body.storeID;
-    StoreModelModel.fetchOthers(storeID)
-      .then((result) => {
-        return res.status(200).send([
-          {
-            _id: null,
-            name: "Office",
-            address: "Jalan Raya Kerobokan no. 87A",
-            phoneNumber: "0878-5426-8240",
-            code: "",
-          },
-          ...result,
-        ]);
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          message: `Error on fetching other stores ${error}`,
-          type: LoggerType.error,
-          tag: "Store",
-        }).log();
-        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
-      });
+  /**
+   * Daftar toko lain, dengan "Office" disisipkan di depan.
+   *
+   * Kantor pusat bukan baris di koleksi `stores` — ia diwakili storeID null —
+   * jadi datanya ditulis langsung di sini. Nama dan alamatnya tertanam di
+   * kode; kalau kantornya pindah, baris ini yang harus diubah.
+   */
+  fetchOthers = async (req: Request, res: Response) => {
+    try {
+      const result = await this.storeRepository.fetchOthers(req.body.storeID);
+
+      return res.status(200).send([
+        {
+          _id: null,
+          name: "Office",
+          address: "Jalan Raya Kerobokan no. 87A",
+          phoneNumber: "0878-5426-8240",
+          code: "",
+        },
+        ...result,
+      ]);
+    } catch (error) {
+      new LoggerHelper({
+        message: `Error on fetching other stores ${error}`,
+        type: LoggerType.error,
+        tag: "Store",
+      }).log();
+
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    }
   };
 
-  static updateByID = (req: Request, res: Response) => {
-    const name = req.body.name;
-    const address = req.body.address;
-    const phoneNumber = req.body.phoneNumber;
-    const prefix = req.body.prefix;
-    const id = req.body.id;
-    const userID = req.body.userID;
-
-    StoreModelModel.preUpdate({
-      name: name,
-      prefix: prefix,
-      id: id,
-    })
-      .then((validation) => {
-        if (!validation) {
-          return res.status(400).send(ErrorList["STORE_ALREADY_EXIST"]);
-        } else {
-          new StoreModelModel({
-            name: name,
-            address: address,
-            phoneNumber: phoneNumber,
-            prefix: prefix,
-            id: id,
-            createdBy: userID,
-          })
-            .update()
-            .then((result) => {
-              return res.status(200).send(result);
-            })
-            .catch((error) => {
-              new LoggerHelper({
-                message: `Error on updating store ${error}`,
-                type: LoggerType.error,
-                tag: "Store",
-              }).log();
-              return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
-            });
-        }
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          message: `Error on pre-updating store ${error}`,
-          type: LoggerType.error,
-          tag: "Store",
-        }).log();
-        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+  updateByID = async (req: Request, res: Response) => {
+    try {
+      const taken = await this.storeRepository.isTakenByOther({
+        name: req.body.name,
+        prefix: req.body.prefix,
+        id: req.body.id,
       });
+
+      if (taken) {
+        return res.status(400).send(ErrorList["STORE_ALREADY_EXIST"]);
+      }
+
+      /*
+        `code` sengaja tidak ikut diperbarui: kode lama tidak mengirimkannya,
+        sehingga Mongoose melewatinya. Kode toko dipakai aplikasi kasir untuk
+        mengenali dirinya, jadi mengubahnya di sini akan memutus perangkat yang
+        sudah terpasang.
+      */
+      const result = await this.storeRepository.update({
+        _id: req.body.id,
+        name: req.body.name,
+        address: req.body.address,
+        phoneNumber: req.body.phoneNumber,
+        prefix: req.body.prefix,
+        createdBy: req.body.userID,
+      });
+
+      return res.status(200).send(result);
+    } catch (error) {
+      new LoggerHelper({
+        message: `Error on updating store ${error}`,
+        type: LoggerType.error,
+        tag: "Store",
+      }).log();
+
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    }
   };
 
-  static deleteByID = (req: Request, res: Response) => {
-    const id = req.params.id;
-    const userID = req.body.userID;
-    StoreModelModel.deleteByID(id, userID)
-      .then(async (result) => {
-        await redisClient.del(`store:${id}`);
+  deleteByID = async (req: Request, res: Response) => {
+    try {
+      const result = await this.storeRepository.delete(
+        req.params.id,
+        req.body.userID
+      );
 
-        return res.status(200).send(result);
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          message: `Error on deleting store ${error}`,
-          type: LoggerType.error,
-          tag: "Store",
-        }).log();
+      /*
+        Kunci cache yang dihapus berpola `store:<id>`, padahal tidak ada satu
+        pun tempat di kode ini yang MENULIS kunci dengan pola itu —
+        auth.interceptor mencari toko langsung ke MongoDB. Jadi penghapusan ini
+        praktis tidak melakukan apa-apa. Dipertahankan apa adanya.
+      */
+      await redisClient.del(`store:${req.params.id}`);
 
-        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
-      });
+      return res.status(200).send(result);
+    } catch (error) {
+      new LoggerHelper({
+        message: `Error on deleting store ${error}`,
+        type: LoggerType.error,
+        tag: "Store",
+      }).log();
+
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    }
   };
 }
 

@@ -1,32 +1,34 @@
-import { connectionFactory } from "../utils/connector.utils";
 import {
-  DeliverySlipFetchInterface,
-  DeliverySlipFetchStatus,
-  DeliverySlipInterface,
-  DeliverySlipItem,
-  DeliverySlipUpdateInterface,
+  IDeliverySlip,
+  IDeliverySlipItem,
 } from "../interfaces/delivery-slip.interface";
 
-const conn = connectionFactory();
-class DeliverySlipModelModel {
-  id?: string;
+/**
+ * Surat jalan sebagai objek data murni.
+ *
+ * Query-nya sekarang tinggal di repositories/delivery-slip.repository.ts.
+ */
+export class DeliverySlipModel {
+  _id?: string;
   name: string;
   date: Date;
-  customerID: string;
-  salesID: string;
-  items: DeliverySlipItem[];
-  createdBy: string;
+  note?: string;
+  customerID: any;
+  salesID: any;
+  items: IDeliverySlipItem[];
+  createdBy: any;
   createdAt?: Date;
-  deletedBy: string | null;
-  deletedAt: Date | null;
-  isDelete: boolean;
-  isReturn: boolean;
-  returnedAt: Date | null;
+  deletedBy?: any;
+  deletedAt?: Date | null;
+  isDelete?: boolean;
+  isReturn?: boolean;
+  returnedAt?: Date | null;
 
-  constructor(data: DeliverySlipInterface) {
-    this.id = data.id;
+  constructor(data: IDeliverySlip) {
+    this._id = data._id;
     this.name = data.name;
     this.date = data.date;
+    this.note = data.note;
     this.customerID = data.customerID;
     this.salesID = data.salesID;
     this.items = data.items;
@@ -39,171 +41,50 @@ class DeliverySlipModelModel {
     this.returnedAt = data.returnedAt;
   }
 
-  create() {
-    return conn.model("delivery-slip").create({
-      name: this.name,
-      date: this.date,
-      customerID: this.customerID,
-      salesID: this.salesID,
-      items: this.items,
-      createdBy: this.createdBy,
-      createdAt: new Date(),
+  static fromMap(data: any): DeliverySlipModel {
+    return new DeliverySlipModel({
+      _id: data._id?.toString(),
+      name: data.name,
+      date: data.date,
+      note: data.note,
+      customerID: data.customerID,
+      salesID: data.salesID,
+      items: data.items ?? [],
+      createdBy: data.createdBy,
+      createdAt: data.createdAt,
+      deletedBy: data.deletedBy,
+      deletedAt: data.deletedAt ?? null,
+      isDelete: data.isDelete,
+      isReturn: data.isReturn,
+      returnedAt: data.returnedAt ?? null,
     });
   }
 
-  static fetch(data: DeliverySlipFetchInterface) {
-    const filter = [];
-    if (data.status.includes(DeliverySlipFetchStatus.active)) {
-      filter.push({
-        $expr: {
-          $and: [{ $eq: ["$isDelete", false] }, { $eq: ["$isReturn", false] }],
-        },
-      });
-    }
+  /**
+   * Menggabungkan baris barang yang identik — barang, harga, DAN diskon sama.
+   *
+   * Perhitungan murni tanpa akses database, jadi tempatnya di model.
+   */
+  static mergeItems(items: IDeliverySlipItem[]): IDeliverySlipItem[] {
+    const hasil: IDeliverySlipItem[] = [];
 
-    if (data.status.includes(DeliverySlipFetchStatus.returned)) {
-      filter.push({
-        $expr: {
-          $and: [{ $eq: ["$isDelete", false] }, { $eq: ["$isReturn", true] }],
-        },
-      });
-    }
+    for (const item of items) {
+      const kembar = hasil.find(
+        (x) =>
+          x.itemID == item.itemID &&
+          x.price == item.price &&
+          x.discount == item.discount
+      );
 
-    if (data.status.includes(DeliverySlipFetchStatus.canceled)) {
-      filter.push({
-        $expr: {
-          $and: [{ $eq: ["$isDelete", true] }, { $eq: ["$deletedBy", null] }],
-        },
-      });
-    }
-
-    return Promise.all([
-      conn
-        .model("delivery-slip")
-        .find({
-          $or: filter,
-          $expr: {
-            // month and year
-            $and: [
-              { $eq: [{ $month: "$date" }, data.month] },
-              { $eq: [{ $year: "$date" }, data.year] },
-            ],
-          },
-          name: RegExp(data.keyword, "i"),
-        })
-        .populate("customerID", "name")
-        .populate("salesID", "name")
-        .populate("createdBy", "name")
-        .skip((data.page - 1) * 10)
-        .limit(10),
-      conn.model("delivery-slip").countDocuments({
-        $or: filter,
-        $expr: {
-          // month and year
-          $and: [
-            { $eq: [{ $month: "$date" }, data.month] },
-            { $eq: [{ $year: "$date" }, data.year] },
-          ],
-        },
-        name: RegExp(data.keyword, "i"),
-      }),
-    ]);
-  }
-
-  static fetchByID(id: string) {
-    return conn
-      .model("delivery-slip")
-      .findById(id)
-      .populate("customerID", "name")
-      .populate("salesID", "name")
-      .populate("items.itemID", "reference description");
-  }
-
-  static fetchUnconfirmed(page: number) {
-    return Promise.all([
-      conn
-        .model("delivery-slip")
-        .find({ isReturn: false, isDelete: false })
-        .populate("customerID", "name")
-        .skip((page - 1) * 10)
-        .limit(10),
-      conn.model("delivery-slip").countDocuments({ deletedBy: null }),
-    ]);
-  }
-
-  static async update(data: DeliverySlipUpdateInterface) {
-    const deliverySlip = await conn.model("delivery-slips").findById(data.id);
-    deliverySlip.isReturn = true;
-    deliverySlip.returnedAt = new Date();
-
-    for (let i = 0; i < data.items.length; i++) {
-      const id = data.items[i].id;
-      const quantity = data.items[i].return;
-
-      const index = deliverySlip.items.findIndex((x: any) => x.id == id);
-      if (index != -1) {
-        deliverySlip.items[index].returned = quantity;
-      }
-    }
-
-    await deliverySlip.save();
-    return deliverySlip;
-  }
-
-  static deleteByID(id: string, userID: string) {
-    return conn.model("delivery-slip").findByIdAndUpdate(id, {
-      isDelete: true,
-      deletedBy: userID,
-      deletedAt: new Date(),
-    });
-  }
-
-  static async generateName(date: Date): Promise<string> {
-    const count = await conn.model("delivery-slip").countDocuments({
-      $expr: {
-        $and: [
-          { $eq: [{ $month: "$date" }, date.getMonth() + 1] },
-          { $eq: [{ $year: "$date" }, date.getFullYear()] },
-        ],
-      },
-    });
-
-    return (
-      "DS-CS-" +
-      date.getFullYear() +
-      "-" +
-      (date.getMonth() + 1).toString().padStart(2, "0") +
-      "-" +
-      (count + 1).toString().padStart(4, "0")
-    );
-  }
-
-  static preCreate(items: DeliverySlipItem[]): DeliverySlipItem[] {
-    // Combine if it has the same price, discount, and itemID
-    const modifiedItems: DeliverySlipItem[] = [];
-    for (let i = 0; i < items.length; i++) {
-      if (
-        modifiedItems.filter(
-          (x) =>
-            x.itemID == items[i].itemID &&
-            x.price == items[i].price &&
-            x.discount == items[i].discount
-        ).length == 0
-      ) {
-        modifiedItems.push(items[i]);
+      if (kembar) {
+        kembar.quantity += item.quantity;
       } else {
-        modifiedItems[
-          modifiedItems.findIndex(
-            (x) =>
-              x.itemID == items[i].itemID &&
-              x.price == items[i].price &&
-              x.discount == items[i].discount
-          )
-        ].quantity += items[i].quantity;
+        hasil.push({ ...item });
       }
     }
-    return modifiedItems;
+
+    return hasil;
   }
 }
 
-export default DeliverySlipModelModel;
+export default DeliverySlipModel;

@@ -1,154 +1,162 @@
 import { Request, Response } from "express";
-import { ErrorList } from "../data/error-list";
+import { ErrorList } from "../constants/error-list.constant";
 import { LoggerType } from "../interfaces/logger.interface";
-import ItemModelModel from "../models/item.model";
-import StockModelModel from "../models/stock.model";
-import LoggerHelper from "../utils/logger.utils";
-import StoreModelModel from "../models/store.model";
+import { ItemRepository } from "../repositories/item.repository";
+import { StockRepository } from "../repositories/stock.repository";
+import { StoreRepository } from "../repositories/store.repository";
+import LoggerHelper from "../utils/logger.helper";
 
-class ItemStockController {
-  static fetch = (req: Request, res: Response) => {
-    const storeID = req.body.storeID;
-    const keyword = req.query.keyword as string;
-    const page = !req.query.page ? 1 : parseInt(req.query.page.toString());
+/**
+ * Lapisan HTTP untuk stok barang.
+ *
+ * PERHATIAN SOAL HAK AKSES.
+ *
+ * Route-route ini dipasang dengan AuthInterceptor.anyIntercept, yang menerima
+ * DUA cara masuk: token JWT, atau sekadar header "store" berisi kode toko.
+ * Pada jalur token, `req.body.storeID` TIDAK diisi interceptor — jadi nilainya
+ * datang apa adanya dari badan permintaan, dan pemanggil bebas menentukan toko
+ * mana yang ingin ia lihat. Hal yang sama berlaku untuk `targetStoreID` di
+ * fetchByStoreID().
+ *
+ * Ini cacat kontrol akses yang SUDAH ADA dan tidak diubah di sini, tapi jangan
+ * dianggap aman: memperbaikinya berarti menetapkan storeID di interceptor,
+ * bukan menerimanya dari klien.
+ */
+export class ItemStockController {
+  private itemRepository: ItemRepository;
+  private stockRepository: StockRepository;
+  private storeRepository: StoreRepository;
 
-    ItemModelModel.fetch({
-      keyword: keyword,
-      page: page,
-      onlyActive: false,
-    })
-      .then(([items, itemCount]) => {
-        StockModelModel.checkDashboardStockByItemIDs(
-          items.map((x) => {
-            return {
-              itemID: x._id,
-              quantity: 0,
-            };
-          }),
-          storeID
-        )
-          .then(([onPremiseStock, otherStock]) => {
-            return res.status(200).send({
-              data: items.map((x) => {
-                const stockIndex = onPremiseStock.findIndex(
-                  (y) => y._id.toString() == x._id.toString()
-                );
+  constructor(
+    itemRepository: ItemRepository,
+    stockRepository: StockRepository,
+    storeRepository: StoreRepository
+  ) {
+    this.itemRepository = itemRepository;
+    this.stockRepository = stockRepository;
+    this.storeRepository = storeRepository;
+  }
 
-                const otherStockIndex = otherStock.findIndex(
-                  (y) => y._id.toString() == x._id.toString()
-                );
-                return {
-                  reference: x.reference,
-                  description: x.description,
-                  onPremiseStock:
-                    stockIndex == -1 ? 0 : onPremiseStock[stockIndex].quantity,
-                  otherStock:
-                    otherStockIndex == -1
-                      ? 0
-                      : otherStock[otherStockIndex].quantity,
-                  _id: x._id,
-                };
-              }),
-              count: itemCount,
-            });
-          })
-          .catch((error) => {
-            new LoggerHelper({
-              type: LoggerType.error,
-              message: `Error on checking stock: ${error.message}`,
-              tag: "ItemStockController",
-            }).log();
-
-            return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
-          });
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          type: LoggerType.error,
-          message: `Error on fetching item stock: ${error}`,
-          tag: "ItemStockController",
-        }).log();
-
-        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
-      });
-  };
-
-  static fetchStockByStoreID = (req: Request, res: Response) => {
-    const keyword = req.body.keyword;
-    const page = req.body.page;
-    const storeID =
-      req.body.targetStoreID === "null" ? null : req.body.targetStoreID;
-
-    ItemModelModel.fetchV2WStock({
-      page: page,
-      keyword: keyword,
-      branch: storeID,
-      onlyActive: false,
-    })
-      .then(async ([items, count]) => {
-        return res.status(200).send({
-          data: items,
-          count: count,
+  /** Daftar barang dengan stok di toko ini dan gabungan stok di toko lain. */
+  fetch = async (req: Request, res: Response) => {
+    try {
+      const { data: items, count: itemCount } =
+        await this.itemRepository.fetch({
+          keyword: req.query.keyword as string,
+          page: !req.query.page ? 1 : parseInt(req.query.page.toString()),
+          onlyActive: false,
         });
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          type: LoggerType.error,
-          message: `Error on fetching item stock: ${error}`,
-          tag: "ItemStockController",
-        }).log();
-        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+
+      const [onPremiseStock, otherStock] =
+        await this.stockRepository.fetchDashboardByItemIDs(
+          items.map((x) => ({ itemID: x._id, quantity: 0 })),
+          req.body.storeID
+        );
+
+      const petakan = (baris: any[]) => {
+        const peta = new Map<string, number>();
+        for (const x of baris) {
+          peta.set(x._id.toString(), x.quantity);
+        }
+        return peta;
+      };
+
+      const stokSini = petakan(onPremiseStock);
+      const stokLain = petakan(otherStock);
+
+      return res.status(200).send({
+        data: items.map((x) => ({
+          reference: x.reference,
+          description: x.description,
+          onPremiseStock: stokSini.get(x._id.toString()) ?? 0,
+          otherStock: stokLain.get(x._id.toString()) ?? 0,
+          _id: x._id,
+        })),
+        count: itemCount,
       });
+    } catch (error) {
+      new LoggerHelper({
+        type: LoggerType.error,
+        message: `Error on fetching item stock: ${error}`,
+        tag: "ItemStockController",
+      }).log();
+
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    }
   };
 
-  static fetchByItemID = (req: Request, res: Response) => {
-    const id = req.params.id;
-    Promise.all([
-      ItemModelModel.fetchByID(id),
-      StockModelModel.fetchByItemID(id),
-    ])
-      .then(([item, result]) => {
-        return res.status(200).send({
-          item: item,
-          stock: result,
-        });
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          type: LoggerType.error,
-          message: `Error on fetching item stock: ${error}`,
-          tag: "ItemStockController",
-        }).log();
-
-        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+  /**
+   * Daftar barang beserta stok pada satu toko tertentu.
+   *
+   * Teks "null" diperlakukan sebagai gudang pusat — aplikasi kasir memang
+   * mengirimkannya sebagai teks, bukan null JSON.
+   */
+  fetchStockByStoreID = async (req: Request, res: Response) => {
+    try {
+      const result = await this.itemRepository.fetchWithStock({
+        page: req.body.page,
+        keyword: req.body.keyword,
+        branch:
+          req.body.targetStoreID === "null" ? null : req.body.targetStoreID,
+        onlyActive: false,
       });
+
+      return res.status(200).send(result);
+    } catch (error) {
+      new LoggerHelper({
+        type: LoggerType.error,
+        message: `Error on fetching item stock: ${error}`,
+        tag: "ItemStockController",
+      }).log();
+
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    }
   };
 
-  static download = (req: Request, res: Response) => {
-    Promise.all([
-      StockModelModel.fetchInitial(),
-      ItemModelModel.download(),
-      StoreModelModel.fetchOthers(null),
-    ])
-      .then(([stocks, items, stores]) => {
-        return res.status(200).send({
-          stores: stores,
-          items: items,
-          stocks: stocks,
-        });
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          type: LoggerType.error,
-          message: `Error on downloading item stock: ${error}`,
-          tag: "ItemStockController",
-        }).log();
+  /** Satu barang beserta sebaran stoknya di seluruh toko. */
+  fetchByItemID = async (req: Request, res: Response) => {
+    try {
+      const [item, result] = await Promise.all([
+        this.itemRepository.fetchByID(req.params.id),
+        this.stockRepository.fetchByItemID(req.params.id),
+      ]);
 
-        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
-      });
+      return res.status(200).send({ item: item, stock: result });
+    } catch (error) {
+      new LoggerHelper({
+        type: LoggerType.error,
+        message: `Error on fetching item stock: ${error}`,
+        tag: "ItemStockController",
+      }).log();
+
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    }
   };
 
-  static fetchByStoreID = (req: Request, res: Response) => {};
+  /** Unduhan penuh: seluruh toko, barang, dan baris stok tanpa batas jumlah. */
+  download = async (req: Request, res: Response) => {
+    try {
+      const [stocks, items, stores] = await Promise.all([
+        this.stockRepository.fetchInitial(),
+        this.itemRepository.download(),
+        this.storeRepository.fetchOthers(null),
+      ]);
+
+      return res.status(200).send({
+        stores: stores,
+        items: items,
+        stocks: stocks,
+      });
+    } catch (error) {
+      new LoggerHelper({
+        type: LoggerType.error,
+        message: `Error on downloading item stock: ${error}`,
+        tag: "ItemStockController",
+      }).log();
+
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    }
+  };
 }
 
 export default ItemStockController;

@@ -1,206 +1,172 @@
 import { Request, Response } from "express";
-import { ErrorList } from "../data/error-list";
+import { ErrorList } from "../constants/error-list.constant";
 import { LoggerType } from "../interfaces/logger.interface";
-import ItemBrandModelModel from "../models/item-brand.model";
-import LoggerHelper from "../utils/logger.utils";
+import { ItemBrandRepository } from "../repositories/item-brand.repository";
+import { MigrationRepository } from "../repositories/migration.repository";
+import LoggerHelper from "../utils/logger.helper";
 
-class ItemBrandController {
-  static create = (req: Request, res: Response) => {
-    const name = req.body.name;
-    const userID = req.body.userID;
-    ItemBrandModelModel.preCreate({
-      name: name,
-    })
-      .then((validation) => {
-        if (!validation) {
-          return res.status(404).send(ErrorList["ITEM_BRAND_ALREADY_EXIST"]);
-        } else {
-          new ItemBrandModelModel({
-            name: name,
-            createdBy: userID,
-            createdAt: new Date(),
-          })
-            .create()
-            .then((result) => {
-              return res.status(201).send(result);
-            })
-            .catch((error) => {
-              new LoggerHelper({
-                type: LoggerType.error,
-                message: `Error on creating item brand ${error}`,
-                tag: "Item-brand",
-              }).log();
-              return res.status(500).send(error);
-            });
-        }
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          type: LoggerType.error,
-          message: `Error on pre-creating item brand ${error}`,
-          tag: "Item-brand",
-        }).log();
-        return res.status(500).send(error);
+/**
+ * Lapisan HTTP untuk merek barang.
+ *
+ * Controller ini menerima DUA repository. Mengganti nama merek tidak hanya
+ * menyentuh koleksi `itembrands`: nama merek ikut tersalin ke tiap baris
+ * produk di database kasir, jadi perubahannya harus dicatat ke antrian
+ * migrasi juga. Karena keduanya adalah koleksi yang berbeda, penggabungannya
+ * dikerjakan di sini — bukan di dalam salah satu repository.
+ */
+export class ItemBrandController {
+  private itemBrandRepository: ItemBrandRepository;
+  private migrationRepository: MigrationRepository;
+
+  constructor(
+    itemBrandRepository: ItemBrandRepository,
+    migrationRepository: MigrationRepository
+  ) {
+    this.itemBrandRepository = itemBrandRepository;
+    this.migrationRepository = migrationRepository;
+  }
+
+  create = async (req: Request, res: Response) => {
+    try {
+      /*
+        Pemeriksaan nama ganda ini pada praktiknya tidak pernah gagal — lihat
+        catatan nomor 1 di item-brand.repository.ts. Tetap dipanggil supaya
+        perilakunya sama persis dengan sebelumnya.
+      */
+      if (await this.itemBrandRepository.isNameTaken(req.body.name)) {
+        return res.status(404).send(ErrorList["ITEM_BRAND_ALREADY_EXIST"]);
+      }
+
+      const result = await this.itemBrandRepository.create({
+        name: req.body.name,
+        createdBy: req.body.userID,
+        createdAt: new Date(),
       });
+
+      return res.status(201).send(result);
+    } catch (error) {
+      new LoggerHelper({
+        type: LoggerType.error,
+        message: `Error on creating item brand ${error}`,
+        tag: "Item-brand",
+      }).log();
+
+      return res.status(500).send(error);
+    }
   };
 
-  // DELETE THIS CONTROLLER
-  static fetch = (req: Request, res: Response) => {
-    const page = req.query.page == null ? 1 : Number(req.query.page);
-    const keyword =
-      req.query.keyword == null ? "" : req.query.keyword.toString();
-    ItemBrandModelModel.fetch({
-      page: page,
-      keyword: keyword,
-    })
-      .then((result) => {
-        return res.status(200).send(result);
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          type: LoggerType.error,
-          message: `Error on fetching item brand ${error}`,
-          tag: "Item-brand",
-        }).log();
-        return res.status(500).send(error);
+  fetch = async (req: Request, res: Response) => {
+    try {
+      const result = await this.itemBrandRepository.fetch({
+        page: req.query.page == null ? 1 : Number(req.query.page),
+        keyword: req.query.keyword == null ? "" : req.query.keyword.toString(),
       });
+
+      return res.status(200).send(result);
+    } catch (error) {
+      new LoggerHelper({
+        type: LoggerType.error,
+        message: `Error on fetching item brand ${error}`,
+        tag: "Item-brand",
+      }).log();
+
+      return res.status(500).send(error);
+    }
   };
 
-  // DO NOT DELETE THIS CONTROLLER
-  static fetchV2 = (req: Request, res: Response) => {
-    const page = req.query.page == null ? 1 : Number(req.query.page);
-    const keyword =
-      req.query.keyword == null ? "" : req.query.keyword.toString();
-    ItemBrandModelModel.fetchV2({
-      page: page,
-      keyword: keyword,
-    })
-      .then(([result, count]) => {
-        return res.status(200).send({
-          data: result,
-          count: count,
-        });
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          type: LoggerType.error,
-          message: `Error on fetching item brand ${error}`,
-          tag: "Item-brand",
-        }).log();
-        return res.status(500).send(error);
-      });
+  fetchByID = async (req: Request, res: Response) => {
+    try {
+      const result = await this.itemBrandRepository.fetchByID(req.params.id);
+
+      /*
+        Merek yang tidak ditemukan tetap dibalas 200 dengan badan null, sama
+        seperti sebelumnya. Membalas 404 di sini akan mengubah perilaku klien.
+      */
+      return res.status(200).send(result);
+    } catch (error) {
+      new LoggerHelper({
+        type: LoggerType.error,
+        message: `Error on fetching item brand by ID ${error}`,
+        tag: "Item-brand",
+      }).log();
+
+      return res.status(500).send(error);
+    }
   };
 
-  static fetchByID = (req: Request, res: Response) => {
-    const id = req.params.id;
-    ItemBrandModelModel.fetchByID(id)
-      .then((result) => {
-        return res.status(200).send(result);
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          type: LoggerType.error,
-          message: `Error on fetching item brand by ID ${error}`,
-          tag: "Item-brand",
-        }).log();
-        return res.status(500).send(error);
-      });
+  fetchAutocomplete = async (req: Request, res: Response) => {
+    try {
+      const result = await this.itemBrandRepository.fetchAutocomplete(
+        req.query.keyword == null ? "" : req.query.keyword.toString()
+      );
+
+      return res.status(200).send(result);
+    } catch (error) {
+      new LoggerHelper({
+        type: LoggerType.error,
+        message: `Error on fetching item brand autocomplete ${error}`,
+        tag: "Item-brand",
+      }).log();
+
+      return res.status(500).send(error);
+    }
   };
 
-  static fetchAutocomplete = (req: Request, res: Response) => {
-    const keyword =
-      req.query.keyword == null ? "" : req.query.keyword.toString();
-    ItemBrandModelModel.fetchAutocomplete(keyword)
-      .then((result) => {
-        return res.status(200).send(result);
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          type: LoggerType.error,
-          message: `Error on fetching item brand autocomplete ${error}`,
-          tag: "Item-brand",
-        }).log();
-        return res.status(500).send(error);
-      });
+  update = async (req: Request, res: Response) => {
+    try {
+      /*
+        Pesan ITEM_BRAND_ALREADY_EXIST di sini keliru — yang diperiksa adalah
+        keberadaan mereknya, bukan nama ganda. Dipertahankan karena pesannya
+        sudah dikenal klien.
+      */
+      if (!(await this.itemBrandRepository.existsActive(req.body.id))) {
+        return res.status(404).send(ErrorList["ITEM_BRAND_ALREADY_EXIST"]);
+      }
+
+      const [result] = await Promise.all([
+        this.itemBrandRepository.update({
+          _id: req.body.id,
+          name: req.body.name,
+        }),
+        this.migrationRepository.updateProductBrand({
+          id: req.body.id,
+          name: req.body.name,
+        }),
+      ]);
+
+      return res.status(201).send(result);
+    } catch (error) {
+      new LoggerHelper({
+        type: LoggerType.error,
+        message: `Error on updating item brand ${error}`,
+        tag: "Item-brand",
+      }).log();
+
+      return res.status(500).send(error);
+    }
   };
 
-  static update = (req: Request, res: Response) => {
-    const id = req.body.id;
-    const name = req.body.name;
-    ItemBrandModelModel.preUpdate({
-      id: id,
-      name: name,
-    })
-      .then((validation) => {
-        if (!validation) {
-          return res.status(404).send(ErrorList["ITEM_BRAND_ALREADY_EXIST"]);
-        } else {
-          new ItemBrandModelModel({
-            id: id,
-            name: name,
-            createdAt: new Date(),
-          })
-            .update()
-            .then(([result, _]) => {
-              return res.status(201).send(result);
-            })
-            .catch((error) => {
-              new LoggerHelper({
-                type: LoggerType.error,
-                message: `Error on pre-updating item brand ${error}`,
-                tag: "Item-brand",
-              }).log();
-              return res.status(500).send(error);
-            });
-        }
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          type: LoggerType.error,
-          message: `Error on updating item brand ${error}`,
-          tag: "Item-brand",
-        }).log();
-        return res.status(500).send(error);
-      });
-  };
+  delete = async (req: Request, res: Response) => {
+    try {
+      if (!(await this.itemBrandRepository.exists(req.params.id))) {
+        return res.status(404).send(ErrorList["ITEM_BRAND_NOT_FOUND"]);
+      }
 
-  static delete = (req: Request, res: Response) => {
-    const id = req.params.id;
-    const userID = req.body.userID;
-    ItemBrandModelModel.preDelete({
-      id: id,
-    })
-      .then((validation) => {
-        if (!validation) {
-          return res.status(404).send(ErrorList["ITEM_BRAND_NOT_FOUND"]);
-        } else {
-          new ItemBrandModelModel({
-            id: id,
-            createdBy: userID,
-            createdAt: new Date(),
-          })
-            .delete()
-            .then((result) => {
-              return res.status(201).send(result);
-            })
-            .catch((error) => {
-              new LoggerHelper({
-                type: LoggerType.error,
-                message: `Error on deleting item brand ${error}`,
-                tag: "Item-brand",
-              }).log();
-              return res.status(500).send(error);
-            });
-        }
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          type: LoggerType.error,
-          message: `Error on pre-deleting item brand ${error}`,
-          tag: "Item-brand",
-        }).log();
-        return res.status(500).send(error);
-      });
+      const result = await this.itemBrandRepository.delete(
+        req.params.id,
+        req.body.userID
+      );
+
+      return res.status(201).send(result);
+    } catch (error) {
+      new LoggerHelper({
+        type: LoggerType.error,
+        message: `Error on deleting item brand ${error}`,
+        tag: "Item-brand",
+      }).log();
+
+      return res.status(500).send(error);
+    }
   };
 }
 

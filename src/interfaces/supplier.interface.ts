@@ -1,18 +1,20 @@
-export interface SupplierModelInterface {
-  id?: string;
+/** Bentuk data pemasok, mengikuti koleksi `suppliers`. */
+export interface ISupplier {
+  _id?: string;
   name: string;
-  email: string;
-  phoneNumber: string;
   address: string;
+  phoneNumber: string;
   npwp: string;
-  createdBy: string;
+  email: string;
+  createdBy?: string;
   createdAt?: Date;
   isDelete?: boolean;
-  deletedBy?: string;
-  deletedAt?: Date;
+  deletedBy?: string | null;
+  deletedAt?: Date | null;
 }
 
-export interface PreUpdateSupplierInterface {
-  name: string;
+/** Masukan pemeriksaan nama ganda saat penyuntingan. */
+export interface ISupplierNameCheck {
   id: string;
+  name: string;
 }

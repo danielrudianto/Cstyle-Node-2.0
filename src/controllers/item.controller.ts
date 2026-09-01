@@ -1,439 +1,436 @@
-import { NextFunction, Request, Response } from "express";
-import { ErrorList } from "../data/error-list";
-import { LoggerType } from "../interfaces/logger.interface";
+import { Request, Response } from "express";
 import fs from "fs";
-import MigrationModelModel from "../models/migration.model";
-import ItemModelModel from "../models/item.model";
-import { queue } from "../utils/queue.utils";
-import LoggerHelper from "../utils/logger.utils";
-import StockModelModel from "../models/stock.model";
-import StoreModelModel from "../models/store.model";
+import { ErrorList } from "../constants/error-list.constant";
+import { LoggerType } from "../interfaces/logger.interface";
+import { ItemRepository } from "../repositories/item.repository";
+import { MigrationRepository } from "../repositories/migration.repository";
+import { StockRepository } from "../repositories/stock.repository";
+import { StoreRepository } from "../repositories/store.repository";
+import LoggerHelper from "../utils/logger.helper";
+import { queue } from "../utils/queue.helper";
 
-class ItemController {
-  static createV2 = (req: Request, res: Response) => {
+/**
+ * Lapisan HTTP untuk barang.
+ *
+ * Controller ini menyentuh empat koleksi sekaligus — barang, stok, toko, dan
+ * antrian migrasi — karena satu layar di aplikasi memang menggabungkan
+ * keempatnya. Penggabungan itu dikerjakan di sini, bukan di dalam salah satu
+ * repository.
+ *
+ * BERKAS GAMBAR MASIH DIHAPUS SECARA SINKRON.
+ *
+ * fs.unlinkSync() menghentikan seluruh event loop selama operasi berkasnya
+ * berjalan, dan melempar galat kalau berkasnya sudah tidak ada. Keduanya
+ * dipertahankan apa adanya di sini; menggantinya dengan versi asinkron
+ * mengubah urutan kejadian dan itu urusan terpisah.
+ */
+export class ItemController {
+  private itemRepository: ItemRepository;
+  private migrationRepository: MigrationRepository;
+  private stockRepository: StockRepository;
+  private storeRepository: StoreRepository;
+
+  constructor(
+    itemRepository: ItemRepository,
+    migrationRepository: MigrationRepository,
+    stockRepository: StockRepository,
+    storeRepository: StoreRepository
+  ) {
+    this.itemRepository = itemRepository;
+    this.migrationRepository = migrationRepository;
+    this.stockRepository = stockRepository;
+    this.storeRepository = storeRepository;
+  }
+
+  create = async (req: Request, res: Response) => {
     const data = req.body;
     const item = JSON.parse(data.item);
-    const reference = item.reference;
-    const description = item.description;
-    const itemTypeID = item.itemTypeID;
-    const itemBrandID = item.itemBrandID;
-    const price = item.price;
-    const barcode = item.barcode;
-    const createdBy = data.userID;
     const images = data.images as string[];
 
-    ItemModelModel.preCreate({
-      reference: reference,
-      description: description,
-      isActive: true,
-    }).then((validation) => {
-      if (!validation) {
-        // Remove the uploaded images
-        if (images.length > 0) {
-          for (const image of images) {
-            fs.unlinkSync(image);
-          }
+    try {
+      if (await this.itemRepository.isReferenceTaken(item.reference)) {
+        /* Gambar yang terlanjur terunggah dibuang lagi. */
+        for (const image of images) {
+          fs.unlinkSync(image);
         }
 
         return res.status(400).send(ErrorList["ITEM_ALREADY_EXIST"]);
-      } else {
-        new ItemModelModel({
-          reference: reference,
-          description: description,
-          itemTypeID: itemTypeID,
-          itemBrandID: itemBrandID,
-          createdBy: createdBy,
-          price: price,
-          barcode: barcode,
-          isFavorite: false,
-          images: images,
-          isActive: true,
-        })
-          .create()
-          .then(async (result) => {
-            await queue.add("createProduct", {
-              id: result._id,
-            });
-
-            if (images.length > 0) {
-              await queue.add("createProductImage", {
-                id: result._id,
-              });
-            }
-
-            return res.status(200).send(result);
-          })
-          .catch((error) => {
-            new LoggerHelper({
-              type: LoggerType.error,
-              message: `Error on creating item ${error}`,
-              tag: "Item",
-            }).log();
-            return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
-          });
       }
-    });
+
+      const result = await this.itemRepository.create({
+        reference: item.reference,
+        description: item.description,
+        itemTypeID: item.itemTypeID,
+        itemBrandID: item.itemBrandID,
+        createdBy: data.userID,
+        price: item.price,
+        barcode: item.barcode,
+        isFavorite: false,
+        images: images,
+        isActive: true,
+      });
+
+      await queue.add("createProduct", { id: result._id });
+
+      /*
+        Job "createProductImage" TIDAK ADA penanganannya di worker.ts — nama
+        yang dikenal worker hanya "updateProductImage". Akibatnya gambar pada
+        produk yang BARU dibuat tidak pernah ikut tercatat ke antrian migrasi,
+        jadi tidak sampai ke aplikasi kasir. Dipertahankan apa adanya; ini
+        cacat perilaku yang perlu diperbaiki terpisah.
+      */
+      if (images.length > 0) {
+        await queue.add("createProductImage", { id: result._id });
+      }
+
+      return res.status(200).send(result);
+    } catch (error) {
+      new LoggerHelper({
+        type: LoggerType.error,
+        message: `Error on creating item ${error}`,
+        tag: "Item",
+      }).log();
+
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    }
   };
 
-  static updateV2 = (req: Request, res: Response) => {
-    const data = req.body;
-    if ("item" in data) {
-      const item = JSON.parse(data.item);
-
-      const id = item.id;
-      const reference = item.reference;
-      const description = item.description;
-      const itemTypeID = item.itemTypeID;
-      const itemBrandID = item.itemBrandID;
-      const price = item.price;
-      const barcode = item.barcode;
-      const isActive = item.isActive;
-
-      const newImages = req.body.images;
-
-      ItemModelModel.preUpdate({
-        reference: reference,
-        id: id,
-        isActive: isActive,
-      })
-        .then(async (validation) => {
-          if (!validation) {
-            return res.status(404).send(ErrorList["ITEM_NOT_FOUND"]);
-          } else {
-            const product = await ItemModelModel.fetchByID(id);
-            if (!product) {
-              return res.status(404).send(ErrorList["ITEM_NOT_FOUND"]);
-            }
-
-            new ItemModelModel({
-              id: id,
-              reference: reference,
-              description: description,
-              itemTypeID: itemTypeID,
-              itemBrandID: itemBrandID,
-              price: price,
-              barcode: barcode,
-              images: [...product.images, ...newImages],
-              isActive: isActive,
-            })
-              .update()
-              .then(async (result) => {
-                await queue.add("updateProduct", {
-                  id: id,
-                });
-
-                if (newImages.length > 0) {
-                  await queue.add("updateProductImage", {
-                    id: id,
-                    images: newImages,
-                  });
-                }
-                return res.status(201).send(result);
-              })
-              .catch((error) => {
-                new LoggerHelper({
-                  type: LoggerType.error,
-                  message: `Error on updating item ${error}`,
-                  tag: "Item",
-                }).log();
-              });
-          }
-        })
-        .catch((error) => {
-          new LoggerHelper({
-            type: LoggerType.error,
-            message: `Error on pre-creating item ${error}`,
-            tag: "Item",
-          }).log();
-          return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
-        });
-    } else {
+  update = async (req: Request, res: Response) => {
+    if (!("item" in req.body)) {
       return res.status(400).send(ErrorList["BAD_REQUEST"]);
     }
-  };
 
-  static updateFavoriteStatus = (req: Request, res: Response) => {
-    const isFavorite = req.body.isFavorite;
-    const itemID = req.body.itemID;
+    const item = JSON.parse(req.body.item);
+    const newImages = req.body.images;
 
-    ItemModelModel.updateFavoriteStatus({
-      id: itemID,
-      isFavorite: isFavorite,
-    })
-      .then((result) => {
-        return res.status(200).send(result);
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          type: LoggerType.error,
-          message: `Error on updating item favorite status ${error}`,
-          tag: "Item",
-        }).log();
-        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
-      });
-  };
+    try {
+      const taken = await this.itemRepository.isReferenceTakenByOther(
+        item.reference,
+        item.id
+      );
 
-  static updatePrice = (req: Request, res: Response) => {
-    const items = req.body.items;
-    ItemModelModel.updatePrice(items)
-      .then((result) => {
-        return res.status(201).send(result);
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          message: `Error on updating price ${error}`,
-          tag: "Item",
-          type: LoggerType.error,
-        }).log();
-
-        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
-      });
-  };
-
-  static deleteByID = (req: Request, res: Response) => {
-    const id = req.params.id;
-    const userID = req.body.userID;
-    ItemModelModel.preDelete(id).then((validation) => {
-      if (!validation) {
+      if (taken) {
         return res.status(404).send(ErrorList["ITEM_NOT_FOUND"]);
-      } else {
-        ItemModelModel.delete({
-          id: id,
-          userID: userID,
-        })
-          .then(async (result) => {
-            // Delete the file
-            if (result == null) {
-              return res.status(404).send(ErrorList["ITEM_NOT_FOUND"]);
-            } else {
-              const images = result.images;
-              for (const image of images) {
-                fs.unlinkSync(image);
-              }
-
-              await queue.add("deleteProduct", {
-                id: id,
-              });
-
-              return res.status(200).send(result);
-            }
-          })
-          .catch((error) => {
-            new LoggerHelper({
-              type: LoggerType.error,
-              message: `Error on deleting item ${error}`,
-              tag: "Item",
-            }).log();
-            return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
-          });
       }
-    });
-  };
 
-  static deleteImage = (req: Request, res: Response) => {
-    const fileName = req.params.name;
-    const itemID = req.params.id;
-    // Check if the file exists in upload
-    if (fs.existsSync(`upload/${fileName}`)) {
-      fs.unlinkSync(`upload/${fileName}`);
-      Promise.all([
-        ItemModelModel.deleteImage(`upload/${fileName}`, itemID),
-        MigrationModelModel.deleteProductImage(`upload/${fileName}`, itemID),
-      ])
-        .then(([result, _]) => {
-          return res.status(200).send(result);
-        })
-        .catch((error) => {
-          new LoggerHelper({
-            type: LoggerType.error,
-            message: `Error on deleting item image ${error}`,
-            tag: "Item",
-          }).log();
+      const product = await this.itemRepository.fetchByID(item.id);
+      if (!product) {
+        return res.status(404).send(ErrorList["ITEM_NOT_FOUND"]);
+      }
 
-          return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+      const result = await this.itemRepository.update({
+        _id: item.id,
+        reference: item.reference,
+        description: item.description,
+        itemTypeID: item.itemTypeID,
+        itemBrandID: item.itemBrandID,
+        price: item.price,
+        barcode: item.barcode,
+        images: [...product.images, ...newImages],
+        isActive: item.isActive,
+      });
+
+      await queue.add("updateProduct", { id: item.id });
+
+      if (newImages.length > 0) {
+        await queue.add("updateProductImage", {
+          id: item.id,
+          images: newImages,
         });
-    } else {
-      return res.status(404).send(ErrorList["ITEM_NOT_FOUND"]);
+      }
+
+      return res.status(201).send(result);
+    } catch (error) {
+      new LoggerHelper({
+        type: LoggerType.error,
+        message: `Error on updating item ${error}`,
+        tag: "Item",
+      }).log();
+
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
     }
   };
 
-  static fetchV2 = (req: Request, res: Response) => {
-    const page = !req.query.page ? 1 : parseInt(req.query.page as string);
-    const keyword = !req.query.keyword ? "" : (req.query.keyword as string);
-    ItemModelModel.fetch({
-      keyword: keyword,
-      page: page,
-      onlyActive: false,
-    })
-      .then(([result, count]) => {
-        return res.status(200).send({
-          data: result,
-          count: count,
-        });
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          message: `Error on fetching item ${error}`,
-          type: LoggerType.error,
-          tag: "Item",
-        }).log();
-        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+  updateFavoriteStatus = async (req: Request, res: Response) => {
+    try {
+      const result = await this.itemRepository.updateFavoriteStatus({
+        id: req.body.itemID,
+        isFavorite: req.body.isFavorite,
       });
+
+      return res.status(200).send(result);
+    } catch (error) {
+      new LoggerHelper({
+        type: LoggerType.error,
+        message: `Error on updating item favorite status ${error}`,
+        tag: "Item",
+      }).log();
+
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    }
   };
 
-  static downloadV2 = (req: Request, res: Response) => {
-    const storeID = req.body.storeID;
-    Promise.all([
-      ItemModelModel.fetchInitial(),
-      StockModelModel.fetchInitial(),
-      StoreModelModel.fetchOthers(null),
-    ])
-      .then(([items, stocks, stores]) => {
-        const itemResult = [];
+  updatePrice = async (req: Request, res: Response) => {
+    try {
+      const result = await this.itemRepository.updatePrice(req.body.items);
+      return res.status(201).send(result);
+    } catch (error) {
+      new LoggerHelper({
+        message: `Error on updating price ${error}`,
+        tag: "Item",
+        type: LoggerType.error,
+      }).log();
 
-        for (let i = 0; i < items.length; i++) {
-          const availableStocks = stocks.filter(
-            (x) => x.itemID.toString() == items[i]._id
-          );
-
-          itemResult.push({
-            id: items[i]._id,
-            reference: items[i].reference,
-            description: items[i].description,
-            brand: items[i].itemBrandID.name,
-            type: items[i].itemTypeID.name,
-            stock: availableStocks.map((x) => {
-              return {
-                quantity: x.quantity,
-                storeID: x.storeID,
-              };
-            }),
-          });
-        }
-
-        return res.status(200).send({
-          store: stores,
-          data: itemResult,
-        });
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          message: `Error on fetching item stock ${error}`,
-          tag: "Item",
-          type: LoggerType.error,
-        }).log();
-
-        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
-      });
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    }
   };
 
-  static download = (req: Request, res: Response) => {
-    ItemModelModel.download()
-      .then((result) => {
-        return res.status(200).send(result);
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          message: `Error on downloading item ${error}`,
-          type: LoggerType.error,
-          tag: "Item",
-        }).log();
+  deleteByID = async (req: Request, res: Response) => {
+    try {
+      /*
+        Pemeriksaan ini pada praktiknya tidak pernah menahan apa pun — lihat
+        catatan isReferenced() di item.repository.ts.
+      */
+      if (await this.itemRepository.isReferenced(req.params.id)) {
+        return res.status(404).send(ErrorList["ITEM_NOT_FOUND"]);
+      }
 
-        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+      const result = await this.itemRepository.delete({
+        id: req.params.id,
+        userID: req.body.userID,
       });
+
+      if (result == null) {
+        return res.status(404).send(ErrorList["ITEM_NOT_FOUND"]);
+      }
+
+      for (const image of result.images) {
+        fs.unlinkSync(image);
+      }
+
+      await queue.add("deleteProduct", { id: req.params.id });
+
+      return res.status(200).send(result);
+    } catch (error) {
+      new LoggerHelper({
+        type: LoggerType.error,
+        message: `Error on deleting item ${error}`,
+        tag: "Item",
+      }).log();
+
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    }
   };
 
-  static fetchByBranchV2 = (req: Request, res: Response) => {
-    const page = req.body.page;
-    const keyword = req.body.keyword;
-    const branch = req.body.branch;
-    const onlyActive = !req.body.onlyActive ? false : req.body.onlyActive;
-    // If keyword length is 13 and all characters are numbers, search by barcode
-    ItemModelModel.fetchV2WStock({
-      keyword: keyword,
-      page: page,
-      branch: branch,
-      onlyActive: onlyActive,
-    })
-      .then(([result, count]) => {
-        return res.status(200).send({
-          data: result,
-          count: count,
-        });
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          message: `Error on fetching item ${error}`,
-          type: LoggerType.error,
-          tag: "Item",
-        }).log();
-        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
-      });
+  /**
+   * Menghapus satu berkas gambar milik satu barang.
+   *
+   * PERINGATAN: nama berkas diambil langsung dari alamat permintaan lalu
+   * disambung ke "upload/" tanpa dibersihkan, sehingga alamat yang memuat
+   * "../" bisa menunjuk berkas di luar folder unggahan. Ini cacat keamanan
+   * yang SUDAH ADA dan sengaja tidak diperbaiki di sini supaya refactor ini
+   * tidak mencampur perubahan perilaku — tapi ia perlu ditutup segera, dan
+   * perbaikannya adalah memvalidasi nama berkas, bukan memindahkannya.
+   */
+  deleteImage = async (req: Request, res: Response) => {
+    const fileName = req.params.name;
+    const itemID = req.params.id;
+
+    if (!fs.existsSync(`upload/${fileName}`)) {
+      return res.status(404).send(ErrorList["ITEM_NOT_FOUND"]);
+    }
+
+    fs.unlinkSync(`upload/${fileName}`);
+
+    try {
+      const [result] = await Promise.all([
+        this.itemRepository.deleteImage(`upload/${fileName}`, itemID),
+        this.migrationRepository.deleteProductImage(
+          `upload/${fileName}`,
+          itemID
+        ),
+      ]);
+
+      return res.status(200).send(result);
+    } catch (error) {
+      new LoggerHelper({
+        type: LoggerType.error,
+        message: `Error on deleting item image ${error}`,
+        tag: "Item",
+      }).log();
+
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    }
   };
 
-  static fetchPrice = (req: Request, res: Response) => {
-    const type = req.body.type;
-    const brand = req.body.brand;
-
-    ItemModelModel.fetchPrices({
-      brand: brand,
-      type: type,
-    })
-      .then((result) => {
-        return res.status(200).send(result);
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          message: `Error on fetching item price ${error}`,
-          type: LoggerType.error,
-          tag: "Item",
-        }).log();
-        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+  fetch = async (req: Request, res: Response) => {
+    try {
+      const result = await this.itemRepository.fetch({
+        keyword: !req.query.keyword ? "" : (req.query.keyword as string),
+        page: !req.query.page ? 1 : parseInt(req.query.page as string),
+        onlyActive: false,
       });
+
+      return res.status(200).send(result);
+    } catch (error) {
+      new LoggerHelper({
+        message: `Error on fetching item ${error}`,
+        type: LoggerType.error,
+        tag: "Item",
+      }).log();
+
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    }
   };
 
-  static fetchByID = (req: Request, res: Response) => {
-    const id = req.params.id;
-    ItemModelModel.fetchByID(id)
-      .then((x) => {
-        if (!x) {
-          return res.status(404).send(ErrorList["ITEM_NOT_FOUND"]);
+  /**
+   * Unduhan penuh untuk aplikasi kasir: seluruh barang beserta stoknya di
+   * setiap toko.
+   *
+   * Stok dikelompokkan lebih dulu ke dalam Map, bukan disaring ulang untuk
+   * tiap barang. Cara lama menelusuri seluruh larik stok sekali untuk setiap
+   * barang, sehingga biayanya tumbuh mengikuti perkalian jumlah barang dan
+   * jumlah baris stok.
+   */
+  downloadForCashier = async (req: Request, res: Response) => {
+    try {
+      const [items, stocks, stores] = await Promise.all([
+        this.itemRepository.fetchInitial(),
+        this.stockRepository.fetchInitial(),
+        this.storeRepository.fetchOthers(null),
+      ]);
+
+      const stockByItem = new Map<string, any[]>();
+      for (const stock of stocks) {
+        const key = stock.itemID.toString();
+        const bucket = stockByItem.get(key);
+        if (bucket) {
+          bucket.push(stock);
         } else {
-          return res.status(200).send({
-            _id: id,
-            reference: x.reference,
-            description: x.description,
-            createdAt: x.createdAt,
-            createdBy: x.createdBy,
-            images: (x.images as string[]).map((z) => {
-              return `${process.env.BASE_URL}/${z}`;
-            }),
-            brandID: (x.itemBrandID as any)._id,
-            typeID: (x.itemTypeID as any)._id,
-            itemBrand: {
-              name: (x.itemBrandID as any).name,
-              _id: (x.itemBrandID as any)._id,
-            },
-            itemType: {
-              name: (x.itemTypeID as any).name,
-              description: (x.itemTypeID as any).description,
-              _id: (x.itemTypeID as any)._id,
-            },
-            price: x.price,
-            barcode: x.barcode,
-            isActive: x.isActive,
-          });
+          stockByItem.set(key, [stock]);
         }
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          message: `Error on fetching item ${error}`,
-          type: LoggerType.error,
-          tag: "Item",
-        }).log();
+      }
 
-        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+      return res.status(200).send({
+        store: stores,
+        data: items.map((item) => ({
+          id: item._id,
+          reference: item.reference,
+          description: item.description,
+          brand: item.itemBrandID.name,
+          type: item.itemTypeID.name,
+          stock: (stockByItem.get(item._id.toString()) ?? []).map((x) => ({
+            quantity: x.quantity,
+            storeID: x.storeID,
+          })),
+        })),
       });
+    } catch (error) {
+      new LoggerHelper({
+        message: `Error on fetching item stock ${error}`,
+        tag: "Item",
+        type: LoggerType.error,
+      }).log();
+
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    }
+  };
+
+  download = async (req: Request, res: Response) => {
+    try {
+      const result = await this.itemRepository.download();
+      return res.status(200).send(result);
+    } catch (error) {
+      new LoggerHelper({
+        message: `Error on downloading item ${error}`,
+        type: LoggerType.error,
+        tag: "Item",
+      }).log();
+
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    }
+  };
+
+  fetchByBranch = async (req: Request, res: Response) => {
+    try {
+      const result = await this.itemRepository.fetchWithStock({
+        keyword: req.body.keyword,
+        page: req.body.page,
+        branch: req.body.branch,
+        onlyActive: !req.body.onlyActive ? false : req.body.onlyActive,
+      });
+
+      return res.status(200).send(result);
+    } catch (error) {
+      new LoggerHelper({
+        message: `Error on fetching item ${error}`,
+        type: LoggerType.error,
+        tag: "Item",
+      }).log();
+
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    }
+  };
+
+  fetchPrice = async (req: Request, res: Response) => {
+    try {
+      const result = await this.itemRepository.fetchPrices({
+        brand: req.body.brand,
+        type: req.body.type,
+      });
+
+      return res.status(200).send(result);
+    } catch (error) {
+      new LoggerHelper({
+        message: `Error on fetching item price ${error}`,
+        type: LoggerType.error,
+        tag: "Item",
+      }).log();
+
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    }
+  };
+
+  fetchByID = async (req: Request, res: Response) => {
+    try {
+      const x = await this.itemRepository.fetchByID(req.params.id);
+      if (!x) {
+        return res.status(404).send(ErrorList["ITEM_NOT_FOUND"]);
+      }
+
+      return res.status(200).send({
+        _id: req.params.id,
+        reference: x.reference,
+        description: x.description,
+        createdAt: x.createdAt,
+        createdBy: x.createdBy,
+        images: (x.images as string[]).map(
+          (z) => `${process.env.BASE_URL}/${z}`
+        ),
+        brandID: (x.itemBrandID as any)._id,
+        typeID: (x.itemTypeID as any)._id,
+        itemBrand: {
+          name: (x.itemBrandID as any).name,
+          _id: (x.itemBrandID as any)._id,
+        },
+        itemType: {
+          name: (x.itemTypeID as any).name,
+          description: (x.itemTypeID as any).description,
+          _id: (x.itemTypeID as any)._id,
+        },
+        price: x.price,
+        barcode: x.barcode,
+        isActive: x.isActive,
+      });
+    } catch (error) {
+      new LoggerHelper({
+        message: `Error on fetching item ${error}`,
+        type: LoggerType.error,
+        tag: "Item",
+      }).log();
+
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    }
   };
 }
 

@@ -1,4 +1,19 @@
-export interface ProductMigrationInterface {
+/**
+ * Bentuk data untuk antrian migrasi.
+ *
+ * Koleksi `migrations` bukan tabel data biasa: isinya baris-baris perintah SQL
+ * yang nanti dijalankan aplikasi kasir pada database SQLite lokalnya. Jadi
+ * yang tersimpan adalah nomor versi dan satu string perintah.
+ */
+
+/** Satu baris antrian migrasi. */
+export interface IMigration {
+  _id?: string;
+  migration_version: number;
+  command: string;
+}
+
+export interface IProductMigration {
   id: string;
   reference: string;
   description: string;
@@ -12,22 +27,22 @@ export interface ProductMigrationInterface {
   images: string[];
 }
 
-export interface ProductImageMigrationInterface {
+export interface IProductImageMigration {
   id: string;
   images: string[];
 }
 
-export interface ProductBrandMigrationInterface {
+export interface IProductBrandMigration {
   id: string;
   name: string;
 }
 
-export interface ProductTypeMigrationInterface {
+export interface IProductTypeMigration {
   id: string;
   name: string;
 }
 
-export interface UserMigrationInterface {
+export interface IUserMigration {
   userID: string;
   code: string;
   name: string;

@@ -1,36 +1,36 @@
 import express from "express";
 import path, { join } from "path";
 
-import AuthRoutes from "./routes/auth.routes";
-import ItemRoutes from "./routes/item.routes";
-import ItemTypeRoutes from "./routes/item-type.routes";
-import ItemBrandRoutes from "./routes/item-brand.routes";
-import CustomerRoutes from "./routes/customer.routes";
-import SupplierRoutes from "./routes/supplier.routes";
-import StoreRoutes from "./routes/store.routes";
-import UserRoutes from "./routes/user.routes";
-import MembershipRoutes from "./routes/membership.routes";
+import AuthRoutes from "./routes/auth.route";
+import ItemRoutes from "./routes/item.route";
+import ItemTypeRoutes from "./routes/item-type.route";
+import ItemBrandRoutes from "./routes/item-brand.route";
+import CustomerRoutes from "./routes/customer.route";
+import SupplierRoutes from "./routes/supplier.route";
+import StoreRoutes from "./routes/store.route";
+import UserRoutes from "./routes/user.route";
+import MembershipRoutes from "./routes/membership.route";
 
-import AdjustmentEventRoutes from "./routes/adjustment.routes";
-import PackingListRoutes from "./routes/packing-list.routes";
-import QuotationRoutes from "./routes/quotation.routes";
-import DeliverySlipRoutes from "./routes/delivery-slip.routes";
-import GoodReceiptRoutes from "./routes/good-receipt.routes";
-import StockRequestRoutes from "./routes/stock-transfer.routes";
-import ItemStockRoutes from "./routes/item-stock.routes";
-import BillRoutes from "./routes/bill.routes";
-import InvoiceRoutes from "./routes/invoice.routes";
+import AdjustmentEventRoutes from "./routes/adjustment.route";
+import PackingListRoutes from "./routes/packing-list.route";
+import QuotationRoutes from "./routes/quotation.route";
+import DeliverySlipRoutes from "./routes/delivery-slip.route";
+import GoodReceiptRoutes from "./routes/good-receipt.route";
+import StockRequestRoutes from "./routes/stock-request.route";
+import ItemStockRoutes from "./routes/item-stock.route";
+import BillRoutes from "./routes/bill.route";
+import InvoiceRoutes from "./routes/invoice.route";
 
-import CashierRoutes from "./routes/cashier.routes";
-import MigrationRoutes from "./routes/migration.routes";
+import CashierRoutes from "./routes/cashier.route";
+import MigrationRoutes from "./routes/migration.route";
 
-import StatusRoutes from "./routes/status.routes";
-import ReportRoutes from "./routes/report.routes";
+import StatusRoutes from "./routes/status.route";
+import ReportRoutes from "./routes/report.route";
 
 import AuthInterceptor from "./interceptors/auth.interceptor";
 import helmet from "helmet";
 import { createClient } from "redis";
-import LoggerHelper from "./utils/logger.utils";
+import LoggerHelper from "./utils/logger.helper";
 import { LoggerType } from "./interfaces/logger.interface";
 
 import cors from "cors";

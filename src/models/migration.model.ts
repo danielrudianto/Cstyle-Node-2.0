@@ -1,152 +1,28 @@
-import MigrationModel from "../schemas/impl.migration.model";
-import {
-  ProductBrandMigrationInterface,
-  ProductImageMigrationInterface,
-  ProductMigrationInterface,
-  ProductTypeMigrationInterface,
-  UserMigrationInterface,
-} from "../interfaces/migration.interface";
-import { connectionFactory } from "../utils/connector.utils";
+import { IMigration } from "../interfaces/migration.interface";
 
-const conn = connectionFactory();
+/**
+ * Satu baris antrian migrasi sebagai objek data murni.
+ *
+ * Query-nya sekarang tinggal di repositories/migration.repository.ts.
+ */
+export class MigrationModel {
+  _id?: string;
+  migration_version: number;
+  command: string;
 
-class MigrationModelModel {
-  static async fetchLatestVersion() {
-    const result = await conn
-      .model("migrations")
-      .aggregate([{ $sort: { migration_version: -1 } }, { $limit: 1 }]);
-
-    return result.length > 0 ? result[0] : null;
+  constructor(data: IMigration) {
+    this._id = data._id;
+    this.migration_version = data.migration_version;
+    this.command = data.command;
   }
 
-  static fetchMigrationSince(version: number) {
-    return conn.model("migrations").find({
-      migration_version: {
-        $gt: version,
-      },
+  static fromMap(data: any): MigrationModel {
+    return new MigrationModel({
+      _id: data._id?.toString(),
+      migration_version: data.migration_version,
+      command: data.command,
     });
-    // return conn
-    //   .model("migrations")
-    //   .find({
-    //     where: {
-    //       migration_version: {
-    //         $gt: version,
-    //       },
-    //     },
-    //   })
-    //   .sort({
-    //     migration_version: 1,
-    //   });
-  }
-
-  static deleteProduct(productID: string) {
-    return conn.model("migrations").create({
-      // Autoincrement from previous
-      migration_version: new Date().getTime(),
-      command: `DELETE FROM product WHERE mongoID = '${productID}';`,
-    });
-  }
-
-  static deleteProductImage(path: string, productID: string) {
-    return conn.model("migrations").create({
-      // Autoincrement from previous
-      migration_version: new Date().getTime(),
-      command: `DELETE FROM product_image WHERE productID = '${productID}' AND imageUrl = '${path}';`,
-    });
-  }
-
-  static createProduct(data: ProductMigrationInterface) {
-    return Promise.all([
-      conn.model("migrations").create({
-        // Autoincrement from previous
-        migration_version: new Date().getTime(),
-        command: `INSERT OR IGNORE INTO product (reference, description, brand, type, brandID, typeID, price, barcode, mongoID, isActive) VALUES ('${
-          data.reference
-        }','${data.description}','${data.brand}','${data.type}','${
-          data.brandID
-        }','${data.typeID}',${data.price},'${data.barcode}','${data.id}', ${
-          data.isActive ? 1 : 0
-        });`,
-      }),
-      ...data.images.map((x) => {
-        return conn.model("migrations").create({
-          // Autoincrement from previous
-          migration_version: new Date().getTime(),
-          command: `INSERT OR IGNORE INTO product_image (productID, imageUrl) VALUES ('${data.id}', '${x}');`,
-        });
-      }),
-    ]);
-  }
-
-  static updateProduct(data: ProductMigrationInterface) {
-    return conn.model("migrations").create({
-      migration_version: new Date().getTime(),
-      command: `UPDATE product SET reference = '${
-        data.reference
-      }', description = '${data.description}', isActive = ${
-        data.isActive ? 1 : 0
-      }, barcode = '${data.barcode}', brandID = '${data.brandID}', typeID = '${
-        data.typeID
-      }', price=${data.price}, type = '${data.type}', brand = '${data.brand}' WHERE mongoID = '${
-        data.id
-      }';`,
-    });
-  }
-
-  static updateProductBrand(data: ProductBrandMigrationInterface) {
-    return conn.model("migrations").create({
-      // Autoincrement from previous
-      migration_version: new Date().getTime(),
-      command: `UPDATE product SET brand = '${data.name}' WHERE brandID = '${data.id}';`,
-    });
-  }
-
-  static updateProductType(data: ProductTypeMigrationInterface) {
-    return conn.model("migrations").create({
-      // Autoincrement from previous
-      migration_version: new Date().getTime(),
-      command: `UPDATE product SET type = '${data.name}' WHERE typeID = '${data.id}';`,
-    });
-  }
-
-  static createUser(data: UserMigrationInterface) {
-    return conn.model("migrations").create({
-      migration_version: new Date().getTime(),
-      command: `INSERT OR IGNORE INTO user (name, code, userID) VALUES ('${data.name}', '${data.code}', '${data.userID}');`,
-    });
-  }
-
-  static updateUser(data: UserMigrationInterface) {
-    return conn.model("migrations").create({
-      // Autoincrement from previous
-      migration_version: new Date().getTime(),
-      command: `UPDATE user SET code = '${data.code}', name = '${data.name}' WHERE userID = '${data.userID}';`,
-    });
-  }
-
-  static deleteUser(userID: string) {
-    return conn.model("migrations").create({
-      // Autoincrement from previous
-      migration_version: new Date().getTime(),
-      command: `DELETE FROM user WHERE userID = '${userID}';`,
-    });
-  }
-
-  static updateProductImages(data: ProductImageMigrationInterface) {
-    return conn.model("migrations").insertMany(
-      data.images.map((x, index) => {
-        return {
-          migration_version: new Date().getTime() + index,
-          command:
-            "INSERT INTO product_image (productID, imageUrl) VALUES ('" +
-            data.id +
-            "', '" +
-            x +
-            "')",
-        };
-      })
-    );
   }
 }
 
-export default MigrationModelModel;
+export default MigrationModel;

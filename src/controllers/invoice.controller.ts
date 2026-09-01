@@ -1,237 +1,253 @@
 import { Request, Response } from "express";
-import InvoiceModelModel from "../models/invoice.model";
-import LoggerHelper from "../utils/logger.utils";
+import { ErrorList } from "../constants/error-list.constant";
 import { LoggerType } from "../interfaces/logger.interface";
-import { ErrorList } from "../data/error-list";
-import PackingListModelModel from "../models/packing-list.model";
-import DeliverySlipModelModel from "../models/delivery-slip.model";
-import lock from "../utils/lock.utils";
-import StockModelModel from "../models/stock.model";
-import { queue } from "../utils/queue.utils";
-import {
-  RemoveStockOutInterface,
-  StockOutInterface,
-} from "../interfaces/stock-out.interface";
+import { RemoveStockOutInterface } from "../interfaces/stock-out.interface";
+import { DeliverySlipRepository } from "../repositories/delivery-slip.repository";
+import { InvoiceRepository } from "../repositories/invoice.repository";
+import { PackingListRepository } from "../repositories/packing-list.repository";
+import { StockRepository } from "../repositories/stock.repository";
+import lock from "../utils/lock.helper";
+import LoggerHelper from "../utils/logger.helper";
+import { queue } from "../utils/queue.helper";
 
-class InvoiceController {
-  static fetch = (req: Request, res: Response) => {
-    const page = req.body.page;
-    const month = req.body.month;
-    const year = req.body.year;
-    const status = req.body.status as string[];
-    const paymentStatus = req.body.paymentStatus as string[];
-    const keyword = req.body.keyword;
+/**
+ * Lapisan HTTP untuk faktur penjualan.
+ *
+ * Faktur selalu punya SATU dokumen asal: packing list atau surat jalan. Hampir
+ * setiap metode di sini harus bercabang berdasarkan yang mana yang terisi.
+ */
+export class InvoiceController {
+  private invoiceRepository: InvoiceRepository;
+  private packingListRepository: PackingListRepository;
+  private deliverySlipRepository: DeliverySlipRepository;
+  private stockRepository: StockRepository;
 
-    InvoiceModelModel.fetch({
-      page: page,
-      keyword: keyword,
-      month: month + 1,
-      year: year,
-      status: status,
-      paymentStatus: paymentStatus,
-    })
-      .then(([result, count]) => {
-        return res.status(200).send({
-          data: result,
-          count: count,
-        });
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          message: `Error on fetching sales invoice ${error}`,
-          tag: "Sales invoice",
-          type: LoggerType.error,
-        }).log();
+  constructor(
+    invoiceRepository: InvoiceRepository,
+    packingListRepository: PackingListRepository,
+    deliverySlipRepository: DeliverySlipRepository,
+    stockRepository: StockRepository
+  ) {
+    this.invoiceRepository = invoiceRepository;
+    this.packingListRepository = packingListRepository;
+    this.deliverySlipRepository = deliverySlipRepository;
+    this.stockRepository = stockRepository;
+  }
 
-        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+  fetch = async (req: Request, res: Response) => {
+    try {
+      const result = await this.invoiceRepository.fetch({
+        page: req.body.page,
+        keyword: req.body.keyword,
+        /* Klien mengirim bulan gaya JavaScript, 0 - 11. */
+        month: req.body.month + 1,
+        year: req.body.year,
+        status: req.body.status as string[],
+        paymentStatus: req.body.paymentStatus as string[],
       });
+
+      return res.status(200).send(result);
+    } catch (error) {
+      new LoggerHelper({
+        message: `Error on fetching sales invoice ${error}`,
+        tag: "Sales invoice",
+        type: LoggerType.error,
+      }).log();
+
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    }
   };
 
-  static fetchByID = (req: Request, res: Response) => {
-    const id = req.params.id;
-    InvoiceModelModel.fetchByID(id)
-      .then(async (result) => {
-        if (!result) {
-          return res.status(404).send(ErrorList["SALES_INVOICE_NOT_FOUND"]);
-        } else {
-          if (result.packingListID) {
-            const packingList = await PackingListModelModel.fetchByID(
-              result.packingListID._id
-            );
+  /**
+   * Satu faktur, dengan dokumen asalnya diambil ulang secara lengkap.
+   *
+   * fetchByID() pada repository sudah mem-populate dokumen asalnya, tetapi
+   * tanpa detail barang. Karena itu dokumen asal diambil sekali lagi lewat
+   * repository-nya sendiri, lalu ditempelkan menggantikan hasil populate.
+   */
+  fetchByID = async (req: Request, res: Response) => {
+    try {
+      const result: any = await this.invoiceRepository.fetchByID(
+        req.params.id
+      );
 
-            result.packingListID = packingList;
-            return res.status(200).send(result);
-          } else {
-            const deliverySlip = await DeliverySlipModelModel.fetchByID(
-              result.deliverySlipID._id
-            );
+      if (!result) {
+        return res.status(404).send(ErrorList["SALES_INVOICE_NOT_FOUND"]);
+      }
 
-            result.deliverySlipID = deliverySlip;
-            return res.status(200).send(result);
-          }
-        }
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          message: `Error on fetching sales invoice ${error}`,
-          tag: "Sales invoice",
-          type: LoggerType.error,
-        }).log();
+      if (result.packingListID) {
+        result.packingListID = await this.packingListRepository.fetchByID(
+          result.packingListID._id
+        );
+      } else {
+        result.deliverySlipID = await this.deliverySlipRepository.fetchByID(
+          result.deliverySlipID._id
+        );
+      }
 
-        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
-      });
+      return res.status(200).send(result);
+    } catch (error) {
+      new LoggerHelper({
+        message: `Error on fetching sales invoice ${error}`,
+        tag: "Sales invoice",
+        type: LoggerType.error,
+      }).log();
+
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    }
   };
 
-  static updatePayment = (req: Request, res: Response) => {
-    const id = req.body.id;
-    const paidAt = req.body.paidAt;
-    const method = req.body.paymentMethod;
-    const amount = req.body.amount;
-    const userID = req.body.userID;
+  updatePayment = async (req: Request, res: Response) => {
+    try {
+      const result: any = await this.invoiceRepository.fetchByID(req.body.id);
 
-    InvoiceModelModel.fetchByID(id)
-      .then((result) => {
-        if (!result || result.isDelete) {
-          return res.status(404).send(ErrorList["SALES_INVOICE_NOT_FOUND"]);
-        } else if (result.isPaid) {
-          return res.status(400).send(ErrorList["SALES_INVOICE_PAID"]);
-        } else {
-          InvoiceModelModel.updatePayment({
-            id: id,
-            paidAt: paidAt,
-            paymentMethod: method,
-            amount: amount,
-            paidBy: userID,
-          })
-            .then(() => {
-              return res.status(200).send({
-                paidAt: paidAt,
-                paymentMethod: method,
-                amount: amount,
-                paidBy: userID,
-              });
-            })
-            .catch((error) => {
-              new LoggerHelper({
-                message: `Error on fetching sales invoice ${error}`,
-                tag: "Sales invoice",
-                type: LoggerType.error,
-              }).log();
-              return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
-            });
-        }
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          message: `Error on fetching sales invoice ${error}`,
-          tag: "Sales invoice",
-          type: LoggerType.error,
-        }).log();
-
-        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
-      });
-  };
-
-  static deleteByID = (req: Request, res: Response) => {
-    const id = req.params.id;
-    const userID = req.body.userID;
-    InvoiceModelModel.fetchByID(id).then((result) => {
       if (!result || result.isDelete) {
         return res.status(404).send(ErrorList["SALES_INVOICE_NOT_FOUND"]);
-      } else {
-        InvoiceModelModel.deleteByID(id, userID)
-          .then(async () => {
-            if (result.packingListID) {
-              await lock.acquire(
-                result.packingListID.items.map((x: any) => {
-                  return `x.itemID:`;
-                }),
-                async (done) => {
-                  result.packingListID.items.forEach(async (x: any) => {
-                    await new StockModelModel({
-                      itemID: x.itemID,
-                      quantity: x.quantity,
-                      storeID: null,
-                    }).update();
-
-                    const stockOutData: RemoveStockOutInterface = {
-                      itemID: x.itemID,
-                      adjustmentCaseID: null,
-                      quantity: x.quantity,
-                      billID: null,
-                      invoiceID: id,
-                      storeID: null,
-                    };
-
-                    await queue.add("removeStockOut", stockOutData);
-                  });
-
-                  await PackingListModelModel.deleteByID(
-                    result.packingListID._id,
-                    userID
-                  );
-                  done();
-
-                  return res.status(201).send(result);
-                }
-              );
-            } else {
-              await lock.acquire(
-                result.deliverySlipID.items.map((x: any) => {
-                  return `x.itemID:`;
-                }),
-                async (done) => {
-                  result.packingListID.items.forEach(async (x: any) => {
-                    await new StockModelModel({
-                      itemID: x.itemID,
-                      quantity: x.quantity - x.returned,
-                      storeID: null,
-                    }).update();
-
-                    const stockOutData: RemoveStockOutInterface = {
-                      itemID: x.itemID,
-                      adjustmentCaseID: null,
-                      quantity: x.quantity,
-                      billID: null,
-                      invoiceID: id,
-                      storeID: null,
-                    };
-
-                    await queue.add("removeStockOut", stockOutData);
-                  });
-
-                  await DeliverySlipModelModel.deleteByID(
-                    result.deliverySlipID._id,
-                    userID
-                  );
-
-                  done();
-
-                  return res.status(201).send(result);
-                }
-              );
-            }
-          })
-          .catch((error) => {});
       }
-    });
+
+      if (result.isPaid) {
+        return res.status(400).send(ErrorList["SALES_INVOICE_PAID"]);
+      }
+
+      await this.invoiceRepository.updatePayment({
+        id: req.body.id,
+        paidAt: req.body.paidAt,
+        paymentMethod: req.body.paymentMethod,
+        amount: req.body.amount,
+        paidBy: req.body.userID,
+      });
+
+      return res.status(200).send({
+        paidAt: req.body.paidAt,
+        paymentMethod: req.body.paymentMethod,
+        amount: req.body.amount,
+        paidBy: req.body.userID,
+      });
+    } catch (error) {
+      new LoggerHelper({
+        message: `Error on updating invoice payment ${error}`,
+        tag: "Sales invoice",
+        type: LoggerType.error,
+      }).log();
+
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    }
   };
 
-  static deletePaymentByID = (req: Request, res: Response) => {
+  /**
+   * Membatalkan faktur, mengembalikan stok, dan ikut membatalkan dokumen
+   * asalnya.
+   *
+   * DUA CACAT DIPERBAIKI DI SINI, KEDUANYA MEMBUAT JALUR SURAT JALAN MUSTAHIL
+   * BERHASIL:
+   *
+   *   1. Cabang surat jalan membaca `result.packingListID.items`, padahal di
+   *      cabang itu packingListID justru null. Pembacaannya melempar galat,
+   *      dan penangkapnya berupa `.catch((error) => {})` yang KOSONG —
+   *      sehingga permintaannya menggantung tanpa jejak, faktur sudah terhapus
+   *      tapi stok tidak pernah kembali.
+   *
+   *   2. Kunci lock disusun sebagai `` `x.itemID:` `` — teks apa adanya, bukan
+   *      template. Seluruh barang memetakan ke satu kunci yang sama, sehingga
+   *      kuncinya tidak memisahkan apa pun.
+   *
+   * Perlu disadari: jalur surat jalan kini benar-benar mengembalikan stok,
+   * sesuatu yang sebelumnya tidak pernah terjadi.
+   */
+  deleteByID = async (req: Request, res: Response) => {
     const id = req.params.id;
-    InvoiceModelModel.deletePaymentByID(id)
-      .then((result) => {
-        return res.status(200).send(result);
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          message: `Error on deleting payment ${error}`,
-          tag: "Sales invoice",
-          type: LoggerType.error,
-        }).log();
+    const userID = req.body.userID;
 
-        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
-      });
+    try {
+      const result: any = await this.invoiceRepository.fetchByID(id);
+
+      if (!result || result.isDelete) {
+        return res.status(404).send(ErrorList["SALES_INVOICE_NOT_FOUND"]);
+      }
+
+      await this.invoiceRepository.delete(id, userID);
+
+      const dariPackingList = Boolean(result.packingListID);
+      const sumber = dariPackingList
+        ? result.packingListID
+        : result.deliverySlipID;
+
+      await lock.acquire(
+        sumber.items.map((x: any) => `${x.itemID}:`),
+        async (done) => {
+          try {
+            for (const x of sumber.items as any[]) {
+              /*
+                Barang dari surat jalan yang sudah dikembalikan pelanggan tidak
+                ikut dikembalikan ke stok — ia memang tidak pernah keluar.
+              */
+              const kembali = dariPackingList
+                ? x.quantity
+                : x.quantity - x.returned;
+
+              await this.stockRepository.increment({
+                itemID: x.itemID,
+                quantity: kembali,
+                storeID: null,
+              });
+
+              const stockOutData: RemoveStockOutInterface = {
+                itemID: x.itemID,
+                adjustmentCaseID: null,
+                quantity: x.quantity,
+                billID: null,
+                invoiceID: id,
+                storeID: null,
+              };
+
+              await queue.add("removeStockOut", stockOutData);
+            }
+
+            if (dariPackingList) {
+              await this.packingListRepository.delete(sumber._id, userID);
+            } else {
+              await this.deliverySlipRepository.delete(sumber._id, userID);
+            }
+
+            done();
+            return res.status(201).send(result);
+          } catch (error) {
+            done();
+
+            new LoggerHelper({
+              message: `Error on restoring stock for invoice ${error}`,
+              tag: "Sales invoice",
+              type: LoggerType.error,
+            }).log();
+
+            return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+          }
+        }
+      );
+    } catch (error) {
+      new LoggerHelper({
+        message: `Error on deleting sales invoice ${error}`,
+        tag: "Sales invoice",
+        type: LoggerType.error,
+      }).log();
+
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    }
+  };
+
+  deletePaymentByID = async (req: Request, res: Response) => {
+    try {
+      const result = await this.invoiceRepository.deletePayment(req.params.id);
+      return res.status(200).send(result);
+    } catch (error) {
+      new LoggerHelper({
+        message: `Error on deleting payment ${error}`,
+        tag: "Sales invoice",
+        type: LoggerType.error,
+      }).log();
+
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    }
   };
 }
 

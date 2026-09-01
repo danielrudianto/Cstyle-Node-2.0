@@ -1,151 +1,69 @@
-import { FetchInterface } from "../interfaces/fetch.interface";
 import {
-  GoodReceiptCreateInterface,
-  GoodReceiptItemInterface,
-  GoodReceiptSearchInterface,
-  GoodReceiptStatus,
+  IGoodReceipt,
+  IGoodReceiptItem,
 } from "../interfaces/good-receipt.interface";
-import { connectionFactory } from "../utils/connector.utils";
 
-const conn = connectionFactory();
-
-export class GoodReceiptCreateModel {
-  id?: string;
+/**
+ * Penerimaan barang sebagai objek data murni.
+ *
+ * Query-nya sekarang tinggal di repositories/good-receipt.repository.ts.
+ *
+ * Kode lama memecah domain ini menjadi DUA kelas — GoodReceiptCreateModel yang
+ * membawa data dan GoodReceiptModelModel yang hanya berisi metode statis.
+ * Pemisahan itu tidak punya alasan selain sejarah, jadi keduanya disatukan
+ * kembali: datanya di sini, query-nya di repository.
+ */
+export class GoodReceiptModel {
+  _id?: string;
   name: string;
   date: Date;
-  supplier: string;
-  createdBy: string;
-  items: GoodReceiptItemInterface[];
+  supplierID: any;
+  items: IGoodReceiptItem[];
+  createdBy: any;
+  createdAt?: Date;
+  isDelete?: boolean;
+  deletedBy?: any;
+  deletedAt?: Date | null;
 
-  constructor(data: GoodReceiptCreateInterface) {
-    (this.id = data.id), (this.name = data.name);
+  constructor(data: IGoodReceipt) {
+    this._id = data._id;
+    this.name = data.name;
     this.date = data.date;
-    this.supplier = data.supplierID;
+    this.supplierID = data.supplierID;
     this.items = data.items;
     this.createdBy = data.createdBy;
+    this.createdAt = data.createdAt;
+    this.isDelete = data.isDelete;
+    this.deletedBy = data.deletedBy;
+    this.deletedAt = data.deletedAt;
   }
 
-  create() {
-    return conn.model("good-receipt").create({
-      name: this.name,
-      date: this.date,
-      supplierID: this.supplier,
-      items: this.items,
-      createdBy: this.createdBy,
-      createdAt: new Date(),
+  static fromMap(data: any): GoodReceiptModel {
+    return new GoodReceiptModel({
+      _id: data._id?.toString(),
+      name: data.name,
+      date: data.date,
+      supplierID: data.supplierID,
+      items: data.items ?? [],
+      createdBy: data.createdBy,
+      createdAt: data.createdAt,
+      isDelete: data.isDelete,
+      deletedBy: data.deletedBy,
+      deletedAt: data.deletedAt ?? null,
     });
   }
 
-  update() {
-    return conn.model("good-receipt").findByIdAndUpdate(this.id, {
-      name: this.name,
-      date: this.date,
-      supplierID: this.supplier,
-      items: this.items,
-    });
+  /**
+   * Harga pokok satu baris setelah potongan.
+   *
+   * Inilah angka yang masuk ke `stock-ins.price` dan menjadi dasar seluruh
+   * perhitungan HPP di kemudian hari. `discount` di sini berupa PERSEN, sesuai
+   * yang dikirim klien — berbeda dari `discount` yang tersimpan di dokumen,
+   * yang sudah berupa rupiah.
+   */
+  static netPrice(price: number, discountPercent: number): number {
+    return (price * (100 - discountPercent)) / 100;
   }
 }
 
-export class GoodReceiptModelModel {
-  static fetchByID(id: string) {
-    return conn
-      .model("good-receipt")
-      .findById(id)
-      .populate("items.itemID", "reference description")
-      .populate("supplierID", "name address");
-  }
-
-  static fetch(data: GoodReceiptSearchInterface) {
-    const filters = [];
-    if (data.status.includes(GoodReceiptStatus.Active)) {
-      filters.push({
-        isDelete: false,
-      });
-    }
-
-    if (data.status.includes(GoodReceiptStatus.Deleted)) {
-      filters.push({
-        isDelete: true,
-      });
-    }
-
-    return Promise.all([
-      conn
-        .model("good-receipt")
-        .find({
-          name: {
-            $regex: new RegExp(data.keyword, "i"),
-          },
-          $or: filters,
-          $expr: {
-            $and: [
-              { $eq: [{ $month: "$date" }, data.month] },
-              { $eq: [{ $year: "$date" }, data.year] },
-            ],
-          },
-        })
-        .sort({ date: 1 })
-        .select("date name createdAt isDelete")
-        .populate("supplierID", "name")
-        .populate("createdBy", "name")
-        .populate("deletedBy", "name")
-        .limit(20)
-        .skip((data.page - 1) * 20),
-      conn.model("good-receipt").countDocuments({
-        name: {
-          $regex: new RegExp(data.keyword, "i"),
-        },
-        $or: filters,
-        $expr: {
-          $and: [
-            { $eq: [{ $month: "$date" }, data.month] },
-            { $eq: [{ $year: "$date" }, data.year] },
-          ],
-        },
-      }),
-    ]);
-  }
-
-  static fetchReport(month: number, year: number) {
-    return conn
-      .model("good-receipt")
-      .find({
-        $expr: {
-          $and: [
-            { $eq: [{ $month: "$date" }, month] },
-            { $eq: [{ $year: "$date" }, year] },
-            { $eq: ["$isDelete", false] },
-          ],
-        },
-      })
-      .populate("supplierID", "name")
-      .populate("createdBy", "name")
-      .sort({
-        date: 1,
-      });
-  }
-
-  static fetchProductReport(month: number, year: number) {
-    return conn
-      .model("good-receipt")
-      .find({
-        $expr: {
-          $and: [
-            { $eq: [{ $month: "$date" }, month] },
-            { $eq: [{ $year: "$date" }, year] },
-            { $eq: ["$isDelete", false] },
-          ],
-        },
-      })
-      .populate("supplierID", "name")
-      .populate("items.itemID", "reference description");
-  }
-
-  static deleteByID(id: string, userID: string) {
-    return conn.model("good-receipt").findByIdAndUpdate(id, {
-      isDelete: true,
-      deletedBy: userID,
-      deletedAt: new Date(),
-    });
-  }
-}
+export default GoodReceiptModel;

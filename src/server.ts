@@ -1,11 +1,9 @@
 import { config } from "dotenv";
 import { app, redisClient } from "./app";
 
-import cron from "node-cron";
-import LoggerHelper from "./utils/logger.utils";
+import LoggerHelper from "./utils/logger.helper";
 import { LoggerType } from "./interfaces/logger.interface";
-import { connectionFactory } from "./utils/connector.utils";
-import SyncUtils from "./utils/sync.utils";
+import SyncUtils from "./utils/sync.helper";
 
 config();
 const port = process.env.PORT!;

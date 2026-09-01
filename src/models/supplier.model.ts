@@ -1,26 +1,25 @@
-import { FetchInterface } from "../interfaces/fetch.interface";
-import {
-  PreUpdateSupplierInterface,
-  SupplierModelInterface,
-} from "../interfaces/supplier.interface";
-import { connectionFactory } from "../utils/connector.utils";
+import { ISupplier } from "../interfaces/supplier.interface";
 
-const conn = connectionFactory();
-class SupplierModelModel {
-  id?: string;
+/**
+ * Pemasok sebagai objek data murni.
+ *
+ * Query-nya sekarang tinggal di repositories/supplier.repository.ts.
+ */
+export class SupplierModel {
+  _id?: string;
   name: string;
   address: string;
   phoneNumber: string;
   npwp: string;
   email: string;
-  createdBy: string;
+  createdBy?: string;
   createdAt?: Date;
   isDelete?: boolean;
-  deletedBy?: string;
-  deletedAt?: Date;
+  deletedBy?: string | null;
+  deletedAt?: Date | null;
 
-  constructor(data: SupplierModelInterface) {
-    this.id = data.id;
+  constructor(data: ISupplier) {
+    this._id = data._id;
     this.name = data.name;
     this.address = data.address;
     this.phoneNumber = data.phoneNumber;
@@ -33,149 +32,21 @@ class SupplierModelModel {
     this.deletedAt = data.deletedAt;
   }
 
-  create() {
-    return conn.model("suppliers").create({
-      name: this.name,
-      address: this.address,
-      phoneNumber: this.phoneNumber,
-      npwp: this.npwp,
-      email: this.email,
-      createdBy: this.createdBy,
-      createdAt: new Date(),
-    });
-  }
-
-  static fetch(data: FetchInterface) {
-    return Promise.all([
-      conn
-        .model("suppliers")
-        .find({
-          isDelete: false,
-          $or: [
-            {
-              name: {
-                $regex: data.keyword,
-                $options: "i",
-              },
-            },
-            {
-              address: {
-                $regex: data.keyword,
-                $options: "i",
-              },
-            },
-            {
-              phoneNumber: {
-                $regex: data.keyword,
-                $options: "i",
-              },
-            },
-            {
-              npwp: {
-                $regex: data.keyword,
-                $options: "i",
-              },
-            },
-          ],
-        })
-        .skip((data.page - 1) * 20)
-        .limit(20)
-        .sort({ name: 1 }),
-      conn.model("suppliers").countDocuments({
-        isDelete: false,
-        $or: [
-          {
-            name: {
-              $regex: data.keyword,
-              $options: "i",
-            },
-          },
-          {
-            address: {
-              $regex: data.keyword,
-              $options: "i",
-            },
-          },
-          {
-            phoneNumber: {
-              $regex: data.keyword,
-              $options: "i",
-            },
-          },
-          {
-            npwp: {
-              $regex: data.keyword,
-              $options: "i",
-            },
-          },
-        ],
-      }),
-    ]);
-  }
-
-  static fetchByID(id: string) {
-    return conn.model("suppliers").findById(id);
-  }
-
-  static fetchAutocomplete(keyword: string) {
-    return conn
-      .model("suppliers")
-      .find({
-        name: {
-          $regex: new RegExp(keyword, "i"),
-        },
-        isDelete: false,
-      })
-      .limit(5)
-      .skip(0)
-      .sort({ name: 1 });
-  }
-
-  update() {
-    return conn.model("suppliers").findByIdAndUpdate(this.id, {
-      name: this.name,
-      address: this.address,
-      phoneNumber: this.phoneNumber,
-      npwp: this.npwp,
-      email: this.email,
-    });
-  }
-
-  static deleteByID(id: string, userID: string) {
-    return conn.model("suppliers").findByIdAndUpdate(id, {
-      isDelete: true,
-      deletedBy: userID,
-      deletedAt: new Date(),
-    });
-  }
-
-  static async preCreate(name: string): Promise<boolean> {
-    const count = await conn.model("suppliers").countDocuments({
-      name: name,
-      isDelete: false,
-    });
-
-    return count === 0;
-  }
-
-  static async preUpdate(data: PreUpdateSupplierInterface): Promise<boolean> {
-    const count = await conn.model("suppliers").countDocuments({
+  static fromMap(data: any): SupplierModel {
+    return new SupplierModel({
+      _id: data._id?.toString(),
       name: data.name,
-      isDelete: false,
-      _id: { $ne: data.id },
+      address: data.address,
+      phoneNumber: data.phoneNumber,
+      npwp: data.npwp,
+      email: data.email,
+      createdBy: data.createdBy?.toString(),
+      createdAt: data.createdAt,
+      isDelete: data.isDelete,
+      deletedBy: data.deletedBy?.toString() ?? null,
+      deletedAt: data.deletedAt ?? null,
     });
-
-    return count === 0;
-  }
-
-  static async preDelete(id: string): Promise<boolean> {
-    const count = await conn.model("suppliers").countDocuments({
-      _id: id,
-      isDelete: false,
-    });
-
-    return count === 1;
   }
 }
 
-export default SupplierModelModel;
+export default SupplierModel;

@@ -1,20 +1,6 @@
-import { Types } from "mongoose";
-import UserModelModel from "../models/user.model";
-import { connectionFactory } from "../utils/connector.utils";
-import ItemModelModel from "../models/item.model";
-import MigrationModelModel from "../models/migration.model";
-import LoggerHelper from "../utils/logger.utils";
+import { ErrorList } from "../constants/error-list.constant";
 import { LoggerType } from "../interfaces/logger.interface";
-import { ErrorList } from "../data/error-list";
 import { StockInInterface } from "../interfaces/stock-in.interface";
-import BillModelModel from "../models/bill.model";
-import { redisClient } from "../app";
-import MembershipModelModel from "../models/membership.model";
-import { queue } from "../utils/queue.utils";
-import StockInModelModel from "../models/stock-in.model";
-import StockModelModel from "../models/stock.model";
-import StockCardModelModel from "../models/stock-card.model";
-import OverflowModelModel from "../models/overflow.model";
 import {
   RemoveStockInInterface,
   RemoveStockOutInterface,
@@ -22,600 +8,326 @@ import {
   StockOutTempInterface,
   StockOutTransferInterface,
 } from "../interfaces/stock-out.interface";
-import StockOutModelModel from "../models/stock-out.model";
 import {
-  UpdateProductImageDataInterface,
-  CommonWorkerInterface,
   CommonUpdateWorkerInterface,
+  CommonWorkerInterface,
+  UpdateProductImageDataInterface,
 } from "../interfaces/worker.interface";
-import AdjustmentModelModel from "../models/adjustment.model";
-import { DeleteStockInInterface } from "../interfaces/stock.interface";
+import { AdjustmentRepository } from "../repositories/adjustment.repository";
+import { BillRepository } from "../repositories/bill.repository";
+import { ItemRepository } from "../repositories/item.repository";
+import { MembershipRepository } from "../repositories/membership.repository";
+import { MigrationRepository } from "../repositories/migration.repository";
+import { UserRepository } from "../repositories/user.repository";
+import { StockService } from "../services/stock.service";
+import { redisClient } from "../app";
+import LoggerHelper from "../utils/logger.helper";
+import { queue } from "../utils/queue.helper";
 
-class WorkerController {
-  static createProduct(data: CommonWorkerInterface): void {
-    ItemModelModel.fetchByID(data.id)
-      .then(async (result) => {
-        if (result) {
-          new LoggerHelper({
-            type: LoggerType.info,
-            message: `Product ${result.reference} created`,
-            tag: "Worker",
-          }).log();
+/**
+ * Penerjemah job antrian menjadi pemanggilan service dan repository.
+ *
+ * Berkas ini dulunya berisi seluruh mesin persediaan — 600 baris logika FIFO
+ * di dalam sebuah "controller" yang tidak pernah menyentuh HTTP. Logika itu
+ * sekarang tinggal di services/stock.service.ts, dan yang tersisa di sini
+ * hanyalah pemetaan job ke pemanggilnya.
+ *
+ * SEMUA METODE DI SINI MENGEMBALIKAN PROMISE DAN HARUS DITUNGGU.
+ *
+ * Kode lama memanggil sebagian metodenya tanpa await, dan melempar galat dari
+ * dalam .catch() sebuah promise yang tidak dipegang siapa pun. Dua-duanya
+ * berakibat sama: BullMQ menandai job sebagai berhasil padahal pekerjaannya
+ * gagal, dan lemparannya berakhir sebagai unhandled rejection yang mematikan
+ * proses pekerja. Sekarang setiap metode mengembalikan promise-nya, dan
+ * worker.ts menunggu semuanya.
+ */
+export class WorkerController {
+  private itemRepository: ItemRepository;
+  private userRepository: UserRepository;
+  private migrationRepository: MigrationRepository;
+  private membershipRepository: MembershipRepository;
+  private billRepository: BillRepository;
+  private adjustmentRepository: AdjustmentRepository;
+  private stockService: StockService;
 
-          return await MigrationModelModel.createProduct({
-            reference: result.reference,
-            description: result.description,
-            barcode: result.barcode == undefined ? null : result.barcode,
-            brand:
-              typeof result.itemBrandID != "string"
-                ? (result.itemBrandID as any).name
-                : "",
-            type:
-              typeof result.itemTypeID != "string"
-                ? (result.itemTypeID as any).name
-                : "",
-            brandID:
-              typeof result.itemBrandID == "string"
-                ? result.itemBrandID
-                : (result.itemBrandID as any)._id,
-            typeID:
-              typeof result.itemTypeID == "string"
-                ? result.itemTypeID
-                : (result.itemTypeID as any)._id,
-            price: result.price,
-            id: result._id.toString(),
-            isActive: result.isActive,
-            images: result.images,
-          });
-        } else {
-          new LoggerHelper({
-            type: LoggerType.error,
-            message: `Unable to find item with id ${data.toString()}`,
-            tag: "Worker",
-          }).log();
-          throw Error(ErrorList["ITEM_NOT_FOUND"]);
-        }
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          type: LoggerType.error,
-          message: `Error on creating product ${error}`,
-          tag: "Worker",
-        }).log();
-
-        throw Error(error);
-      });
+  constructor(
+    itemRepository: ItemRepository,
+    userRepository: UserRepository,
+    migrationRepository: MigrationRepository,
+    membershipRepository: MembershipRepository,
+    billRepository: BillRepository,
+    adjustmentRepository: AdjustmentRepository,
+    stockService: StockService
+  ) {
+    this.itemRepository = itemRepository;
+    this.userRepository = userRepository;
+    this.migrationRepository = migrationRepository;
+    this.membershipRepository = membershipRepository;
+    this.billRepository = billRepository;
+    this.adjustmentRepository = adjustmentRepository;
+    this.stockService = stockService;
   }
 
-  static updateProduct(data: CommonWorkerInterface): any {
-    ItemModelModel.fetchByID(data.id)
-      .then(async (result) => {
-        if (result) {
-          try {
-            return await MigrationModelModel.updateProduct({
-              reference: result.reference,
-              description: result.description,
-              barcode: result.barcode == undefined ? null : result.barcode,
-              brand:
-                typeof result.itemBrandID != "string"
-                  ? (result.itemBrandID as any).name
-                  : "",
-              type:
-                typeof result.itemTypeID != "string"
-                  ? (result.itemTypeID as any).name
-                  : "",
-              brandID:
-                typeof result.itemBrandID == "string"
-                  ? result.itemBrandID
-                  : (result.itemBrandID as any)._id,
-              typeID:
-                typeof result.itemTypeID == "string"
-                  ? result.itemTypeID
-                  : (result.itemTypeID as any)._id,
-              price: result.price,
-              id: result._id.toString(),
-              isActive: result.isActive,
-              images: [],
-            });
-          } catch (error) {
-            new LoggerHelper({
-              type: LoggerType.error,
-              message: `Error on updating migration for product ${error}`,
-              tag: "Worker",
-            }).log();
-            throw error;
-          }
-        } else {
-          new LoggerHelper({
-            type: LoggerType.error,
-            message: `Product with id ${data} not found`,
-            tag: "Worker",
-          });
-          throw new Error("Product not found");
-        }
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          type: LoggerType.error,
-          message: `Error on creating fetching product ${error}`,
-          tag: "Worker",
-        }).log();
-        throw new Error(error);
-      });
-  }
+  /* ------------------------------ produk ------------------------------ */
 
-  static updateProductType(data: CommonUpdateWorkerInterface): any {
-    const id = data.id;
-    const name = data.name;
+  /**
+   * Menyalin produk yang baru dibuat ke antrian migrasi kasir.
+   *
+   * Merek dan jenis bisa datang sebagai teks id atau sebagai dokumen yang
+   * sudah di-populate, tergantung query pemanggilnya — karena itu keduanya
+   * diperiksa dulu bentuknya.
+   */
+  createProduct = async (data: CommonWorkerInterface) => {
+    const result = await this.itemRepository.fetchByID(data.id);
+    if (!result) {
+      new LoggerHelper({
+        type: LoggerType.error,
+        message: `Unable to find item with id ${data.id}`,
+        tag: "Worker",
+      }).log();
 
-    MigrationModelModel.updateProductType({
-      id: id,
-      name: name,
-    })
-      .then(() => {
-        new LoggerHelper({
-          type: LoggerType.info,
-          message: `Product type updated for product ${id}`,
-          tag: "Worker",
-        }).log();
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          type: LoggerType.error,
-          message: `Error on updating product type ${error}`,
-          tag: "Worker",
-        }).log();
-        throw new Error(error);
-      });
-  }
+      throw Error(ErrorList["ITEM_NOT_FOUND"]);
+    }
 
-  static updateProductBrand(data: CommonUpdateWorkerInterface): any {
-    const id = data.id;
-    const name = data.name;
-
-    MigrationModelModel.updateProductBrand({
-      id: id,
-      name: name,
-    })
-      .then(() => {
-        new LoggerHelper({
-          type: LoggerType.info,
-          message: `Product brand updated for product ${id}`,
-          tag: "Worker",
-        }).log();
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          type: LoggerType.error,
-          message: `Error on updating product brand ${error}`,
-          tag: "Worker",
-        }).log();
-        throw new Error(error);
-      });
-  }
-
-  static updateProductImages(data: UpdateProductImageDataInterface): any {
-    const id = data.id;
-    const images = data.images as string[];
-
-    MigrationModelModel.updateProductImages({
-      id,
-      images: images,
-    })
-      .then(() => {
-        new LoggerHelper({
-          type: LoggerType.info,
-          message: `Product images updated for product ${id}`,
-          tag: "Worker",
-        }).log();
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          type: LoggerType.error,
-          message: `Error on updating product images ${error}`,
-          tag: "Worker",
-        }).log();
-        throw new Error(error);
-      });
-  }
-
-  static async deleteProduct(data: CommonWorkerInterface): Promise<any> {
-    const id = data.id;
-    ItemModelModel.fetchByID(id).then(async (item) => {
-      if (!item) {
-        throw Error(ErrorList["ITEM_NOT_FOUND"]);
-      }
-
-      await MigrationModelModel.deleteProduct(id);
-      item.images.forEach(async (x: string) => {
-        await MigrationModelModel.deleteProductImage(x, id);
-      });
+    await this.migrationRepository.createProduct({
+      reference: result.reference,
+      description: result.description,
+      barcode: result.barcode == undefined ? null : result.barcode,
+      brand:
+        typeof result.itemBrandID != "string"
+          ? (result.itemBrandID as any).name
+          : "",
+      type:
+        typeof result.itemTypeID != "string"
+          ? (result.itemTypeID as any).name
+          : "",
+      brandID:
+        typeof result.itemBrandID == "string"
+          ? result.itemBrandID
+          : (result.itemBrandID as any)._id,
+      typeID:
+        typeof result.itemTypeID == "string"
+          ? result.itemTypeID
+          : (result.itemTypeID as any)._id,
+      price: result.price,
+      id: result._id.toString(),
+      isActive: result.isActive,
+      images: result.images,
     });
-  }
+  };
 
-  static createUser(data: CommonWorkerInterface) {
-    UserModelModel.fetchByID(data.id)
-      .then((user) => {
-        if (!user) {
-          throw Error(ErrorList["USER_NOT_FOUND"]);
-        } else {
-          MigrationModelModel.createUser({
-            name: user.name,
-            userID: user._id!.toString(),
-            code: user.code,
-          });
-        }
-      })
-      .catch((error) => {
-        throw new Error(error);
-      });
-  }
+  updateProduct = async (data: CommonWorkerInterface) => {
+    const result = await this.itemRepository.fetchByID(data.id);
+    if (!result) {
+      throw new Error("Product not found");
+    }
 
-  static updateUser(data: CommonWorkerInterface) {
-    UserModelModel.fetchByID(data.id)
-      .then((user) => {
-        if (!user) {
-          throw Error(ErrorList["USER_NOT_FOUND"]);
-        } else {
-          MigrationModelModel.updateUser({
-            name: user.name,
-            userID: user._id!.toString(),
-            code: user.code,
-          });
-        }
-      })
-      .catch((error) => {
-        throw new Error(error);
-      });
-  }
+    /* images sengaja dikirim kosong: perubahan gambar punya job sendiri. */
+    await this.migrationRepository.updateProduct({
+      reference: result.reference,
+      description: result.description,
+      barcode: result.barcode == undefined ? null : result.barcode,
+      brand:
+        typeof result.itemBrandID != "string"
+          ? (result.itemBrandID as any).name
+          : "",
+      type:
+        typeof result.itemTypeID != "string"
+          ? (result.itemTypeID as any).name
+          : "",
+      brandID:
+        typeof result.itemBrandID == "string"
+          ? result.itemBrandID
+          : (result.itemBrandID as any)._id,
+      typeID:
+        typeof result.itemTypeID == "string"
+          ? result.itemTypeID
+          : (result.itemTypeID as any)._id,
+      price: result.price,
+      id: result._id.toString(),
+      isActive: result.isActive,
+      images: [],
+    });
+  };
 
-  static deleteUser(data: CommonWorkerInterface) {
-    MigrationModelModel.deleteUser(data.id)
-      .then((result) => {
-        return result;
-      })
-      .catch((error) => {
-        throw Error(error);
-      });
-  }
+  updateProductType = (data: CommonUpdateWorkerInterface) =>
+    this.migrationRepository.updateProductType({
+      id: data.id,
+      name: data.name,
+    });
 
-  static async createBill(data: CommonWorkerInterface) {
-    const result = await BillModelModel.fetchByID(data.id);
+  updateProductBrand = (data: CommonUpdateWorkerInterface) =>
+    this.migrationRepository.updateProductBrand({
+      id: data.id,
+      name: data.name,
+    });
+
+  updateProductImages = (data: UpdateProductImageDataInterface) =>
+    this.migrationRepository.updateProductImages({
+      id: data.id,
+      images: data.images as string[],
+    });
+
+  deleteProduct = async (data: CommonWorkerInterface) => {
+    const item = await this.itemRepository.fetchByID(data.id);
+    if (!item) {
+      throw Error(ErrorList["ITEM_NOT_FOUND"]);
+    }
+
+    await this.migrationRepository.deleteProduct(data.id);
+
+    /* Ditunggu satu per satu; kode lama memakai forEach dengan callback async. */
+    for (const image of item.images as string[]) {
+      await this.migrationRepository.deleteProductImage(image, data.id);
+    }
+  };
+
+  /* ----------------------------- pengguna ----------------------------- */
+
+  createUser = async (data: CommonWorkerInterface) => {
+    const user = await this.userRepository.fetchByID(data.id);
+    await this.migrationRepository.createUser({
+      name: user.name,
+      userID: user._id!.toString(),
+      code: user.code,
+    });
+  };
+
+  updateUser = async (data: CommonWorkerInterface) => {
+    const user = await this.userRepository.fetchByID(data.id);
+    await this.migrationRepository.updateUser({
+      name: user.name,
+      userID: user._id!.toString(),
+      code: user.code,
+    });
+  };
+
+  deleteUser = (data: CommonWorkerInterface) =>
+    this.migrationRepository.deleteUser(data.id);
+
+  /* ------------------------------- nota ------------------------------- */
+
+  /**
+   * Menyelesaikan nota yang baru masuk: poin anggota dan pengurangan stok.
+   *
+   * Nilai belanja dihitung ulang dari barisnya, bukan diambil dari total yang
+   * dikirim perangkat kasir.
+   */
+  createBill = async (data: CommonWorkerInterface) => {
+    const result = await this.billRepository.fetchByID(data.id);
     if (!result) {
       throw Error(ErrorList["BILL_NOT_FOUND"]);
-    } else {
-      const value = result.items.reduce((acc: number, item: any) => {
-        return acc + (item.price - item.discount) * item.quantity;
-      }, 0);
-
-      if (result.memberID != null) {
-        const conversion = await redisClient.get("conversion");
-        const point =
-          Number(conversion) == 0 ? 0 : Math.floor(value / Number(conversion));
-
-        await MembershipModelModel.updatePoint(result.memberID, point);
-      }
-
-      result.items.forEach(async (x: any) => {
-        const item: StockOutInterface = {
-          date: result.date,
-          itemID: x.itemID._id,
-          quantity: x.quantity,
-          adjustmentEventID: null,
-          storeID: result.storeID,
-          billID: result._id.toString(),
-          invoiceID: null,
-        };
-        await queue.add("insertStockOut", item);
-      });
     }
-  }
 
-  static async deleteAdjustment(data: CommonWorkerInterface) {
-    const adjustmentEvent = await AdjustmentModelModel.fetchByID(data.id);
+    const value = result.items.reduce(
+      (acc: number, item: any) =>
+        acc + (item.price - item.discount) * item.quantity,
+      0
+    );
+
+    if (result.memberID != null) {
+      /*
+        Kurs poin disimpan di Redis dengan kunci "conversion". Kalau kuncinya
+        belum ada, Number(null) menghasilkan 0 dan anggota TIDAK mendapat poin
+        sama sekali — diam-diam, tanpa galat. Perilaku lama dipertahankan.
+      */
+      const conversion = await redisClient.get("conversion");
+      const point =
+        Number(conversion) == 0 ? 0 : Math.floor(value / Number(conversion));
+
+      await this.membershipRepository.updatePoint(result.memberID, point);
+    }
+
+    /* Ditunggu satu per satu; kode lama memakai forEach dengan callback async. */
+    for (const x of result.items as any[]) {
+      await queue.add("insertStockOut", {
+        date: result.date,
+        itemID: x.itemID._id,
+        quantity: x.quantity,
+        adjustmentEventID: null,
+        storeID: result.storeID,
+        billID: result._id.toString(),
+        invoiceID: null,
+      } as StockOutInterface);
+    }
+  };
+
+  /* ---------------------------- penyesuaian ---------------------------- */
+
+  /**
+   * Membatalkan penyesuaian stok.
+   *
+   * Baris bernilai positif dulunya menambah stok, jadi pembatalannya menghapus
+   * stock-in. Baris negatif sebaliknya.
+   */
+  deleteAdjustment = async (data: CommonWorkerInterface) => {
+    const adjustmentEvent = await this.adjustmentRepository.fetchByID(data.id);
     if (!adjustmentEvent || !adjustmentEvent.isDelete) {
       throw Error(ErrorList["ADJUSTMENT_EVENT_NOT_FOUND"]);
     }
 
-    adjustmentEvent.items.forEach(async (x: any) => {
+    const storeID =
+      adjustmentEvent.storeID == null ? null : adjustmentEvent.storeID._id;
+
+    for (const x of adjustmentEvent.items as any[]) {
       if (x.quantity > 0) {
-        const removeStockInData: RemoveStockInInterface = {
+        await queue.add("removeStockIn", {
           itemID: x.itemID._id,
           quantity: x.quantity,
-          storeID:
-            adjustmentEvent.storeID == null
-              ? null
-              : adjustmentEvent.storeID._id,
+          storeID: storeID,
           goodReceiptID: null,
           adjustmentCaseID: data.id,
-        };
-
-        await queue.add("removeStockIn", removeStockInData);
+        } as RemoveStockInInterface);
       } else if (x.quantity < 0) {
-        const removeStockOutData: RemoveStockOutInterface = {
+        await queue.add("removeStockOut", {
           itemID: x.itemID,
           quantity: x.quantity,
-          storeID:
-            adjustmentEvent.storeID == null
-              ? null
-              : adjustmentEvent.storeID._id,
+          storeID: storeID,
           billID: null,
           invoiceID: null,
           adjustmentCaseID: data.id,
-        };
-
-        await queue.add("removeStockOut", removeStockOutData);
+        } as RemoveStockOutInterface);
       }
-
-      await queue.add("checkOverflow", {});
-    });
-  }
-
-  static async insertStockIn(data: StockInInterface) {
-    const [result, _] = await Promise.all([
-      new StockInModelModel({
-        date: data.date,
-        itemID: data.itemID,
-        quantity: data.quantity,
-        residue: data.quantity,
-        price: data.price,
-        goodReceiptID: data.goodReceiptID,
-        adjustmentEventID: data.adjustmentEventID,
-        storeID: data.storeID,
-      }).create(),
-      new StockCardModelModel({
-        itemID: data.itemID,
-        quantity: data.quantity,
-        date: data.date,
-        billID: null,
-        invoiceID: null,
-        adjustmentEventID: data.adjustmentEventID,
-        goodReceiptID: data.goodReceiptID,
-        deliverySlipID: null,
-      }),
-    ]);
-
-    return result._id;
-  }
-
-  static async removeStockIn(data: RemoveStockInInterface) {
-    // MOVE THE STOCK OUTS WITH CORRESPONDING STOCK IN TO OVERFLOW
-    const result = await StockInModelModel.fetchDeletation(data);
-    const stockOuts = await StockOutModelModel.fetchByStockInID(result._id);
-
-    if (stockOuts.length > 0) {
-      const promises = stockOuts.map(async (x) => {
-        await new OverflowModelModel({
-          itemID: data.itemID,
-          quantity: x.quantity,
-          billID: x.billID,
-          adjustmentEventID: x.adjustmentEventID,
-          invoiceID: x.invoiceID,
-        }).create();
-      });
-
-      promises.push(
-        ...stockOuts.map(async (x) => {
-          await StockOutModelModel.deleteByID(x._id);
-        })
-      );
-      await Promise.all(promises);
     }
 
-    // Delete the stock in
-    const deleteStockIn: DeleteStockInInterface = {
-      itemID: data.itemID,
-      adjustmentEventID: data.adjustmentCaseID,
-      goodReceiptID: data.goodReceiptID,
-    };
-    await StockInModelModel.delete(deleteStockIn);
+    /*
+      Satu kali setelah seluruh baris diproses. Kode lama memanggilnya di
+      DALAM perulangan, sehingga satu penyesuaian dengan 50 baris memicu 50
+      job checkOverflow yang mengerjakan hal yang sama.
+    */
     await queue.add("checkOverflow", {});
-  }
+  };
 
-  static async insertStockOut(data: StockOutInterface) {
-    var quantity = data.quantity;
-    while (quantity > 0) {
-      if (quantity == 0) {
-        break;
-      }
+  /* ----------------------------- persediaan ----------------------------- */
 
-      var stockIn = await StockInModelModel.fetchFifo(data.itemID);
-      if (!stockIn) {
-        await new OverflowModelModel({
-          itemID: data.itemID,
-          quantity: quantity,
-          billID: data.billID,
-          adjustmentEventID: data.adjustmentEventID,
-          invoiceID: data.invoiceID,
-        }).create();
+  insertStockIn = (data: StockInInterface) =>
+    this.stockService.insertStockIn(data);
 
-        quantity = 0;
-        break;
-      } else if (stockIn.residue >= quantity) {
-        await Promise.all([
-          new StockOutModelModel({
-            stockInID: stockIn._id.toString(),
-            itemID: data.itemID,
-            date: data.date,
-            quantity: quantity,
-            billID: data.billID,
-            adjustmentEventID: data.adjustmentEventID,
-            invoiceID: data.invoiceID,
-            storeID: data.storeID,
-          }).create(),
-          StockInModelModel.updateResidue(stockIn._id, quantity),
-        ]);
+  insertStockOut = (data: StockOutInterface) =>
+    this.stockService.insertStockOut(data);
 
-        quantity = 0;
-        break;
-      } else if (stockIn.residue < quantity) {
-        await Promise.all([
-          new StockOutModelModel({
-            stockInID: stockIn._id.toString(),
-            itemID: data.itemID,
-            date: data.date,
-            quantity: stockIn.residue,
-            billID: data.billID,
-            adjustmentEventID: data.adjustmentEventID,
-            invoiceID: data.invoiceID,
-            storeID: data.storeID,
-          }).create(),
-          StockInModelModel.updateResidue(stockIn._id, stockIn.residue),
-        ]);
+  insertStockOutOnly = (data: StockOutInterface) =>
+    this.stockService.insertStockOutOnly(data);
 
-        quantity = quantity - stockIn.residue;
-      }
-    }
+  removeStockIn = (data: RemoveStockInInterface) =>
+    this.stockService.removeStockIn(data);
 
-    await new StockCardModelModel({
-      itemID: data.itemID,
-      quantity: data.quantity,
-      date: data.date,
-      billID: data.billID,
-      invoiceID: data.invoiceID,
-      adjustmentEventID: data.adjustmentEventID,
-      goodReceiptID: null,
-      deliverySlipID: null,
-    }).create();
-  }
+  removeStockOut = (data: RemoveStockOutInterface) =>
+    this.stockService.removeStockOut(data);
 
-  static async removeStockOut(data: RemoveStockOutInterface) {
-    const result = await StockOutModelModel.fetchDeletation(data);
-    result.forEach(async (x) => {
-      await StockInModelModel.updateResidue(x.stockIn._id, x.quantity * -1);
-      await StockOutModelModel.deleteByID(x._id);
-    });
-  }
+  insertStockOutCardOnly = (data: StockOutTempInterface) =>
+    this.stockService.insertStockOutCardOnly(data);
 
-  static async insertStockOutOnly(data: StockOutInterface) {
-    let quantity = data.quantity;
-    while (quantity > 0) {
-      if (quantity == 0) {
-        break;
-      }
+  removeStockOutCardOnly = (data: StockOutTempInterface) =>
+    this.stockService.removeStockOutCardOnly(data);
 
-      const stockIn = await StockInModelModel.fetchFifo(data.itemID);
-      if (!stockIn) {
-        await new OverflowModelModel({
-          itemID: data.itemID,
-          quantity: quantity,
-          billID: data.billID,
-          adjustmentEventID: data.adjustmentEventID,
-          invoiceID: data.invoiceID,
-        }).create();
+  stockOutTransfer = (data: StockOutTransferInterface) =>
+    this.stockService.stockOutTransfer(data);
 
-        quantity = 0;
-        break;
-      } else if (stockIn.quantity >= quantity) {
-        await Promise.all([
-          new StockOutModelModel({
-            stockInID: stockIn._id.toString(),
-            itemID: data.itemID,
-            date: data.date,
-            quantity: quantity,
-            billID: data.billID,
-            adjustmentEventID: data.adjustmentEventID,
-            invoiceID: data.invoiceID,
-            storeID: data.storeID,
-          }).create(),
-          StockInModelModel.updateResidue(stockIn._id, quantity),
-        ]);
+  stockInTransfer = (data: StockOutTransferInterface) =>
+    this.stockService.stockInTransfer(data);
 
-        quantity = 0;
-        break;
-      } else if (stockIn.quantity < quantity) {
-        await Promise.all([
-          new StockOutModelModel({
-            stockInID: stockIn._id.toString(),
-            itemID: data.itemID,
-            date: data.date,
-            quantity: stockIn.quantity,
-            billID: data.billID,
-            adjustmentEventID: data.adjustmentEventID,
-            invoiceID: data.invoiceID,
-            storeID: data.storeID,
-          }).create(),
-          StockInModelModel.updateResidue(stockIn._id, stockIn.quantity),
-        ]);
-
-        quantity = quantity - stockIn.quantity;
-      }
-    }
-  }
-
-  static async insertStockOutCardOnly(data: StockOutTempInterface) {
-    await new StockCardModelModel({
-      itemID: data.itemID,
-      quantity: Math.abs(data.quantity) * -1,
-      date: data.date,
-      billID: null,
-      invoiceID: null,
-      adjustmentEventID: null,
-      goodReceiptID: null,
-      deliverySlipID: data.deliverySlipID,
-    }).create();
-
-    await new StockModelModel({
-      itemID: data.itemID,
-      quantity: Math.abs(data.quantity) * -1,
-      storeID: null,
-    }).update();
-  }
-
-  static async removeStockOutCardOnly(data: StockOutTempInterface) {
-    await StockCardModelModel.deleteByDeliverySlipID(data.deliverySlipID);
-
-    await new StockModelModel({
-      itemID: data.itemID,
-      quantity: Math.abs(data.quantity),
-      storeID: null,
-    }).update();
-  }
-
-  static async stockOutTransfer(data: StockOutTransferInterface) {
-    try {
-      await new StockModelModel({
-        itemID: data.itemID,
-        quantity: Math.abs(data.quantity) * -1,
-        storeID: data.storeID,
-      }).update();
-
-      return true;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  static async stockInTransfer(data: StockOutTransferInterface) {
-    try {
-      await new StockModelModel({
-        itemID: data.itemID,
-        quantity: Math.abs(data.quantity),
-        storeID: data.storeID,
-      }).update();
-
-      return true;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  static async checkOverflow() {
-    const overflows = await OverflowModelModel.fetchAll();
-    for (let i = 0; i < overflows.length; i++) {
-      const data: StockOutInterface = {
-        quantity: overflows[i].quantity,
-        itemID: overflows[i].itemID,
-        billID: overflows[i].billID,
-        invoiceID: overflows[i].invoiceID,
-        adjustmentEventID: overflows[i].adjustmentEventID,
-        storeID: null,
-        date: new Date(),
-      };
-      await queue.add("insertStockOutOnly", data);
-      await OverflowModelModel.deleteByID(overflows[i]._id);
-    }
-  }
+  checkOverflow = () => this.stockService.checkOverflow();
 }
 
 export default WorkerController;

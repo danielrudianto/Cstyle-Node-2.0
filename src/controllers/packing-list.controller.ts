@@ -1,176 +1,203 @@
 import { Request, Response } from "express";
-import PackingListModelModel from "../models/packing-list.model";
-import LoggerHelper from "../utils/logger.utils";
+import { ErrorList } from "../constants/error-list.constant";
 import { LoggerType } from "../interfaces/logger.interface";
-import { ErrorList } from "../data/error-list";
-import StockModelModel from "../models/stock.model";
-import { queue } from "../utils/queue.utils";
 import { StockOutInterface } from "../interfaces/stock-out.interface";
-import InvoiceModelModel from "../models/invoice.model";
-import lock from "../utils/lock.utils";
+import { PackingListModel } from "../models/packing-list.model";
+import { InvoiceRepository } from "../repositories/invoice.repository";
+import { PackingListRepository } from "../repositories/packing-list.repository";
+import { StockRepository } from "../repositories/stock.repository";
+import lock from "../utils/lock.helper";
+import LoggerHelper from "../utils/logger.helper";
+import { queue } from "../utils/queue.helper";
 
-class PackingListController {
-  static create = async (req: Request, res: Response) => {
+/**
+ * Lapisan HTTP untuk packing list.
+ *
+ * Satu permintaan di sini menghasilkan TIGA hal sekaligus: packing list,
+ * fakturnya, dan pengurangan stok. Ketiganya di koleksi yang berbeda dan
+ * TIDAK dibungkus transaksi — kalau proses berhenti di tengah, dokumennya
+ * tertinggal setengah jadi. Itu perilaku lama dan belum diubah.
+ */
+export class PackingListController {
+  private packingListRepository: PackingListRepository;
+  private invoiceRepository: InvoiceRepository;
+  private stockRepository: StockRepository;
+
+  constructor(
+    packingListRepository: PackingListRepository,
+    invoiceRepository: InvoiceRepository,
+    stockRepository: StockRepository
+  ) {
+    this.packingListRepository = packingListRepository;
+    this.invoiceRepository = invoiceRepository;
+    this.stockRepository = stockRepository;
+  }
+
+  create = async (req: Request, res: Response) => {
     const date = req.body.date;
-    const dueDate = req.body.dueDate;
-    const note = req.body.note;
-    const invoiceNote = req.body.invoiceNote;
-    const items = req.body.items as any[];
-    const customerID = req.body.customerID;
-    const salesID = req.body.salesID;
-    const userID = req.body.userID;
 
-    const modifiedItems = PackingListModelModel.preCreate(items);
-    StockModelModel.checkStockByItemIDs(
-      modifiedItems.map((x) => {
-        return {
+    try {
+      /* Baris yang identik digabung dulu supaya stoknya dihitung sekali. */
+      const modifiedItems = PackingListModel.mergeItems(
+        req.body.items as any[]
+      );
+
+      /* Stok gudang pusat — storeID null, bukan "tidak ada toko". */
+      const stock = await this.stockRepository.fetchByItemIDs(
+        modifiedItems.map((x) => ({
           itemID: x.itemID,
           quantity: x.quantity,
-        };
-      }),
-      null
-    ).then(async (stock) => {
-      let validation = true;
-      for (let i = 0; i < modifiedItems.length; i++) {
-        const x = modifiedItems[i];
-        const stockIndex = stock.findIndex(
-          (y) => y.itemID.toString() == x.itemID
-        );
-        if (stockIndex < 0 || stock[stockIndex].quantity < x.quantity) {
-          validation = false;
-        }
+        })),
+        null
+      );
+
+      const cukup = modifiedItems.every((x) => {
+        const baris = stock.find((y) => y.itemID.toString() == x.itemID);
+        return baris != undefined && baris.quantity >= x.quantity;
+      });
+
+      if (!cukup) {
+        return res.status(400).send(ErrorList["INSUFFICIENT_STOCK"]);
       }
 
-      if (!validation) {
-        return res.status(400).send(ErrorList["INSUFFICIENT_STOCK"]);
-      } else {
-        const name = await PackingListModelModel.generateName(new Date(date));
-        new PackingListModelModel({
-          name: name,
-          date: date,
-          note: note,
-          items: modifiedItems,
-          salesID: salesID,
-          customerID: customerID,
-          createdBy: userID,
-        })
-          .create()
-          .then(async (result) => {
-            const invoiceName = await InvoiceModelModel.generateName(
-              new Date(date)
-            );
-            // Now input the sales invoice
-            new InvoiceModelModel({
-              name: invoiceName,
-              date: date,
-              dueDate: dueDate,
-              note: invoiceNote,
-              packingListID: result._id,
-              deliverySlipID: null,
-              createdBy: userID,
-              customerID: customerID,
-              salesID: salesID,
-            })
-              .create()
-              .then(async (salesInvoice) => {
-                await lock.acquire(
-                  result.items.map((x: any) => {
-                    return `${x.itemID}:`;
-                  }),
-                  (done) => {
-                    result.items.forEach(async (x: any) => {
-                      const data: StockOutInterface = {
-                        itemID: x.itemID,
-                        quantity: x.quantity,
-                        invoiceID: salesInvoice._id,
-                        billID: null,
-                        adjustmentEventID: null,
-                        date: date,
-                        storeID: null,
-                      };
+      const name = await this.packingListRepository.generateName(
+        new Date(date)
+      );
 
-                      await queue.add("insertStockOut", data);
+      const result = await this.packingListRepository.create({
+        name: name,
+        date: date,
+        note: req.body.note,
+        items: modifiedItems,
+        salesID: req.body.salesID,
+        customerID: req.body.customerID,
+        createdBy: req.body.userID,
+      });
 
-                      await new StockModelModel({
-                        itemID: x.itemID,
-                        quantity: x.quantity * -1,
-                        storeID: null,
-                      }).update();
-                    });
+      const invoiceName = await this.invoiceRepository.generateName(
+        new Date(date)
+      );
 
-                    done();
-                    return res.status(201).send(result);
-                  }
-                );
-              })
-              .catch((error) => {
-                new LoggerHelper({
-                  message: `Error on creating invoice ${error}`,
-                  type: LoggerType.error,
-                  tag: "Invoice",
-                }).log();
-                return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+      const salesInvoice = await this.invoiceRepository.create({
+        name: invoiceName,
+        date: date,
+        dueDate: req.body.dueDate,
+        note: req.body.invoiceNote,
+        packingListID: result._id,
+        deliverySlipID: null,
+        createdBy: req.body.userID,
+        customerID: req.body.customerID,
+        salesID: req.body.salesID,
+      });
+
+      await lock.acquire(
+        result.items.map((x: any) => `${x.itemID}:`),
+        async (done) => {
+          try {
+            /*
+              Ditunggu satu per satu. Kode lama memakai forEach dengan callback
+              async di dalam kunci, sehingga done() dan balasan dikirim SEBELUM
+              satu pun stok benar-benar berkurang — dan kegagalannya tidak
+              terlihat sama sekali.
+            */
+            for (const x of result.items as any[]) {
+              const data: StockOutInterface = {
+                itemID: x.itemID,
+                quantity: x.quantity,
+                invoiceID: salesInvoice._id,
+                billID: null,
+                adjustmentEventID: null,
+                date: date,
+                storeID: null,
+              };
+
+              await queue.add("insertStockOut", data);
+
+              await this.stockRepository.increment({
+                itemID: x.itemID,
+                quantity: x.quantity * -1,
+                storeID: null,
               });
-          })
-          .catch((error) => {
+            }
+
+            done();
+            return res.status(201).send(result);
+          } catch (error) {
+            done();
+
             new LoggerHelper({
-              message: `Error on creating packing list ${error}`,
+              message: `Error on reducing stock for packing list ${error}`,
               type: LoggerType.error,
               tag: "Packing list",
             }).log();
 
             return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
-          });
-      }
-    });
-  };
-
-  static fetch = (req: Request, res: Response) => {
-    const keyword = req.body.keyword;
-    const month = req.body.month + 1;
-    const year = req.body.year;
-    const page = req.body.page;
-    const status = req.body.status as string[];
-
-    PackingListModelModel.fetch({
-      keyword: keyword,
-      month: month,
-      year: year,
-      status: status,
-      page: page,
-    }).then(([result, count]) => {
-      return res.status(200).send({
-        data: result,
-        count: count,
-      });
-    });
-  };
-
-  static fetchByID = (req: Request, res: Response) => {
-    const id = req.params.id;
-    Promise.all([
-      PackingListModelModel.fetchByID(id),
-      InvoiceModelModel.fetchByPackingListID(id),
-    ])
-      .then(([packingList, salesInvoice]) => {
-        if (!packingList || !salesInvoice) {
-          return res.status(404).send(ErrorList["PACKING_LIST_NOT_FOUND"]);
-        } else {
-          return res.status(200).send({
-            packingList: packingList,
-            salesInvoice: salesInvoice,
-          });
+          }
         }
-      })
-      .catch((error) => {
-        new LoggerHelper({
-          message: `Error on fetching packing list ${error}`,
-          type: LoggerType.error,
-          tag: "Packing list",
-        }).log();
+      );
+    } catch (error) {
+      new LoggerHelper({
+        message: `Error on creating packing list ${error}`,
+        type: LoggerType.error,
+        tag: "Packing list",
+      }).log();
 
-        return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    }
+  };
+
+  fetch = async (req: Request, res: Response) => {
+    try {
+      const result = await this.packingListRepository.fetch({
+        keyword: req.body.keyword,
+        /* Klien mengirim bulan gaya JavaScript, 0 - 11. */
+        month: req.body.month + 1,
+        year: req.body.year,
+        status: req.body.status as string[],
+        page: req.body.page,
       });
+
+      return res.status(200).send(result);
+    } catch (error) {
+      /*
+        Kode lama tidak memasang penangkap galat sama sekali di sini, sehingga
+        kegagalan berakhir sebagai unhandled rejection dan permintaannya
+        menggantung. Sekarang dibalas 500.
+      */
+      new LoggerHelper({
+        message: `Error on fetching packing list ${error}`,
+        type: LoggerType.error,
+        tag: "Packing list",
+      }).log();
+
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    }
+  };
+
+  fetchByID = async (req: Request, res: Response) => {
+    try {
+      const [packingList, salesInvoice] = await Promise.all([
+        this.packingListRepository.fetchByID(req.params.id),
+        this.invoiceRepository.fetchByPackingListID(req.params.id),
+      ]);
+
+      if (!packingList || !salesInvoice) {
+        return res.status(404).send(ErrorList["PACKING_LIST_NOT_FOUND"]);
+      }
+
+      return res.status(200).send({
+        packingList: packingList,
+        salesInvoice: salesInvoice,
+      });
+    } catch (error) {
+      new LoggerHelper({
+        message: `Error on fetching packing list ${error}`,
+        type: LoggerType.error,
+        tag: "Packing list",
+      }).log();
+
+      return res.status(500).send(ErrorList["INTERNAL_SERVER_ERROR"]);
+    }
   };
 }
 

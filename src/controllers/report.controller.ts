@@ -1,16 +1,48 @@
 import { Request, Response } from "express";
-import BillModelModel from "../models/bill.model";
-import { ErrorList } from "../data/error-list";
-import LoggerHelper from "../utils/logger.utils";
+import { ErrorList } from "../constants/error-list.constant";
+import LoggerHelper from "../utils/logger.helper";
 import { LoggerType } from "../interfaces/logger.interface";
-import InvoiceModelModel from "../models/invoice.model";
 import { redisClient } from "../app";
-import StockOutModelModel from "../models/stock-out.model";
-import { GoodReceiptModelModel } from "../models/good-receipt.model";
 import moment from "moment";
+import { BillRepository } from "../repositories/bill.repository";
+import { GoodReceiptRepository } from "../repositories/good-receipt.repository";
+import { InvoiceRepository } from "../repositories/invoice.repository";
+import { StockOutRepository } from "../repositories/stock-out.repository";
 
-class ReportController {
-  static fetchSalesReport = (req: Request, res: Response) => {
+
+/**
+ * Lapisan HTTP untuk laporan.
+ *
+ * Controller ini menggabungkan empat domain — nota, faktur, penerimaan barang,
+ * dan barang keluar — karena satu lembar laporan memang menyilangkan
+ * keempatnya. Tidak ada satu repository pun yang bisa menjawabnya sendirian,
+ * jadi penggabungannya memang tempatnya di sini.
+ *
+ * HAK AKSES DIBACA DARI REDIS, BUKAN DARI DATABASE.
+ *
+ * Dua laporan penjualan memeriksa accessLevel langsung dari cache `users:<id>`
+ * dan hanya mengizinkan tingkat 0 dan 4. Kalau kunci Redis-nya hilang,
+ * JSON.parse(null) melempar galat dan permintaannya berakhir 500 — bukan 403.
+ */
+export class ReportController {
+  private billRepository: BillRepository;
+  private invoiceRepository: InvoiceRepository;
+  private goodReceiptRepository: GoodReceiptRepository;
+  private stockOutRepository: StockOutRepository;
+
+  constructor(
+    billRepository: BillRepository,
+    invoiceRepository: InvoiceRepository,
+    goodReceiptRepository: GoodReceiptRepository,
+    stockOutRepository: StockOutRepository
+  ) {
+    this.billRepository = billRepository;
+    this.invoiceRepository = invoiceRepository;
+    this.goodReceiptRepository = goodReceiptRepository;
+    this.stockOutRepository = stockOutRepository;
+  }
+
+  fetchSalesReport = (req: Request, res: Response) => {
     const storeID = req.body.store;
     const month = req.body.month;
     const year = req.body.year;
@@ -26,14 +58,14 @@ class ReportController {
           return res.status(400).send(ErrorList["ACCESS_DENIED"]);
         } else {
           Promise.all([
-            BillModelModel.fetchReport(storeID, month, year),
+            this.billRepository.fetchReport(storeID, month, year),
             storeID == null
-              ? InvoiceModelModel.fetchReport(month, year, accessLevel === 0)
+              ? this.invoiceRepository.fetchReport(month, year, accessLevel === 0)
               : Promise.resolve([]),
           ])
             .then(([bills, invoices]) => {
               return res.status(200).send({
-                bills: bills.map((x, index) => {
+                bills: bills.map((x: any, index: number) => {
                   const QRISPaymentIndex = x.payment.findIndex(
                     (a: any) => a.type.toLowerCase() === "qris"
                   );
@@ -126,7 +158,7 @@ class ReportController {
                     Staff: x.createdBy.name,
                   };
                 }),
-                invoices: invoices.map((x, index) => {
+                invoices: invoices.map((x: any, index: number) => {
                   return {
                     No: index + 1,
                     ID: x._id,
@@ -175,7 +207,7 @@ class ReportController {
       });
   };
 
-  static fetchSalesProductReport = (req: Request, res: Response) => {
+  fetchSalesProductReport = (req: Request, res: Response) => {
     const storeID = req.body.store;
     const month = req.body.month;
     const year = req.body.year;
@@ -191,31 +223,56 @@ class ReportController {
           return res.status(400).send(ErrorList["ACCESS_DENIED"]);
         } else {
           Promise.all([
-            BillModelModel.fetchProductReport(storeID, month, year),
+            this.billRepository.fetchProductReport(storeID, month, year),
             storeID == null
-              ? InvoiceModelModel.fetchProductReport(
+              ? this.invoiceRepository.fetchProductReport(
                   month,
                   year,
                   accessLevel === 0
                 )
               : Promise.resolve([]),
-            StockOutModelModel.fetchProductReport(month, year),
+            this.stockOutRepository.fetchProductReport(month, year),
           ])
             .then(([bills, invoices, stockouts]) => {
+              // Index the month's stock-outs once, keyed by the document they
+              // belong to and the item. Re-scanning the whole array for every
+              // report line is O(bills x items x stock-outs) and blocks the
+              // event loop for minutes at production volumes.
+              const stockOutIndex = new Map<string, any[]>();
+              const indexStockOut = (key: string, stockout: any) => {
+                const bucket = stockOutIndex.get(key);
+                if (bucket) {
+                  bucket.push(stockout);
+                } else {
+                  stockOutIndex.set(key, [stockout]);
+                }
+              };
+
+              for (const stockout of stockouts) {
+                const itemKey = stockout.itemID.toString();
+                if (stockout.billID != null) {
+                  indexStockOut(
+                    `${stockout.billID.toString()}|${itemKey}`,
+                    stockout
+                  );
+                }
+                if (stockout.invoiceID != null) {
+                  indexStockOut(
+                    `${stockout.invoiceID.toString()}|${itemKey}`,
+                    stockout
+                  );
+                }
+              }
+
               const billsResult: any[] = [];
 
-              bills.forEach((bill) => {
+              bills.forEach((bill: any) => {
                 const billID = bill._id.toString();
                 for (let i = 0; i < bill.items.length; i++) {
                   const itemID = bill.items[i].itemID;
-                  const stockOut = stockouts.filter((stockout) => {
-                    return (
-                      (stockout.billID == null
-                        ? null
-                        : stockout.billID.toString()) === billID &&
-                      stockout.itemID.toString() === itemID._id.toString()
-                    );
-                  });
+                  const stockOut =
+                    stockOutIndex.get(`${billID}|${itemID._id.toString()}`) ??
+                    [];
 
                   const quantity = stockOut.reduce(
                     (acc, stockout) => acc + stockout.quantity,
@@ -228,7 +285,10 @@ class ReportController {
                     0
                   );
 
-                  const averagePrice = stockOutPrice / quantity;
+                  // No matching stock-out means the line was fulfilled from
+                  // overflow; report it at zero cost rather than NaN.
+                  const averagePrice =
+                    quantity === 0 ? 0 : stockOutPrice / quantity;
 
                   billsResult.push({
                     Bill: bill.name,
@@ -254,19 +314,15 @@ class ReportController {
 
               const invoicesResult: any[] = [];
 
-              invoices.forEach((invoice) => {
+              invoices.forEach((invoice: any) => {
                 const invoiceID = invoice._id.toString();
                 if (invoice.packingListID != null) {
                   for (let i = 0; i < invoice.packingListID.items.length; i++) {
                     const itemID = invoice.packingListID.items[i].itemID;
-                    const stockOut = stockouts.filter((stockout) => {
-                      return (
-                        stockout.itemID.toString() === itemID._id.toString() &&
-                        (stockout.invoiceID == null
-                          ? null
-                          : stockout.invoiceID.toString()) === invoiceID
-                      );
-                    });
+                    const stockOut =
+                      stockOutIndex.get(
+                        `${invoiceID}|${itemID._id.toString()}`
+                      ) ?? [];
 
                     const quantity = stockOut.reduce(
                       (acc, stockout) => acc + stockout.quantity,
@@ -279,7 +335,8 @@ class ReportController {
                       0
                     );
 
-                    const averagePrice = stockOutPrice / quantity;
+                    const averagePrice =
+                      quantity === 0 ? 0 : stockOutPrice / quantity;
 
                     invoicesResult.push({
                       Invoice: invoice.name,
@@ -318,11 +375,10 @@ class ReportController {
                     i++
                   ) {
                     const itemID = invoice.deliverySlipID.items[i].itemID;
-                    const stockOut = stockouts.filter(
-                      (stockout) =>
-                        stockout.invoiceID.toString() === invoiceID &&
-                        stockout.itemID.toString() === itemID._id.toString()
-                    );
+                    const stockOut =
+                      stockOutIndex.get(
+                        `${invoiceID}|${itemID._id.toString()}`
+                      ) ?? [];
 
                     const stockOutPrice = stockOut.reduce(
                       (acc, stockout) =>
@@ -330,10 +386,11 @@ class ReportController {
                       0
                     );
 
+                    const netQuantity =
+                      invoice.deliverySlipID.items[i].quantity -
+                      invoice.deliverySlipID.items[i].returned;
                     const averagePrice =
-                      stockOutPrice /
-                      (invoice.deliverySlipID.items[i].quantity -
-                        invoice.deliverySlipID.items[i].returned);
+                      netQuantity === 0 ? 0 : stockOutPrice / netQuantity;
 
                     invoicesResult.push({
                       ID: invoice._id,
@@ -397,11 +454,11 @@ class ReportController {
       });
   };
 
-  static fetchPurchaseReport = (req: Request, res: Response) => {
+  fetchPurchaseReport = (req: Request, res: Response) => {
     const month = req.body.month;
     const year = req.body.year;
 
-    GoodReceiptModelModel.fetchReport(month, year)
+    this.goodReceiptRepository.fetchReport(month, year)
       .then((result) => {
         return res.status(200).send({
           data: result.map((x, index) => {
@@ -428,11 +485,11 @@ class ReportController {
       });
   };
 
-  static fetchPurchaseProductReport = (req: Request, res: Response) => {
+  fetchPurchaseProductReport = (req: Request, res: Response) => {
     const month = req.body.month;
     const year = req.body.year;
 
-    GoodReceiptModelModel.fetchProductReport(month, year)
+    this.goodReceiptRepository.fetchProductReport(month, year)
       .then((result) => {
         const data: any = [];
         result.forEach((x) => {
@@ -462,13 +519,13 @@ class ReportController {
       });
   };
 
-  static updateSalesReport = (req: Request, res: Response) => {
+  updateSalesReport = (req: Request, res: Response) => {
     const invoices = req.body.invoices;
     const bills = req.body.bills;
 
     Promise.all([
-      InvoiceModelModel.updateReport(invoices),
-      BillModelModel.updateReport(bills),
+      this.invoiceRepository.updateVisibility(invoices),
+      this.billRepository.updateVisibility(bills),
     ])
       .then(() => {
         return res.status(200).send({

@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { redisClient } from "../app";
-import { ErrorList } from "../data/error-list";
-import LoggerHelper from "../utils/logger.utils";
+import { ErrorList } from "../constants/error-list.constant";
+import LoggerHelper from "../utils/logger.helper";
 import { LoggerType } from "../interfaces/logger.interface";
 
 class AccessInterceptor {
