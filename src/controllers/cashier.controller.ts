@@ -4,6 +4,7 @@ import { pilahNotaKiriman } from "../utils/bill-sync.helper";
 import { ErrorList } from "../constants/error-list.constant";
 import { BillInterface } from "../interfaces/bill.interface";
 import { LoggerType } from "../interfaces/logger.interface";
+import { IStock } from "../interfaces/stock.interface";
 import { BillRepository } from "../repositories/bill.repository";
 import { ItemRepository } from "../repositories/item.repository";
 import { MembershipRepository } from "../repositories/membership.repository";
@@ -244,17 +245,43 @@ export class CashierController {
           try {
             const result = await this.billRepository.insertMany(modifiedBills);
 
+            /*
+              SATU perjalanan untuk stok, SATU untuk antrean.
+
+              Sebelumnya keduanya ada di dalam perulangan bersarang: satu
+              findOneAndUpdate per barang per nota, lalu satu queue.add per
+              nota, semuanya berurutan. Dua puluh nota berisi sepuluh barang
+              berarti dua ratus perjalanan ke MongoDB dan dua puluh ke Redis —
+              untuk pekerjaan yang muat dalam dua perintah.
+
+              Karena seluruh badan ini berjalan di dalam kunci per toko,
+              lamanya perjalanan itu persis lamanya toko lain menunggu
+              gilirannya.
+
+              Urutannya juga menjadi lebih aman. Kalau penulisan stok gagal,
+              tidak ada satu pun job yang terlanjur diantrekan; bentuk lama
+              meninggalkan sebagian nota sudah berkurang stoknya sementara
+              sebagian job sudah berjalan.
+            */
+            const perubahanStok: IStock[] = [];
             for (const bill of result) {
               for (const item of bill.items) {
-                await this.stockRepository.increment({
+                perubahanStok.push({
                   itemID: item.itemID,
                   quantity: item.quantity * -1,
                   storeID: bill.storeID,
                 });
               }
-
-              await queue.add("createBill", { id: bill._id });
             }
+
+            await this.stockRepository.incrementMany(perubahanStok);
+
+            await queue.addBulk(
+              result.map((bill: any) => ({
+                name: "createBill",
+                data: { id: bill._id },
+              }))
+            );
 
             done();
 

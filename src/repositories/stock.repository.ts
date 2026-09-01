@@ -53,6 +53,78 @@ export class StockRepository {
     }
   }
 
+  /**
+   * Menambah atau mengurangi stok BANYAK barang sekaligus, dalam satu
+   * perjalanan ke database.
+   *
+   * KENAPA INI ADA.
+   *
+   * increment() di atas dipanggil dari dalam perulangan di sebelas tempat —
+   * sinkronisasi kasir, faktur, penyesuaian, penerimaan barang, permintaan
+   * transfer. Satu kelompok sinkronisasi berisi dua puluh nota dengan sepuluh
+   * barang menjalankan dua ratus findOneAndUpdate BERURUTAN, masing-masing
+   * menunggu jawaban sebelum yang berikutnya dikirim.
+   *
+   * Yang mahal bukan pekerjaannya, melainkan perjalanannya: dua ratus kali
+   * pulang-pergi ke MongoDB untuk pekerjaan yang muat dalam satu perintah.
+   *
+   * Ini juga penting untuk penguncian. Seluruh badan sinkronisasi berjalan di
+   * dalam kunci per toko, jadi lamanya perjalanan itu adalah lamanya toko lain
+   * yang sedang mengantre harus menunggu.
+   *
+   * BARIS KEMBAR DIGABUNG LEBIH DULU.
+   *
+   * Satu kelompok nota lazim menyentuh barang yang sama berkali-kali. Kalau
+   * dikirim apa adanya, bulkWrite memuat beberapa upsert dengan penyaring yang
+   * sama persis, dan pada baris yang belum ada keduanya berlomba membuatnya —
+   * menghasilkan galat kunci ganda, atau lebih buruk, dua baris stok untuk
+   * barang yang sama. Menjumlahkannya lebih dulu menghilangkan keduanya
+   * sekaligus mengurangi jumlah perintah.
+   */
+  async incrementMany(data: IStock[]): Promise<void> {
+    if (data.length === 0) {
+      return;
+    }
+
+    /*
+      storeID bernilai null itu SAH — artinya gudang pusat. Dipakai apa adanya
+      sebagai bagian kunci penggabungan, dan String(null) menghasilkan "null"
+      yang tidak mungkin bentrok dengan ObjectId mana pun.
+    */
+    const gabungan = new Map<string, IStock>();
+    for (const baris of data) {
+      const kunci = `${String(baris.itemID)}|${String(baris.storeID)}`;
+      const ada = gabungan.get(kunci);
+
+      if (ada) {
+        ada.quantity += baris.quantity;
+      } else {
+        gabungan.set(kunci, { ...baris });
+      }
+    }
+
+    const perintah = [...gabungan.values()].map((baris) => ({
+      updateOne: {
+        filter: { storeID: baris.storeID, itemID: baris.itemID },
+        update: { $inc: { quantity: baris.quantity } },
+        upsert: true,
+      },
+    }));
+
+    try {
+      /*
+        ordered: false membolehkan MongoDB mengerjakannya berbarengan. Aman di
+        sini karena penyaring tiap perintah sudah dipastikan unik oleh
+        penggabungan di atas — tidak ada dua perintah yang menyentuh baris yang
+        sama.
+      */
+      await this.collection.bulkWrite(perintah, { ordered: false });
+    } catch (error) {
+      console.error(`[error]: Error on bulk updating stock: ${error}`);
+      throw error;
+    }
+  }
+
   async fetchByItemIDs(
     items: ICheckStock[],
     storeID: string | null
